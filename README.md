@@ -4,7 +4,7 @@ Notes and MD files for Data Science at CNM Ingenuity
 
 ## to fork this repo
 
-- return to the root directory "cohort-15-data-science"
+- in the root directory at "cohort-15-data-science"
 
 - look to the top right of the github GUI under the search bar and find the fork button with a small git Version Control icon.
 
