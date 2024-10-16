@@ -16,7 +16,8 @@ Notes and MD files for Data Science at CNM Ingenuity
 
 - select create fork
 
-## These files were not all added straight from google colab because of this it takes a different step to open them in google colab - you can also clone the repo to your local drive and open them there 
+## These files were not all added straight from google colab because of this it takes a different step to open them in google colab - 
+you can also clone the repo to your local drive and open them there. This is IF the file does not have a colab link. Most of them do.
 
 - To open ipynb file straight from the git repo these three options should work fine the easiest method is to clone the repositiory in colab. For me the easiest was to modify the url of the ipynb file you are located in url and hit the enter key. Then follow the instructions to open the notebook in google colab.
   
