@@ -15,7 +15,7 @@ Here's the formatted list of pandas methods with descriptions in italics:
 - `head()`: _Displays the first few rows of a DataFrame (default is 5)._
 - `shape`: _Returns a tuple containing the number of rows and columns in a DataFrame._
 - `info()`: _Prints a concise summary of a DataFrame, including data types and non-null counts._
-- `describe()`: _Generates descriptive statistics of a DataFrame._
+- `describe()`: _Generates descrip`tive statistics of a DataFrame._
 - `columns`: _Returns a list of column names._
 
 ### Handling Missing Data
