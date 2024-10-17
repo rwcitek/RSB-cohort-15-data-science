@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This code extracts text and code cells from Jupyter notebooks and combines them into a single file.
+
 for notebook in *.ipynb; do
     output_file="${notebook%.ipynb}.combined.txt"
     
