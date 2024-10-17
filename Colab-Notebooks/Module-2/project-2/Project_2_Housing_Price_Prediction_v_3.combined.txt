@@ -64,23 +64,23 @@ for col in categorical_cols:
 
 ### Feature Scaling for RFE Selection
 # 5c- RFECV Feature Selection
-%%capture
+# %%capture
 
-!pip install cudf-cu11 --extra-index-url=https://pypi.ngc.nvidia.com
+# !pip install cudf-cu11 --extra-index-url=https://pypi.ngc.nvidia.com
 
-!apt-get update
+# !apt-get update
 
-!apt-get install -y nvidia-cuda-toolkit
-
-
-
-import locale
-
-locale.getpreferredencoding = lambda: "UTF-8"
+# !apt-get install -y nvidia-cuda-toolkit
 
 
 
-%load_ext cudf.pandas
+# import locale
+
+# locale.getpreferredencoding = lambda: "UTF-8"
+
+
+
+# %load_ext cudf.pandas
 import pandas as pd
 
 import numpy as np
@@ -319,12 +319,6 @@ print(saleprice_corr.head(11))
 # Select features with correlation > 0.5
 
 selected_features = saleprice_corr[saleprice_corr > 0.5].index.tolist()
-# Assuming selected_features is your list of features
-
-selected_features = saleprice_corr[saleprice_corr > 0.5].index.tolist()
-
-
-
 # Remove 'SalePrice' from the list if it exists
 
 if 'SalePrice' in selected_features:
@@ -424,47 +418,127 @@ plt.title('Actual vs Predicted House Prices')
 plt.show()
 
 scaling_features = features_for_correlation.copy()
-X_train, X_test, y_train, y_test = train_test_split_2(scaling_features, target, test_size=0.2, random_state=42)
+
+scaling_features.head()
+X_train, X_test, y_train, y_test = train_test_split(scaling_features, target, test_size=0.2, random_state=42)
 scaler = StandardScaler()
 
 X_train_scaled = scaler.fit_transform(X_train)
 
 X_test_scaled = scaler.transform(X_test)
- # Create a linear regression model
+#  Create a linear regression model
 
-# model = LinearRegression()
-
-
-
-# # Create an RFE object with 10 features to select
-
-# rfe = RFE(model, n_features_to_select=10)
+model = LinearRegression()
 
 
 
-# # Fit the RFE object
+# Create an RFE object with 10 features to select
 
-# rfe.fit(X_train, y_train)
-
-
-
-# # Get the selected features
-
-# selected_features_rfe = X_train.columns[rfe.support_]
-
-# print("Selected features by RFE:", selected_features_rfe)
+rfe = RFE(model, n_features_to_select=10)
 
 
 
-# # Get feature rankings
+# Fit the RFE object
 
-# feature_rankings = rfe.ranking_
+rfe.fit(X_train, y_train)
 
-# print("\nFeature rankings:")
 
-# for feature, rank in zip(X_train.columns, feature_rankings):
 
-#     print(f"{feature}: {rank}")
+# Get the selected features
+
+selected_features_rfe = X_train.columns[rfe.support_]
+
+print("Selected features by RFE:", selected_features_rfe)
+
+
+
+# Get feature rankings
+
+feature_rankings = rfe.ranking_
+
+print("\nFeature rankings:")
+
+for feature, rank in zip(X_train.columns, feature_rankings):
+
+    print(f"{feature}: {rank}")
+
+# Initialize Random Forest Regressor
+
+rf_regressor = RandomForestRegressor(n_estimators=100, random_state=42)
+
+
+
+# Create RFE object with 11 features to select
+
+rfe = RFE(estimator=rf_regressor, n_features_to_select=11)
+
+
+
+# Fit the RFE model
+
+rfe.fit(X_train, y_train)
+
+
+
+# Get the selected features
+
+selected_features = X_train.columns[rfe.support_]
+
+print("Selected Features:", selected_features)
+
+
+
+# create a new Random Forest Regressor model using only the selected
+
+new_rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
+
+
+
+# Fit the new model on the selected features
+
+X_train_selected = X_train[selected_features]
+
+new_rf_model.fit(X_train_selected, y_train)
+
+
+
+# evaluate our new model:
+
+# Make predictions on the test set
+
+X_test_selected = X_test[selected_features]
+
+y_pred = new_rf_model.predict(X_test_selected)
+
+
+
+# Calculate MSE
+
+mse = mean_squared_error(y_test, y_pred)
+
+rmse = np.sqrt(mse)
+
+
+
+print(f"RMSE of RFE-selected Random Forest Model: {rmse}")
+
+
+
+# Visualize the predictions vs actual values
+
+plt.figure(figsize=(10, 6))
+
+plt.scatter(y_test, predictions)
+
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], 'r--')
+
+plt.xlabel('Actual Price ($)')
+
+plt.ylabel('Predicted Price ($)')
+
+plt.title('Actual vs Predicted House Prices')
+
+plt.show()
 
 # # Create a linear regression model
 
@@ -504,7 +578,7 @@ X_test_scaled = scaler.transform(X_test)
 
 # plt.xlabel("Number of features selected")
 
-# plt.ylabel("Cross validation score")
+# plt.ylabel("Cross validation score")It
 
 # plt.plot(range(1, len(rfecv.cv_results_['mean_test_score']) + 1), rfecv.cv_results_['mean_test_score'])
 
