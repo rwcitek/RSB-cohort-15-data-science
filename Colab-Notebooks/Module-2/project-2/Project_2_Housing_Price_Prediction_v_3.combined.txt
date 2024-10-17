@@ -58,10 +58,12 @@ for col in categorical_cols:
 ### Feature Selection based on correlation
 # 5a1- Data Preparation
 ### Splitting Training and Testing sets
-# 5-b RFE Feature Selection
-
-# 5-c RFECV Feature Selection
+### Feature Scaling for corr_features
 # 5a- Model Creation and Eval
+# 5b- RFE Feature Selection
+
+### Feature Scaling for RFE Selection
+# 5c- RFECV Feature Selection
 %%capture
 
 !pip install cudf-cu11 --extra-index-url=https://pypi.ngc.nvidia.com
@@ -79,12 +81,6 @@ locale.getpreferredencoding = lambda: "UTF-8"
 
 
 %load_ext cudf.pandas
-
-
-%load_ext cudf.pandas
-
-
-
 import pandas as pd
 
 import numpy as np
@@ -99,7 +95,11 @@ import seaborn as sns
 
 from sklearn.model_selection import train_test_split
 
+
+
 from sklearn.metrics import mean_squared_error
+
+
 
 from sklearn.impute import SimpleImputer
 
@@ -118,6 +118,8 @@ from sklearn.linear_model import Ridge
 
 
 from sklearn.ensemble import RandomForestRegressor
+
+
 
 from sklearn.preprocessing import StandardScaler
 
@@ -349,6 +351,8 @@ print(f"\nShape of selected features dataframe: {corr_features.shape}")
 print(f"Features shape: {corr_features.shape}")
 
 print(f"Target shape: {target.shape}")
+# Data Preparation
+
 X_train, X_test, y_train, y_test = train_test_split(corr_features, target, test_size=0.2, random_state=42)
 
 # Print the shapes of the split data
@@ -360,6 +364,72 @@ print(f"X_test shape: {X_test.shape}")
 print(f"y_train shape: {y_train.shape}")
 
 print(f"y_test shape: {y_test.shape}")
+# Feature Scaling
+
+scaler = StandardScaler()
+
+X_train_scaled = scaler.fit_transform(X_train)
+
+X_test_scaled = scaler.transform(X_test)
+# Model Creation and Evaluation
+
+# Use Ridge regression with a small alpha value to add some regularization
+
+model = Ridge(alpha=0.1)
+
+model.fit(X_train_scaled, y_train)
+
+
+
+# Make predictions
+
+predictions = model.predict(X_test_scaled)
+
+
+
+# Calculate metrics
+
+rmse = np.sqrt(mean_squared_error(y_test, predictions))
+
+print(f"Root Mean Squared Error (RMSE): ${rmse:.2f}")
+
+
+
+rmspe = np.sqrt(np.mean((predictions - y_test) / y_test)**2) * 100
+
+print(f"Root Mean Squared Percentage Error (RMSPE): {rmspe:.2f}%")
+
+
+
+r2 = model.score(X_test_scaled, y_test)
+
+print(f"R-squared: {r2:.4f}")
+
+
+
+# Visualize the predictions vs actual values
+
+plt.figure(figsize=(10, 6))
+
+plt.scatter(y_test, predictions)
+
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], 'r--')
+
+plt.xlabel('Actual Price ($)')
+
+plt.ylabel('Predicted Price ($)')
+
+plt.title('Actual vs Predicted House Prices')
+
+plt.show()
+
+scaling_features = features_for_correlation.copy()
+X_train, X_test, y_train, y_test = train_test_split_2(scaling_features, target, test_size=0.2, random_state=42)
+scaler = StandardScaler()
+
+X_train_scaled = scaler.fit_transform(X_train)
+
+X_test_scaled = scaler.transform(X_test)
  # Create a linear regression model
 
 # model = LinearRegression()
@@ -441,74 +511,4 @@ print(f"y_test shape: {y_test.shape}")
 # plt.title("RFECV Cross Validation Scores")
 
 # plt.show()
-
-
-
-# Data Preparation
-
-X_train, X_test, y_train, y_test = train_test_split(corr_features, target, test_size=0.2, random_state=42)
-
-
-
-# Feature Scaling
-
-scaler = StandardScaler()
-
-X_train_scaled = scaler.fit_transform(X_train)
-
-X_test_scaled = scaler.transform(X_test)
-
-
-
-# Model Creation and Evaluation
-
-# Use Ridge regression wit a small alpha value to add some regularization
-
-model = Ridge(alpha=0.1)
-
-model.fit(X_train_scaled, y_train)
-
-
-
-# Make predictions
-
-predictions = model.predict(X_test_scaled)
-
-
-
-# Calculate metrics
-
-rmse = np.sqrt(mean_squared_error(y_test, predictions))
-
-print(f"Root Mean Squared Error (RMSE): ${rmse:.2f}")
-
-
-
-rmspe = np.sqrt(np.mean((predictions - y_test) / y_test)**2) * 100
-
-print(f"Root Mean Squared Percentage Error (RMSPE): {rmspe:.2f}%")
-
-
-
-r2 = model.score(X_test_scaled, y_test)
-
-print(f"R-squared: {r2:.4f}")
-
-
-
-# Visualize the predictions vs actual values
-
-plt.figure(figsize=(10, 6))
-
-plt.scatter(y_test, predictions)
-
-plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], 'r--')
-
-plt.xlabel('Actual Price ($)')
-
-plt.ylabel('Predicted Price ($)')
-
-plt.title('Actual vs Predicted House Prices')
-
-plt.show()
 
