@@ -1,0 +1,113 @@
+---
+
+# **About Me**
+
+---
+
+### **Robert Balch II**
+
+I am a software developer with an interest in moving into systems engineering or data science. To achieve these goals I began my coding work a year and a half ago at the Deep Dive Fullstack Program at CNM Ingenuity.
+
+
+
+---
+
+
+
+## **Work Opportunities After Graduation**
+
+---
+
+### **Martini App - Startup**
+
+I have had the opportunities after the DeepDive program to work at an internship with Dry Ice LLC. At this internship I was able to
+
+- *write pages of the main application software*
+
+- *write up a CRUD application for the COO to keep track of sales and customer information*
+
+- *use supabase as a backend for data and middleware for .*
+
+
+
+---
+
+### **Petroleum Research and Recovery - New Mexico Tech**
+
+---
+
+
+
+During this contract I designed an Entity Relationship Diagram and decided what frameworks and languages would be used for an inventory application that is used by the Petroleum Research and Engineering Center at New Mexico Technical Institute.
+
+
+
+---
+
+#### **PRRC Website**
+
+---
+
+
+
+- *Made contributions to the PRRC Website converting html and css to Next.js Framework for security and high speed access.*
+
+
+
+---
+
+#### **PRRC Seismic Database data conversion**
+
+---
+
+
+
+Using data taken from oil well sensors in the Permian Basin in an effort to understand the effects of Co2 Sequestration methods tested on older wells. This process both removes Co2 in vast amounts from the atmoshpere and allows wells to produce oil beyond basic fracturing methods.
+
+
+
+- *here I configured permissions on the server*
+
+- *Converted data from Miniseed file format to be updated with meta tags and transferred them into a MySQL databse.*
+
+- *Used SSH to access the machine remotely and scp file transferring to send extracted data files which allowed reading with .obspy software by geologists at Sandia Laboratories.*
+
+
+
+---
+
+Things I enjoy
+
+---
+
+
+
+![https://images3.alphacoders.com/116/116875.jpg](https://images3.alphacoders.com/116/116875.jpg "Blowing up Windows again")
+
+
+
+Blowing up my OS!
+
+
+
+OS| Installs| Resets|
+
+ - | - | -
+
+ Windows| 5| 3|
+
+Fedora | 1 | 6|
+
+Pop! OS| 2| 5|
+
+Mint | 3| 9|
+
+
+
+
+
+All the resets are because of troubleshooting driver software and compatability as my machine I installed it onto had hardware that was too new for the recent kernel on the linux distros I tried.
+
+
+
+Windows I just try to keep a licensed version of 11 pro just in case.

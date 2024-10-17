@@ -1,0 +1,340 @@
+# Exploring BigQuery
+
+
+
+- BigQuery metadata, i.e. information about a table
+
+- BigQuery query limits with QueryJobConfig()
+
+## Setup
+## Table Metadata Exploration
+### List the tables
+### Look at the table schema
+##  Add safe config settings
+BigQuery allows you to query up to 1 TB per month. You can quickly reach this limit if you are not careful. Luckily, there are ways to assess and limit the amount of data you are querying.
+Set constants for sizes
+### Sample Queries - Dry Run
+
+
+
+You can use a 'dry run' to estimate the size of a query before running it.
+Sample Query 1 - Safe Config
+
+You can also specify a limit for how much data you want to scan.
+from google.cloud import bigquery
+
+from google.colab import auth
+
+import pandas as pd
+
+
+
+auth.authenticate_user()
+billing_project_id = 'cool-monolith-286222'
+
+
+
+# Create client object
+
+client = bigquery.Client(project=billing_project_id)
+# Construct a reference to the "Global Biodiversity Information Facility" dataset
+
+dataset_ref = client.dataset("gbif", project="bigquery-public-data")
+
+
+
+# API request - fetch the dataset
+
+dataset = client.get_dataset(dataset_ref)
+
+
+
+# Get all the tables in the dataset
+
+tables = list(client.list_tables(dataset))
+
+
+
+# Print names of all tables in the dataset
+
+for table in tables:
+
+  print(table.table_id)
+table_id = "occurrences"
+
+table_id
+# Construct a reference to the "mobility report" table
+
+table_ref = dataset.table("occurrences")
+
+
+
+# API request - fetch the table
+
+table = client.get_table(table_ref)
+
+
+
+# See the table's schema - name, field type, mode, description
+
+table.schema
+# convert the table.schema into a data frame
+
+fields = pd.DataFrame( [ x.to_api_repr() for x in table.schema ] )
+
+fields.head()
+
+fields.shape
+# Preview the first five lines of the table as a data frame
+
+client.list_rows(table, max_results=5).to_dataframe().transpose()
+
+ONE_MB = 1_000*1_000
+
+ONE_GB = 1_000*ONE_MB
+project_id = "bigquery-public-data"
+
+dataset_id = "gbif"
+
+table_id = "occurrences"
+
+
+
+queries = []
+
+
+
+queries += [ f"""
+
+        SELECT countrycode
+
+        FROM {project_id}.{dataset_id}.{table_id}
+
+        WHERE class = "Magnoliopsida" AND countrycode ='US'
+
+        LIMIT 10
+
+        """ ]
+
+
+
+queries += [ f"""
+
+        SELECT countrycode
+
+        FROM {project_id}.{dataset_id}.{table_id}
+
+        WHERE class = "Magnoliopsida" AND countrycode ='US'
+
+        """ ]
+
+
+
+queries += [ f"""
+
+        SELECT countrycode
+
+        FROM {project_id}.{dataset_id}.{table_id}
+
+        WHERE countrycode ='US'
+
+        """ ]
+
+
+
+queries += [ f"""
+
+        SELECT year
+
+        FROM {project_id}.{dataset_id}.{table_id}
+
+        WHERE year = 2012
+
+        """ ]
+
+
+
+queries += [ f"""
+
+        SELECT countrycode, class
+
+        FROM {project_id}.{dataset_id}.{table_id}
+
+        WHERE class = "Magnoliopsida" AND countrycode ='US'
+
+        """ ]
+
+
+
+queries += [ f"""
+
+        SELECT countrycode, class
+
+        FROM {project_id}.{dataset_id}.{table_id}
+
+        WHERE countrycode ='US'
+
+        """ ]
+
+
+
+queries += [ f"""
+
+        SELECT countrycode, class
+
+        FROM {project_id}.{dataset_id}.{table_id}
+
+        """ ]
+
+
+
+queries += [ f"""
+
+        SELECT countrycode
+
+        FROM {project_id}.{dataset_id}.{table_id}
+
+        """ ]
+
+
+
+queries += [ f"""
+
+        SELECT count(countrycode)
+
+        FROM {project_id}.{dataset_id}.{table_id}
+
+        """ ]
+
+
+
+queries += [ f"""
+
+        SELECT count(1)
+
+        FROM {project_id}.{dataset_id}.{table_id}
+
+        """ ]
+
+
+
+queries += [ f"""
+
+        SELECT count(countrycode)
+
+        FROM {project_id}.{dataset_id}.{table_id}
+
+        WHERE countrycode ='US'
+
+        """ ]
+
+
+
+queries += [ f"""
+
+        SELECT count(1)
+
+        FROM {project_id}.{dataset_id}.{table_id}
+
+        WHERE countrycode ='US'
+
+        """ ]
+
+
+
+len(queries)
+
+for query in queries:
+
+  dry_run_config = bigquery.QueryJobConfig(dry_run = True)
+
+  dry_run_query_job = client.query(query, job_config= dry_run_config)
+
+  size = dry_run_query_job.total_bytes_processed
+
+  print(query)
+
+  print(f"{size:_}")
+
+  print()
+# Create a list of queries
+
+queries = []
+
+
+
+queries += [ f"""
+
+        SELECT count(1) as `total`
+
+        FROM {project_id}.{dataset_id}.{table_id}
+
+        """ ]
+
+
+
+queries += [ f"""
+
+        SELECT count(1) as `total`
+
+        FROM {project_id}.{dataset_id}.{table_id}
+
+        WHERE countrycode ='US'
+
+        """ ]
+
+
+
+queries += [ f"""
+
+        SELECT count(countrycode) as `total`
+
+        FROM {project_id}.{dataset_id}.{table_id}
+
+        """ ]
+
+
+
+queries += [ f"""
+
+        SELECT count(countrycode) as `total`
+
+        FROM {project_id}.{dataset_id}.{table_id}
+
+        WHERE countrycode ='US'
+
+        """ ]
+
+
+
+len(queries)
+# safe_config needs to be included with every client.query() request
+
+safe_config = bigquery.QueryJobConfig(
+
+    maximum_bytes_billed=ONE_GB,
+
+    # totalBytesProcessed=ONE_GB,
+
+    # total_bytes_processed=ONE_GB,
+
+)
+
+# Use a try...except block to catch when the safe_config paramenter prevents a query
+
+for query in queries:
+
+  print(query)
+
+  try:
+
+    df = client.query(query, job_config=safe_config).to_dataframe()
+
+    print(df.head())
+
+  except:
+
+    print("Blocked by safe_config")
+
+f"{ONE_GB:_}"
+2669694827 > ONE_GB

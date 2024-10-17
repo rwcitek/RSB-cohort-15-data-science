@@ -1,0 +1,277 @@
+Plotly Express documentation can be found [here](https://plotly.com/python/plotly-express/).
+# Gapminder Dataset
+## Line Plot
+## Box Plot
+## Scatter Plot
+## Map
+# Iris Dataset
+## Scatter Plot w/ Marginal Plots & Trendline
+## Parallel Coordinates Plot
+## 3D Plot
+# Carshare Dataset
+## Violin Plot
+## Map
+## Your Turn
+
+1. Look at two of the datasets from Plotly Express: `tips` and one other. [List of data sets]( https://plotly.com/python-api-reference/generated/plotly.data.html#module-plotly.data )
+
+2. Create at least one Plotly Express plot for each of the datasets. Be creative!
+Tips data in a facet plot.
+Wind data in a radar plot
+Stocks
+import pandas as pd
+
+import plotly.express as px
+
+import matplotlib.pyplot as plt
+# Example data
+
+gap = px.data.gapminder()
+
+gap.head()
+gap.shape
+# Line Plot
+
+fig = px.line(
+
+    gap,
+
+    x = 'year',
+
+    y = 'lifeExp',
+
+    facet_col = 'continent',
+
+    color = 'country'
+
+    )
+
+fig.show()
+#Box Plot
+
+fig = px.box(
+
+    gap,
+
+    x="year",
+
+    y="lifeExp",
+
+    color="continent",
+
+    notched=True)
+
+fig.show()
+# Scatter Plot
+
+fig = px.scatter(
+
+    gap,
+
+    x="gdpPercap",
+
+    y="lifeExp",
+
+    size="pop",
+
+    color="continent",
+
+    animation_frame="year",
+
+    hover_name="country",
+
+    log_x=True,
+
+    size_max=60
+
+    )
+
+fig.update_yaxes(range=[0, 100])
+
+fig.show()
+
+fig = px.choropleth(
+
+    gap,
+
+    locations="iso_alpha",
+
+    color="lifeExp",
+
+    hover_name="country",
+
+    animation_frame="year",
+
+    range_color=[20,80]
+
+)
+
+fig.show()
+iris = px.data.iris()
+
+fig = px.scatter(
+
+    iris,
+
+    x="sepal_width",
+
+    y="sepal_length",
+
+    color="species",
+
+    marginal_y="violin",
+
+    marginal_x="box",
+
+    trendline="ols"
+
+)
+
+fig.show()
+fig = px.parallel_coordinates(
+
+    iris,
+
+    color="species_id",
+
+    color_continuous_scale=px.colors.diverging.Tealrose,
+
+    color_continuous_midpoint=2
+
+    )
+
+fig.show()
+fig = px.scatter_3d(
+
+    iris,
+
+    x="sepal_width",
+
+    y="sepal_length",
+
+    z="petal_width",
+
+    color="species_id",
+
+    size="species_id",
+
+    hover_name="species_id"
+
+    )
+
+fig.show()
+cars = px.data.carshare()
+
+cars.head()
+cars.shape
+filter = ( cars['peak_hour'] < 5 )
+
+cars[filter].groupby('peak_hour')['peak_hour'].count()
+
+cars2 = cars[cars['peak_hour'] < 5]
+
+fig = px.violin(
+
+    cars2,
+
+    y="car_hours",
+
+    x="peak_hour",
+
+    color = 'peak_hour',
+
+    box=True,
+
+    points = 'all',
+
+    hover_data=cars.columns
+
+)
+
+fig.show()
+fig = px.scatter_mapbox(
+
+        cars,
+
+        lat="centroid_lat",
+
+        lon="centroid_lon",
+
+        color="peak_hour",
+
+        size="car_hours",
+
+        color_continuous_scale=px.colors.cyclical.IceFire,
+
+        size_max=15,
+
+        zoom=10,
+
+        mapbox_style="carto-positron",
+
+        anima
+
+)
+
+fig.show()
+
+df = px.data.tips()
+
+df.shape
+df[:5]
+df["day"].value_counts()
+df["time"].value_counts()
+fig = px.bar(
+
+    df,
+
+    x="sex",
+
+    y="total_bill",
+
+    color="smoker",
+
+    barmode="group",
+
+    facet_row="time",
+
+    facet_col="day",
+
+    category_orders={
+
+        "day": ["Thur", "Fri", "Sat", "Sun"],
+
+        "time": ["Lunch", "Dinner"],
+
+        },
+
+    )
+
+fig.show()
+
+df = px.data.wind()
+
+df.shape
+df[:5]
+fig = px.line_polar(
+
+    df,
+
+    r="frequency",
+
+    theta="direction",
+
+    color="strength",
+
+    line_close=True,
+
+    color_discrete_sequence=px.colors.sequential.Plasma_r,
+
+    )
+
+fig.show() ;
+
+df = px.data.stocks()
+
+df.shape
+df[:5]

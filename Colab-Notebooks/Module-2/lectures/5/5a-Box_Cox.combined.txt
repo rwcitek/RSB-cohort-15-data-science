@@ -1,0 +1,170 @@
+## Boston Dataset
+
+We are going to look at a Boston housing dataset in this example
+## Imports
+## Read in Data
+## Data Cleaning
+## EDA
+## Linear Regression
+
+We will first fit a multiple linear regression model using all of the predictors.
+## Transformation of Response
+Box Cox is a commonly used transformation that is used to transform a non-normal distribution to a normal distribution. Recall that one of the assumptions of linear regression is that the residuals are normally distributed. If that assumption is not being met, we can transform the response using a Box Cox transformation to try to make them more normally distributed.
+### Box Cox Implementation
+import statsmodels.api as sm
+
+import matplotlib.pyplot as plt
+
+import pandas as pd
+
+import numpy as np
+
+import numpy.typing as npt
+
+import seaborn as sns
+
+from sklearn import datasets
+
+from sklearn.linear_model import LinearRegression
+
+from sklearn.model_selection import train_test_split
+
+from sklearn.model_selection import cross_val_score
+
+from sklearn.metrics import mean_squared_error
+def rmse(y_test: npt.NDArray, y_pred: npt.NDArray) -> np.float64:
+
+  '''Calculates the root mean square between an array of known and predicated values'''
+
+  return np.sqrt(mean_squared_error(y_test,y_pred))
+
+help(rmse)
+# from google.colab import drive
+
+# drive.mount('/content/drive')
+url = "http://ddc-datascience.s3-website-us-west-1.amazonaws.com/boston.csv"
+
+!curl -s {url} | head | cut -c1-100
+boston = pd.read_csv( url, index_col = 0)
+
+boston.head()
+boston.shape
+boston.describe( include = "all" ).transpose()
+boston.info()
+plt.figure(figsize = (8,6))
+
+plt.hist(boston['med_home_value'])
+
+plt.xlabel('Median Home Value (in thousands)')
+
+plt.ylabel('Count')
+plt.figure(figsize = (8,6))
+
+sns.scatterplot(x = boston['num_rooms'], y = boston['med_home_value'])
+
+plt.xlabel('Number of Rooms')
+
+plt.ylabel("Median Home Value (in thousands)") ;
+# First we will break up our data into training and testing sets
+
+X = boston.drop('med_home_value', axis = 1).copy()
+
+X = sm.add_constant(X)
+
+y = boston['med_home_value']
+
+
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 4)
+train_test_split?
+# Fit a linear model using Statsmodels
+
+myfit = sm.OLS(y_train, X_train).fit()
+
+myfit.summary()
+# Perform cross validation
+
+n = 500
+
+results = np.zeros(n)
+
+for idx in range(n):
+
+  X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2)
+
+  model = sm.OLS(y_train, X_train).fit()
+
+  y_pred = model.predict(X_test)
+
+  results[idx] = rmse(y_test,y_pred)
+
+
+
+print(f"CV RMSE: {results.mean().round(2)*1000}")
+# Generate figure of predicted vs actual results
+
+plt.figure(figsize=(10,8));
+
+plt.scatter(y_test, y_pred);
+
+p1 = max(y_pred.max(), y_test.max())
+
+plt.plot([0, p1],[0, p1], c='red')
+
+plt.xlabel('True Values')
+
+plt.ylabel('Predicted Values')
+# QQ Plot - Residuals of Linear Model Above
+
+import scipy.stats as stats
+
+res = y_test - y_pred
+
+sm.qqplot(res, fit=True, line="45")
+
+plt.show()
+from scipy import stats
+
+from scipy import special
+
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2, random_state = 4)
+
+fitted_data, fitted_lambda = stats.boxcox(y_train)
+
+print(fitted_lambda)
+
+y_train.mean() , y_train.median()
+plt.hist(y_train) ;
+plt.hist(fitted_data) ;
+# Perform CV
+
+# FIXME insert
+
+n = 500
+
+results = np.zeros(n)
+
+for idx in range(n):
+
+  X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2)
+
+  fitted_data, fitted_lambda = stats.boxcox(y_train) # Perform the box cox transformation on y_train
+
+  model = sm.OLS(fitted_data, X_train).fit() # Fit the linear regression model. Note: you can also perform box cox with Lasso or Ridge regression
+
+  y_pred = model.predict(X_test)
+
+  real_y_pred = special.inv_boxcox(y_pred, fitted_lambda) # Perform the inverse box cox to get predictions back on original scale
+
+  results[idx] = rmse(y_test,real_y_pred)
+
+print(f"CV RMSE: {results.mean().round(2)*1000}")
+# QQ Plot
+
+import scipy.stats as stats
+
+res = y_test - real_y_pred
+
+sm.qqplot(res, fit=True, line="45")
+
+plt.show()

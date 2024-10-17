@@ -1,0 +1,146 @@
+# Encoding
+## When and Why is Encoding Used?
+
+Encoding is needed for some machine learning models when you have **categorical** predictors (e.g., *color*: red, yellow, blue).
+
+
+
+Some machine learning algorithms (e.g., decision trees in R) can work directly with categorical data, but most others cannot.
+
+
+
+The machine learning algorithms that cannot use categorical data require that the categorical data be transformed to numeric data.
+
+
+
+
+
+## How Do We Transform Categorical Data Into Numeric?
+
+There are two ways we can do this:
+
+1. Integer Encoding
+
+2. One-Hot Encoding
+### Integer Encoding
+
+This requires simpy assigning an integer value to each of the categories in the categorical data.
+
+
+
+For example:
+
+
+
+*   Small = 1
+
+*   Medium = 2
+
+*   Large = 3
+
+
+
+This works for cases where the categorical data have a natural ordering between them (as is the case with small, medium & large). However, when the categorical data do not have a natural ordering (e.g., blue, yellow, green), one-hot encoding is required.
+
+
+
+
+
+### One-Hot Encoding
+
+One-hot encoding involves creating a new binary variable for each category.
+
+
+
+For example, say we have this original dataset:
+
+
+
+Bird Species | Color
+
+-------------|------
+
+Blue Jay     | Blue
+
+Warbler      | Yellow
+
+Mountain Bird| Blue
+
+Parrot       | Green
+
+
+
+We would one-hot encode these data as follows:
+
+
+
+Bird Species | Blue | Yellow | Green
+
+-------------|------|--------|------
+
+Blue Jay     | 1    |0      |0
+
+Warbler      |0     |1      |0
+
+Mountain Bird| 1    |0      |0
+
+Parrot       |0     |0       |1
+
+
+
+## Example
+### Integer Encoding
+### One-Hot Encoding
+from sklearn.preprocessing import LabelEncoder
+
+import numpy as np
+
+import pandas as pd
+# Create dataframe
+
+heights = {'Name': ['Michael', 'Jim', 'Pam', 'Dwight', 'Kelly'],
+
+           'Age': [45, 35, 33, 46, 28],
+
+           'Height': ['Average', 'Tall', 'Short', 'Average', 'Short']}
+
+heights_df = pd.DataFrame(heights)
+
+heights_df
+# Create instance of labelencoder
+
+labelencoder = LabelEncoder()
+
+
+
+# Assign numerical values and store in another column
+
+heights_df['Height Label'] = labelencoder.fit_transform(heights_df['Height'])
+
+heights_df
+# Another option - using .replace()
+
+heights_df['Height Label2'] = heights_df['Height'].replace({'Short': 0, 'Average': 1, 'Tall': 2})
+
+heights_df
+heights_df.info()
+# Using pandas
+
+# Create dataframe
+
+foods = {'Name': ['Michael', 'Jim', 'Pam', 'Dwight', 'Kelly'],
+
+         'Age': [45, 35, 33, 46, 28],
+
+         'Food': ['Pizza', 'Ham and Cheese', 'Pizza', 'Beets', 'Cupcake']}
+
+foods_df = pd.DataFrame(foods)
+
+foods_df
+# Generate binary values using get_dummies
+
+dum_df = pd.get_dummies(foods_df, columns=["Food"], prefix="", prefix_sep="") # Can change prefix using prefix argument
+
+# dum_df = pd.get_dummies(foods_df, columns=["Food"] ) # Can change prefix using prefix argument
+
+dum_df

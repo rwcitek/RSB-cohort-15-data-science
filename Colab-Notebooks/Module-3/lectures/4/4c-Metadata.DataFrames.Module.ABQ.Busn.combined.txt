@@ -1,0 +1,90 @@
+# Exploring the Metadata of Data Frames
+
+## Exploring dataframes
+
+### Using the ABQ business data set
+## Using a module on GitHub
+### Looking at ABQ business data
+import pandas as pd
+
+url = 'https://ddc-datascience.s3.amazonaws.com/a-z.business/2023-08-21/combined.txt'
+
+csv = 'abq_bus.csv'
+!curl -O {url}
+!ln -s combined.txt abq_bus.csv
+abq_bus = pd.read_csv( csv, delimiter='\t', dtype='str' )
+
+abq_bus.shape
+rows, columns = abq_bus.shape
+
+{
+
+  "Rows": rows,
+
+  "Columns" : columns
+
+}
+# from https://github.com/rwcitek/example-c11/blob/main/python.modules/metadata.py
+
+
+
+!curl -s -O https://raw.githubusercontent.com/rwcitek/example-c11/main/python.modules/metadata.py
+
+
+
+# normally importing into the global namespace is very much frowned upon
+
+from metadata import *
+
+
+
+# this is preferred
+
+# import metadata as md
+
+ls -la
+pd.set_option('display.max_rows', 1_000)
+md_abq_bus = metadata( abq_bus )
+
+md_abq_bus
+md_abq_bus
+%%capture output
+
+%%bash
+
+apt-get update
+
+# apt-cache search csv
+
+apt-get install -y csvkit csvtool jq tree
+
+%%bash
+
+echo $PATH |
+
+tr : '\n' |
+
+while read folder ; do
+
+  ls -la ${folder}/csv* 2> /dev/null || true
+
+done
+!{ head -1 abq_bus.csv ; grep -i tricore abq_bus.csv ; } | head -2 | csvjson -t | jq .
+
+!{ head -1 abq_bus.csv ; grep -i 8731005 abq_bus.csv ; } | column -s$'\t' -t | cat -n
+
+!{ head -1 abq_bus.csv ; grep -i 541714 abq_bus.csv ; } | cat -n
+
+cols = [ x for x in abq_bus.columns if "NAICS" in x and "Desc" not in x ]
+
+filter = abq_bus[ cols ].apply( lambda row: '|'.join(row.values.astype(str)).find("541714") >= 0, axis=1)
+
+abq_bus[ filter ]
+
+sum(filter)
+abq_bus.iloc[0]
+
+abq_bus[["NAICS 1", "NAICS 1 Description"]].value_counts()
+
+abq_bus[["NAICS 1 Description"]].value_counts().to_frame().reset_index()
+

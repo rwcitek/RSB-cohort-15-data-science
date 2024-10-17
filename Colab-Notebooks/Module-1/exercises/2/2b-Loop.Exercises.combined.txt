@@ -1,0 +1,276 @@
+## Problem 1
+Write a Python program that prints out the numbers from 2 to 60 in increments of two
+
+
+
+Output:
+
+```
+
+2 4 6 ... 56 58 60
+
+```
+## Problem 2
+
+
+
+
+Write a Python program that takes a word and reverses it.
+Input:
+
+
+
+```
+
+input_word = 'stressed'
+
+```
+
+
+
+Output:
+
+```
+
+desserts
+
+```
+Solution:
+## Problem 3
+
+
+
+
+
+Write a Python program that prints each item and its corresponding type from the following list.
+Input:
+
+
+
+```
+
+datalist = [1452, 11.23, 1+2j, True, 'w3resource', (0, -1), [5, 12],
+
+{"class":'V', "section":'A'}]
+
+```
+
+
+
+Preferred Output:
+
+
+
+```
+
+Type of  1452  is  <class 'int'>                                                                              
+
+Type of  11.23  is  <class 'float'>                                                                            
+
+Type of  (1+2j)  is  <class 'complex'>                                                                         
+
+Type of  True  is  <class 'bool'>                                                                             
+
+Type of  w3resource  is  <class 'str'>                                                                        
+
+Type of  (0, -1)  is  <class 'tuple'>                                                                         
+
+Type of  [5, 12]  is  <class 'list'>                                                                          
+
+Type of  {'class': 'V', 'section': 'A'}  is  < class 'dict'>
+
+```
+
+
+
+Solution:
+## Problem 4
+
+
+
+
+Write a Python program to construct the following pattern:
+
+
+
+
+
+
+
+@
+
+
+
+@@
+
+
+
+@@@
+
+
+
+@@@@
+
+
+
+@@@@@
+
+
+
+@@@@
+
+
+
+@@@
+
+
+
+@@
+
+
+
+@
+
+
+
+
+
+**Hint:** `@*3` will print out `@@@`.
+
+# Problem 5
+
+
+
+
+Write a Python program which iterates through the integers from 0 to 50. For multiples of three print "Fizz" instead of the number and for the multiples of five print "Buzz". For numbers which are multiples of both three and five print "FizzBuzz".  
+
+
+
+For this problem zero is considered a multiple of three and five 3\*0=5\*0=0
+Sample Output :  
+
+```
+
+Fizz Buzz
+
+1
+
+2
+
+Fizz
+
+4
+
+Buzz
+
+Fizz
+
+7
+
+8
+
+Fizz
+
+Buzz
+
+<etc.>
+
+```
+
+# Problem 6
+
+
+
+
+Write a Python program to calculate a dog's age in dog's years.
+
+
+
+Note: For the first two calendar years, a dog year is equal to 10.5 calendar years. After that, each dog year equals 4 calendar years.
+
+
+
+Input:
+
+```
+
+calendar_age = 5
+
+```
+
+
+
+Preferred Output:
+
+
+
+```
+
+The dog's age in dog's years is 33
+
+```
+for _ in range(0, 61, 2): print(_)
+input_word = 'stressed'
+
+for _ in input_word[::-1]:
+
+ print(_)
+datalist = [1452, 11.23, 1+2j, True, 'w3resource', (0, -1), [5, 12], {"class":'V', "section":'A'}]
+
+for _ in datalist:
+
+  print(_)
+for _ in datalist:
+
+  print(f"type of {_} is {type(_)}")
+for _ in range(1,5):
+
+  print('@' * _ )
+
+
+
+for _ in range(5,0, -1):
+
+  print('@' * _)
+
+
+
+# Solution here
+
+for _ in range(0, 51):
+
+ if _ % 5 == 0 and _ % 3 == 0:
+
+    print('fizz-buzz')
+
+ elif _ % 5 == 0:
+
+    print('buzz')
+
+ elif _ % 3 == 0:
+
+  print('fizz')
+
+ else:
+
+  print(_)
+
+# first 2 years. calendar year = 10.5 dog years
+
+# after that calendar year = 4 dog years
+
+calendar_age = 5
+
+dog_age = 0
+
+for _ in range(1, calendar_age + 1):
+
+    if _ <= 2:
+
+        dog_age += 10.5
+
+    else:
+
+        dog_age += 4
+
+print(f"The dog's age in dog's years is {dog_age}")

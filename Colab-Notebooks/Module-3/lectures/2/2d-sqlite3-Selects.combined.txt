@@ -1,0 +1,1107 @@
+# Part 1: SQL Overview & Syntax
+## SQL Overview
+**Structured Query Language - Databases!!**
+
+
+
+**Why do we care?**
+
+- Lots of data is available in SQL databases
+
+- You may be tasked with using this data and you have to be able to get it out of the database.
+
+- Efficient storage and retrieval of records
+
+- Good for storing MASSIVE amounts of data.
+
+- You may want to make your own SQL database at some point
+
+
+
+
+
+**Lots of things you can do with SQL:**
+
+- SELECT (get data) - This is what we'll focus on - Getting Data
+
+- CREATE - Make tables
+
+- INSERT - Add data to a table
+
+- UPDATE - Update data in a table
+
+- ALTER - Change a table
+
+- DROP - Delete a table
+
+- DELETE - Delete data from a table
+We are going to use the following websites to practice SQL queries:
+
+- [MySQL]( https://www.w3schools.com/mysql/trymysql.asp?filename=trysql_select_all )
+
+- [MS SQL Server]( https://www.w3schools.com/sql/trysqlserver.asp?filename=trysql_select_all )
+
+
+
+Also, there are dialects of SQL between the various vendors.  For example, see [w3school's TOP](https://www.w3schools.com/sql/sql_top.asp) page.
+## SQL SELECT Syntax
+Sample Table
+
+
+
+
+
+---
+
+
+
+
+
+
+
+**people**  
+
+
+
+| id       | name           | age | city |
+
+| ------------- |-------------| -----|---|
+
+| 1     | Joe | 5| Durango|
+
+| 2      | Alice     | 55| Albuquerque |
+
+| 3 | Veronica     |   105| Albuquerque |
+
+|4| Matt | 43 | null |
+We will use that Markdown table to create a table in SQLite3.  In order to do that, we need to install SQLite3.
+And to get the data into SQLite, we will first need to go through a few data wrangling steps:
+
+1. save the Markdown table to a string
+
+1. convert the string to HTML
+
+1. convert the HTML to a DataFrame
+
+1. convert the DataFrame to a CSV file
+
+1. import the CSV file into SQLite3
+
+1. clean up the data in SQLite3, e.g. null values, data types
+
+
+
+
+
+## Basic Queries
+**Query all rows and columns**  
+
+`SELECT * FROM people`
+
+
+
+*Note: as a general rule, it is better to explicitly name your columns to ensure consistent results. Naming specific columns is also better for large datasets.*
+
+
+
+**Query specific columns**  
+
+`SELECT name, age FROM people`
+
+
+
+**Query based on condition**  
+
+`SELECT name FROM people WHERE id > 1`
+
+
+
+### Your Turn
+
+1. Select the `CustomerName` and `City` columns from `Customers`.
+
+2. Select the `CustomerName` for people live in Sweden.
+
+3. Select the entire row for people who live in London.
+## And, Or, In
+
+
+**AND - Combine Conditions**  
+
+`SELECT name FROM people WHERE id > 1 AND age > 50`
+
+
+
+
+
+**OR**  
+
+`SELECT name FROM people WHERE name = 'Joe' OR name = 'Alice'`
+
+
+
+**IN**  Require something to be in a list of values  
+
+`SELECT name FROM people WHERE name IN ('Joe', 'Alice')`
+
+
+
+**Combining AND with OR - BEWARE!! - Remember your parentheses!**
+
+
+
+`SELECT name FROM people WHERE (id > 1 AND age > 50) AND (name = 'Joe' OR name = 'Alice')`
+
+
+
+### Your Turn
+
+From the `Customers` table ...
+
+1. Select the entire row for people who live in Spain and have a `CustomerID` less than 20.
+
+2. Select the entire row for people who live in either France or Germany.
+## Aliases and Wildcards
+**AS - Alias a column**  
+
+`SELECT name AS 'first_name' FROM people`
+
+
+
+**% Wildcard - LIKE**  Get all names that start with A  
+
+`SELECT * FROM people WHERE name LIKE  'A%'`
+
+
+
+**_ Wildcard - LIKE**  Match any single character   
+
+`SELECT * FROM people WHERE name LIKE  '_oe'`
+
+
+
+[SQL Reference for LIKE Statement](https://www.w3schools.com/sql/sql_like.asp)
+
+
+
+### Your Turn
+
+From the `Customers` table ...
+
+
+
+1. Select the entire row for people whose `CustomerName` start with "W'
+
+2. Select the entire row for people whose `PostalCode` ends in a 4
+## Additional Queries
+
+
+**BETWEEN** Includes both the lower and upper range of the BETWEEN statement.
+
+
+
+`SELECT name, age FROM people WHERE age BETWEEN 18 AND 70`
+
+
+
+**LIMIT rows returned**  
+
+`SELECT name FROM people LIMIT 5`
+
+
+
+**OFFSET**  skips entries (i.e. page 2 of search results skips first 5 on page 1)  
+
+`SELECT name FROM PEOPLE LIMIT 5 OFFSET 2`
+
+
+
+**NULL** Do not use != or <> or = for NULL
+
+
+
+--Get all records where city has some data.
+
+
+
+`SELECT * FROM people WHERE city IS NOT NULL`
+
+
+
+
+
+--Get all records where city has no data - not the same as "blank"
+
+
+
+`SELECT * FROM people WHERE city IS NULL`
+
+
+
+**ROUND**  - Rounds average age to 2 decimals  
+
+`SELECT ROUND(AVG(age), 2) FROM people`
+**NULL vs blank**
+
+
+
+- NULL is the absence of data meaning data was never collected or provided for that data element. For example, a value may have been left off a survey. You will also get nulls when joining data if the data only exists in one table but not another.
+
+
+
+- blank is empty data meaning data was collected but did not exist for that data element. For example, an address may not have an apartment number so that could be blank.
+
+
+
+- Each serves a different purpose. A database administrator will decide which is appropriate for their application.
+### Your Turn
+
+From the `Customers` table ...
+
+
+
+1. Select the first 6 rows of people who have CustomerIDs between 20 and 35.
+## Sorting & Grouping
+**ORDER BY**  ASC (default) or DESC  
+
+`SELECT * FROM people ORDER BY name DESC`
+
+
+
+**DISTINCT**  Returns unique values of a column  
+
+`SELECT DISTINCT city FROM people`
+
+
+
+**GROUP BY**  (Can come after FROM or WHERE but must come before ORDER BY or LIMIT)  -- Total the number of people in each city
+
+
+
+`SELECT city, COUNT(1) FROM people GROUP BY city`
+
+
+
+**HAVING** Further filters groups-- only pull cities with more than 1 people in them  
+
+`SELECT city, COUNT(1) FROM people GROUP BY city HAVING COUNT(1) > 1`
+### Your Turn
+
+1. Sort the `Customers` table by `City` in alphabetical order.
+
+2. Find the distinct countries.
+
+3. Count the number of people in each country.
+## Aggregates
+**COUNT(*) or COUNT(1)**  Get the number of rows *including* those with NULLs
+
+
+
+`SELECT COUNT(*) FROM people`
+
+
+
+**COUNT(columnName)**  Get the number of rows *excluding* those with NULLs for the specified column.
+
+
+
+`SELECT COUNT(name) FROM people`
+
+
+
+**MAX**  
+
+`SELECT MAX(age) FROM people`
+
+
+
+**MIN**  
+
+`SELECT MIN(age) FROM people`
+
+
+
+**SUM**  
+
+`SELECT SUM(age) FROM people`
+
+
+
+**AVG**  
+
+`SELECT AVG(age) FROM people`
+
+
+
+
+
+### Your Turn
+
+1. Find the maximum postal code in `Customers`.
+## Aliases and CTEs
+
+
+
+An alias makes your query output easier to read. You use them to assign meaningful names to aggregated and derived columns.
+
+
+
+`SELECT MAX(age) AS max_age FROM people`
+You can create a subset of your data and assign it a temporary name using the `WITH` statement.
+Another type of alias is the Common Table Expression ( CTE ).  This is very similar to a context manager in Python.  A CTE allows us to create a name for a query and then use that name later in another query.
+### Your Turn
+
+From the `Customers` table ...
+
+
+
+1. Using a WITH statement, first select all `Customers` from Spain, then select all of those whose `CustomerID` is less than 20.
+**NOTE:** MySQL < 8.0 does not support CTEs.  SQL Server requires single quotes ( not double quotes ) for strings.
+### Encoding block
+%%capture
+
+%%bash
+
+apt-get update
+
+apt-get install -y sqlite3
+
+!sqlite3 --help
+
+!sqlite3 --version
+import pandas as pd
+
+import markdown
+
+import base64
+
+%%markdown
+
+| id       | name           | age | city |
+
+| ------------- |-------------| -----|---|
+
+| 1     | Joe | 5| Durango|
+
+| 2      | Alice     | 55| Albuquerque |
+
+| 3 | Veronica     |   105| Albuquerque |
+
+|4| Matt | 43 | null |
+# Assign Markdown string to a variable
+
+
+
+table_md = '''| id       | name           | age | city |
+
+| ------------- |-------------| -----|---|
+
+| 1     | Joe | 5| Durango|
+
+| 2      | Alice     | 55| Albuquerque |
+
+| 3 | Veronica     |   105| Albuquerque |
+
+|4| Matt | 43 | null |'''
+
+table_md
+
+# Convert Markdown to HTML to a DataFrame
+
+table_html=markdown.markdown(table_md, extensions=['markdown.extensions.tables'])
+
+table_html
+people_df = pd.read_html(table_html)[0]
+
+people_df
+
+# Save DataFrame as CSV
+
+!rm -f people.*
+
+people_df.to_csv('people.csv', index=False)
+
+!ls -l people.*
+
+!cat -n people.csv
+
+# Import CSV into SQLite3
+
+%%script sqlite3 --column --header people.sql3
+
+.mode csv
+
+.import people.csv people
+
+# Verify files exist
+
+!ls -la people*
+
+# Look at the schema
+
+%%script sqlite3 --column --header people.sql3
+
+.schema
+
+# Clean up Nulls
+
+%%script sqlite3 --column --header people.sql3
+
+UPDATE people SET city = NULL WHERE city = '';
+
+# Verify the data
+
+%%script sqlite3 --column --header people.sql3
+
+select * from people ;
+
+select * from people where city is null ;
+
+%%script sqlite3 --column --header people.sql3
+
+-- print(people_df)
+
+SELECT * FROM people
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+-- print(people_df[["name","age"]])
+
+SELECT name, age FROM people
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+-- filter = (people_df["age"] > 40)
+
+-- print(people_df[ filter ][["name"]])
+
+SELECT name FROM people WHERE age+0 > 40
+
+;
+
+# Solution 1
+
+SELECT CustomerName, City
+
+FROM Customers
+
+;
+
+# Solution 2
+
+SELECT CustomerName
+
+FROM Customers
+
+WHERE Country = "Sweden"
+
+;
+
+# Solution 3
+
+SELECT *
+
+FROM Customers
+
+WHERE City = 'London'
+
+;
+
+# Answer
+
+SHOW = False
+
+answer_b64 = b'''IyBBbnN3ZXIKIyAtLXF1ZXJ5IDEKIyBTRUxFQ1QgQ3VzdG
+
+                9tZXJOYW1lLCBDaXR5CiMgRlJPTSBDdXN0b21lcnM7Cgoj
+
+                IC0tcXVlcnkgMgojIFNFTEVDVCBDdXN0b21lck5hbWUKIy
+
+                BGUk9NIEN1c3RvbWVycwojIFdIRVJFIENvdW50cnkgPSAi
+
+                U3dlZGVuIgoKIyAtLXF1ZXJ5IDMKIyBTRUxFQ1QgKgojIE
+
+                ZST00gQ3VzdG9tZXJzCiMgV0hFUkUgQ2l0eSA9ICdMb25k
+
+                b24nCg=='''
+
+if SHOW: print(base64.b64decode(answer_b64).decode('ascii'))
+
+%%script sqlite3 --column --header people.sql3
+
+-- people_df[["name"]][ ( people_df[ "id" ] > 1 ) & ( people_df["age"] > 50)]
+
+
+
+SELECT name
+
+FROM people
+
+WHERE id+0 > 1 AND age+0 > 50
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+-- people_df[["name"]][ ( people_df[ "name" ]  == "Joe" ) | ( people_df["name"] == "Alice" )]
+
+
+
+SELECT name
+
+FROM people
+
+WHERE name = 'Joe' OR name = 'Alice'
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+-- people_df[["name"]][ ( people_df[ "name" ] in ( "Joe", "Alice" ) ) ]
+
+
+
+SELECT name
+
+FROM people
+
+WHERE name IN ('Joe', 'Alice')
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+
+
+SELECT
+
+  name
+
+FROM
+
+  people
+
+WHERE
+
+    (id+0 > 1 AND age+0 > 50)
+
+  AND
+
+    (name = 'Joe' OR name = 'Alice')
+
+;
+
+# Solution 1
+
+-- query 1
+
+SELECT *
+
+FROM Customers
+
+WHERE Country = "Spain" and CustomerID < 20
+
+;
+
+# Solution 2
+
+-- query 2
+
+SELECT *
+
+FROM Customers
+
+WHERE Country in ("France","Germany")
+
+;
+
+# Answer
+
+SHOW = 3
+
+answer_b64 = b'''Ci0tIHF1ZXJ5IDEKU0VMRUNUICoKRlJPTSBDdXN0b21lcnMgCl
+
+                dIRVJFIENvdW50cnkgPSAiU3BhaW4iIGFuZCBDdXN0b21lcklE
+
+                IDwgMjAKOwoKLS0gcXVlcnkgMgpTRUxFQ1QgKgpGUk9NIEN1c3
+
+                RvbWVycwpXSEVSRSBDb3VudHJ5IGluICgiRnJhbmNlIiwiR2Vy
+
+                bWFueSIpCjs=
+
+'''
+
+if SHOW: print(base64.b64decode(answer_b64).decode('ascii'))
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT name AS 'first_name'
+
+FROM people
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people
+
+WHERE name LIKE 'A%'
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people
+
+WHERE name LIKE '_oe'
+
+;
+
+# Solution 1
+
+-- query 1
+
+SELECT *
+
+FROM Customers
+
+WHERE CustomerName LIKE 'W%'
+
+;
+
+# Solution 2
+
+-- query 2
+
+SELECT *
+
+FROM Customers
+
+WHERE PostalCode LIKE '%4'
+
+;
+
+# Answer
+
+SHOW = "a"
+
+answer_b64 = b'''Ci0tIHF1ZXJ5IDEKU0VMRUNUICoKRlJPTSBDdXN0b21lcnMKV0
+
+                hFUkUgQ3VzdG9tZXJOYW1lIExJS0UgJ1clJwo7CgotLSBxdWVy
+
+                eSAyClNFTEVDVCAqCkZST00gQ3VzdG9tZXJzCldIRVJFIFBvc3
+
+                RhbENvZGUgTElLRSAnJTQnCjsK
+
+'''
+
+if SHOW: print(base64.b64decode(answer_b64).decode('ascii'))
+
+filter = (people_df["age"].between(18, 70))
+
+people_df[ filter ][["name","age"]]
+
+%%script sqlite3 --column --header people.sql3
+
+-- filter = (people_df["age"].between(18, 70))
+
+-- people_df[ filter ][["name","age"]]
+
+SELECT name, age
+
+FROM people
+
+WHERE age+0 BETWEEN 18 AND 70
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT name
+
+FROM people
+
+LIMIT 2
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT name
+
+FROM PEOPLE
+
+LIMIT 5 OFFSET 2
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM PEOPLE
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people
+
+WHERE city IS NOT NULL
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people
+
+WHERE city IS NULL
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+--
+
+SELECT AVG(age+0) as "mean_age"
+
+FROM people
+
+;
+
+SELECT Round(AVG(age+0)/1000,2) "milli_mean_age"
+
+FROM people
+
+;
+
+# Solution
+
+
+
+# Answer
+
+SHOW = [1]
+
+answer_b64 = b'''ClNFTEVDVCAqCkZST00gQ3VzdG9tZXJzCldIRVJFIEN1c3RvbW
+
+                VySUQgQkVUV0VFTiAyMCBhbmQgMzUKTElNSVQgNgo7Cg==
+
+'''
+
+if SHOW: print(base64.b64decode(answer_b64).decode('ascii'))
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people
+
+ORDER BY name DESC
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT DISTINCT city
+
+FROM people
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT city, COUNT(1) as count_city
+
+FROM people
+
+GROUP BY city
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT city, COUNT(1) as count_city
+
+FROM people
+
+GROUP BY city
+
+HAVING count_city > 1
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT city, COUNT(city) as count_city
+
+FROM people
+
+GROUP BY ity
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT COUNT(*)
+
+FROM people
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people
+
+;
+
+# Solution
+
+-- query 1
+
+SELECT *
+
+FROM Customers
+
+ORDER BY City
+
+;
+
+
+
+-- query 2
+
+SELECT DISTINCT Country
+
+FROM Customers
+
+;
+
+
+
+-- query 3
+
+SELECT Country, COUNT(1)
+
+FROM Customers
+
+GROUP BY Country
+
+;
+
+
+
+# Answer
+
+SHOW = {1:1}
+
+answer_b64 = b'''Ci0tIHF1ZXJ5IDEKU0VMRUNUICoKRlJPTSBDdXN0b21lcnMKT1
+
+                JERVIgQlkgQ2l0eQo7CgotLSBxdWVyeSAyClNFTEVDVCBESVNU
+
+                SU5DVCBDb3VudHJ5CkZST00gQ3VzdG9tZXJzCjsKCi0tIHF1ZX
+
+                J5IDMKU0VMRUNUIENvdW50cnksIENPVU5UKDEpCkZST00gQ3Vz
+
+                dG9tZXJzCkdST1VQIEJZIENvdW50cnkKOwoK
+
+'''
+
+if SHOW: print(base64.b64decode(answer_b64).decode('ascii'))
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT COUNT(1)
+
+FROM people
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT count(city)
+
+FROM people
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT MAX(age+0)
+
+FROM people
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT MIN(age+0)
+
+FROM people
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT SUM(age+0)
+
+FROM people
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT AVG(age+0)
+
+FROM people
+
+;
+
+# Solution
+
+# Answer
+
+SHOW = (0,)
+
+answer_b64 = b'U0VMRUNUIG1heChQb3N0YWxDb2RlKSBGUk9NIEN1c3RvbWVyczs='
+
+if SHOW: print(base64.b64decode(answer_b64).decode('ascii'))
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT MAX(age+0) AS max_age
+
+FROM people
+
+;
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT name as "first_name", age
+
+FROM people as "p"
+
+WHERE age+0 > 50 ;
+
+%%script sqlite3 --column --header people.sql3
+
+WITH
+
+  some_people as (
+
+    SELECT name as "first_name", age+0 as age, count(1) as count
+
+    FROM people
+
+    GROUP by age
+
+)
+
+SELECT * FROM some_people where age > 50
+
+;
+
+# Solution
+
+# An answer
+
+SHOW = 1
+
+answer_b64 = b'''V0lUSAogIFNwYW5pYXJkcyBhcyAoCiAgICBTRUxFQ1QgK
+
+                 iBGUk9NIEN1c3RvbWVycyB3aGVyZSBDb3VudHJ5ID0gIl
+
+                 NwYWluIgopClNFTEVDVCAqIEZST00gU3BhbmlhcmRzIHd
+
+                 oZXJlIEN1c3RvbWVySUQgPCAyMAo7'''
+
+if SHOW: print(base64.b64decode(answer_b64).decode('ascii'))
+
+def obscure(text):
+
+  answer = text.encode("utf-8")
+
+  b64 = base64.b64encode(answer).decode("utf-8")
+
+  n=50
+
+  print("\n".join([ b64[i:i+n] for i in range(0,len(b64),n) ]))
+
+
+
+obscure('''
+
+with spaniards as (
+
+SELECT *
+
+FROM Customers
+
+where Country = 'Spain'
+
+),
+
+Madridians as (
+
+SELECT *
+
+FROM Spaniards
+
+where City = 'Madrid'
+
+)
+
+select *
+
+from Madridians
+
+''')
+
+
+
+# An answer
+
+def reveal(text, show=False):
+
+  if SHOW: show=SHOW
+
+  answer_b64 = text.encode("utf-8")
+
+  if show: print(base64.b64decode(answer_b64).decode('ascii'))
+
+
+
+SHOW = False
+
+reveal('''CndpdGggc3BhbmlhcmRzIGFzICgKU0VMRUNUICoKRlJPTSBDdX
+
+N0b21lcnMKd2hlcmUgQ291bnRyeSA9ICdTcGFpbicKKSwKTWFk
+
+cmlkaWFucyBhcyAoClNFTEVDVCAqCkZST00gU3BhbmlhcmRzCn
+
+doZXJlIENpdHkgPSAnTWFkcmlkJwopCnNlbGVjdCAqCmZyb20g
+
+TWFkcmlkaWFucwo=
+
+
+
+
+
+''', True)
+
+
+

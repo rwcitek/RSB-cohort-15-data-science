@@ -1,0 +1,239 @@
+# Python Exercises - Numpy and Plotting
+## Problem 1
+
+
+
+Generate 10,000 samples from a normal distribution with mean 0 and standard deviation 1.
+## Problem 2
+
+
+
+Create a list called `mean_list` and set it equal to `[0,2,4,6]`.
+## Problem 3
+
+
+
+Write a for loop that loops through the mean values in `mean_list`.
+
+
+
+*   In each loop, generate 10,000 samples from a normal distribution with mean `i` (the value in `mean_list`) and standard deviation 1. For example, loop 1 will generate samples from a normal distribution with mean 0, loop 2 will generate samples from a normal distribution with mean 2, and so on.
+
+
+
+*   In each loop, also plot a histogram of the samples you generate. Plot the histograms on the same figure (i.e., do not use subplots). Set `alpha` = 0.5 so that the histograms are somewhat transparent.
+
+*   Add a legend and axis labels.
+
+
+
+## Problem 4
+
+
+
+Create a variable called `age` and set it equal to 20 equally spaced points between 1 and 100. Create a second variable called `free_time` and set it equal to $(age-50)^2$.
+## Problem 5
+
+
+
+Create a plot of `free_time` vs `age` with these additional features:
+
+- Use both markers and a line
+
+- Change your marker shape to be a triangle
+
+- Change the colors of the line and the markers to colors of your choice
+
+- Change the marker size and the linewidth so they are easier to see
+
+- Add axis labels
+
+## **BONUS** (only if you have time)
+
+
+
+Write a function that takes in a string as its input. This function should return the number of letters and words in the string.
+
+
+
+For example:
+
+
+
+string_counter("Hello, my name is Bob.") -> (16, 5)
+
+
+
+string_counter("What's up?") -> (7, 2)
+
+
+
+string_counter(" ") -> (0,0)
+
+
+
+```python
+
+string_counter('Hello, my name is Bob.')
+
+
+
+string_counter("What's up?")
+
+
+
+string_counter(' ')
+
+```
+
+
+
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+import pandas as pd
+
+import seaborn as sns
+# Generate 10k samples from a normal distribution (gaussian distirbution) with a mean of 0 and standard deviation of 1
+
+n_dist = np.random.normal(0 , 1, 10000)
+
+print(n_dist[:5])
+
+print(np.mean(n_dist))
+
+print(np.std(n_dist))
+mean_list = [0,2,4,6]
+# iterate through our mean_list by "mean"
+
+for mean in mean_list:
+
+
+
+
+
+# get out normal distribution mean of each mean in mean_list
+
+  norm_dist = np.random.normal(mean , 1, 10000)
+
+
+
+# plot histogram of our normal distribution
+
+  plt.hist(norm_dist, bins=30, alpha=0.5, label=f"Mean={mean}")
+
+
+
+# added legend, labels and title to plots of normal distributions
+
+  plt.legend()
+
+  plt.xlabel("Value")
+
+  plt.ylabel("Frequency")
+
+  plt.title("Normal Distribution histograms")
+
+
+
+  plt.tight_layout()
+
+  plt.show()
+age = np.linspace(1, 100, 20)
+
+free_time = (age - 50)**2
+
+
+
+print('age')
+
+print(age)
+
+print('free_time')
+
+print(free_time)
+plt.figure(figsize=(10,6))
+
+plt.plot(age, free_time,
+
+          marker = '^',
+
+          linestyle ='-',
+
+          color = '#ff6600',
+
+          markersize=8,
+
+          linewidth=2,
+
+          alpha=0.8)
+
+
+
+plt.xlabel('Age', fontsize=12)
+
+plt.ylabel('Free Time', fontsize=12)
+
+
+
+plt.title('Free Time vs. Age')
+
+
+
+plt.tight_layout()
+
+plt.show()
+
+
+
+
+
+def string_counter(string):
+
+    string = string.strip()
+
+    letter_count = sum(c.isalpha() for c in string)
+
+    word_count = len(string.split())
+
+    return letter_count, word_count
+
+
+
+
+
+
+
+def main():
+
+    print("String Counter Program")
+
+    print("---------------------")
+
+
+
+    while True:
+
+        user_string = input("Enter a string (or 'quit' to exit): ")
+
+
+
+        if user_string.lower() == 'quit':
+
+            break
+
+
+
+        result = string_counter(user_string)
+
+        print(f"Result: {result}")
+
+        print()
+
+
+
+if __name__ == "__main__":
+
+    main()
+

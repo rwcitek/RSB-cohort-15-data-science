@@ -1,0 +1,450 @@
+**Note:**  These closely match the loop exercises.  You may want to refer to that homework.  
+
+
+
+- **Make sure and include a docstring and code comments for each exercise.**
+
+- **Make sure and follow the naming conventions for functions and arguments.**
+## Reading Assignment
+
+Read the Python Documentation on Docstring conventions: https://www.python.org/dev/peps/pep-0257/
+
+
+
+These conventions might seem a little silly or unexciting.  They are important to keep your code readable for others, to create consistency and to make it so that if you come back to a project months (or years) later it's easy for you to know what is going on.  
+
+## Problem 1
+**Part A:** Write a function that takes a number as input and counts up to that number in increments of 2.  (Output should be done using print().  The function does not need to return anything.)
+
+
+
+For example:
+
+
+
+Input:
+
+```
+
+60  
+
+```
+
+
+
+Output:
+
+```
+
+2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60
+
+```
+**Part B:** Call the help function on your new function to see the documentation.  
+## Problem 2
+
+
+
+
+Write a Python function that takes a word and reverses it.  Function should return the result with a `return` statement
+
+Function Input:
+
+
+
+```python
+
+input_word = 'fantastic'
+
+```
+
+Returns:
+
+
+
+```python
+
+citsatnaf
+
+```
+
+
+Solution:
+## Problem 3
+
+
+
+
+
+Write a Python function that takes a list as input and prints each item and its corresponding type from the following list.
+Input:
+
+
+
+```python
+
+datalist = [
+
+  1452,
+
+  11.23,
+
+  1+2j,
+
+  True,
+
+  'w3resource',
+
+  (0, -1),
+
+  [5, 12],
+
+  {
+
+    "class":'V',
+
+    "section":'A'
+
+  },
+
+]
+
+```
+
+
+
+Preferred Output:
+
+```
+
+Type of  1452  is  <class 'int'>                                                                              
+
+Type of  11.23  is  <class 'float'>                                                                            
+
+Type of  (1+2j)  is  <class 'complex'>                                                                         
+
+Type of  True  is  <class 'bool'>                                                                             
+
+Type of  w3resource  is  <class 'str'>                                                                        
+
+Type of  (0, -1)  is  <class 'tuple'>                                                                         
+
+Type of  [5, 12]  is  <class 'list'>                                                                          
+
+Type of  {'class': 'V', 'section': 'A'}  is  < class 'dict'>
+
+```
+Solution:
+## Problem 4
+
+
+
+
+Write a Python function to construct the following pattern.  The input will be a positive integer that determines the line with the maximum number of '@' symbols.  
+
+
+
+
+
+Input:
+
+```
+
+5
+
+```
+
+Output:
+
+
+
+```python
+
+@
+
+@@
+
+@@@
+
+@@@@
+
+@@@@@
+
+@@@@
+
+@@@
+
+@@
+
+@
+
+```
+
+Solution:
+# Problem 5
+
+
+
+
+Write a Python function that takes a positive integer (n) as input and iterates through the integers from 0 to n.
+
+
+
+Return a list that has
+
+-  the number if it is not a multiple of 3 or 5
+
+-  'Fizz' if the number is a multiple of 3
+
+-  'Buzz' if the number is a multiple of 5
+
+-  'FizzBuzz' if the number is a multiple of 3 and 5
+Sample Input:
+
+```
+
+7
+
+```
+
+
+
+Sample Return:
+
+```
+
+['FizzBuzz', 1, 2, 'Fizz', 4, 'Buzz', 'Fizz', 7]
+
+```
+# Problem 6
+
+
+
+
+Write a Python function to calculate a dog's age in dog's years.  (Input is human age).
+
+
+
+Note: For the first two years, a dog year is equal to 10.5 human years. After that, each dog year equals 4 human years.
+
+
+
+Input:
+
+
+
+```
+
+h_age = 5
+
+```
+
+Returns the string:
+
+```
+
+The dog's age in dog's years is 33
+
+```
+
+def slice_numbers(end=60, start=0, step=2):
+
+    """
+
+    This function generates a list of even numbers from start to end with a given step.
+
+
+
+    Parameters:
+
+    end (int): The end value of the sequence (default is 60).
+
+    start (int): The starting value of the sequence (default is 0).
+
+    step (int): The increment between numbers (default is 2).
+
+
+
+    Returns:
+
+    list: A list of even numbers from start to end
+
+    """
+
+    numbers = range(start, end + 1)
+
+    sliced_numbers = list(numbers[start:end+1:step])
+
+    return sliced_numbers
+
+
+
+# Solution here
+
+help(slice_numbers)
+slice_numbers()
+
+# Solution here
+
+def reverse_word(word = ''):
+
+
+
+ """
+
+
+
+variable: word chosen to reverse (default is '')
+
+
+
+
+
+
+
+"""
+
+
+
+ return word[::-1]
+
+ start_word = reversal
+
+ reversal = _reverse_word(start_word)
+
+ print(start_word)
+reverse_word('hat')
+# Solution
+
+def fun_list():
+
+    list = [1, 2, 2, 3, 4, 5, 'string', 6, 10, 'string']
+
+    ls = [type(item).__name__ for item in list]
+
+    print(ls)
+
+
+
+fun_list()
+
+def at_triangle(height=10):
+
+    """
+
+    This function prints an '@' triangle of a given height.
+
+
+
+    Parameters:
+
+    height (int): The height of the triangle (default is 10).
+
+    """
+
+    # Print the top half of the triangle
+
+    for i in range(1, height + 1):
+
+        print('@' * i)
+
+
+
+    # Print the bottom half of the triangle
+
+    for i in range(height - 1, 0, -1):
+
+        print('@' * i)
+
+
+
+at_triangle(5)
+def fizber(range_size = 51):
+
+    """
+
+    Generates and prints the classic FizzBuzz sequence up to the given range size.
+
+
+
+    Parameters:
+
+    range_size (int): The upper limit of the sequence (default is 51).
+
+
+
+    Behavior:
+
+    - Prints numbers from 1 to range_size.
+
+    - Replaces multiples of 3 with "fizz".
+
+    - Replaces multiples of 5 with "buzz".
+
+    - Replaces multiples of both 3 and 5 with "fizz-buzz".
+
+
+
+    Returns:
+
+    None (prints the sequence directly)
+
+    """
+
+    for _ in range(1, range_size):
+
+        if _ % 5 == 0 and _ % 3 == 0:
+
+            print('fizz-buzz')
+
+        elif _ % 5 == 0:
+
+            print('buzz')
+
+        elif _ % 3 == 0:
+
+            print('fizz')
+
+        else:
+
+            print(_)
+
+
+
+fizber()
+# Solution here
+
+def years(calendar_age = 5, dog_age = 0):
+
+    """
+
+    Converts a dog's calendar age to dog years.
+
+
+
+    Parameters:
+
+    calendar_age (int): The dog's age in human calendar years.
+
+
+
+    Returns:
+
+    age in dog years
+
+
+
+    """
+
+    for _ in range(1, calendar_age + 1):
+
+        if _ <= 2:
+
+            dog_age += 10.5
+
+        else:
+
+            dog_age += 4
+
+    return dog_age
+
+years()

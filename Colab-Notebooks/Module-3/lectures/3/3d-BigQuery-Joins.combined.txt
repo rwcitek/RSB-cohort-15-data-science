@@ -1,0 +1,289 @@
+# Joins with BigQuery
+## Inner Joins
+Inner Joins return data where there are matching records in both tables.  
+[Join documentation on BigQuery](https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax#join_types)
+
+
+
+[Kaggle Inner Joins](https://www.kaggle.com/dansbecker/joining-data)  
+
+[Kaggle Outter Joins](https://www.kaggle.com/alexisbcook/joins-and-unions)
+Inner and Outer Joins Venn Diagram https://realpython.com/pandas-merge-join-and-concat/ about halfway down
+## Outer Joins
+
+## Normalize table
+from google.cloud import bigquery
+
+from google.colab import auth
+
+auth.authenticate_user()
+billing_project_id = 'cool-monolith-286222'
+
+
+
+# Create client object
+
+client = bigquery.Client(project=billing_project_id)
+dataset_ref = client.dataset("github_repos", project="bigquery-public-data")
+
+
+
+# API request - fetch the dataset
+
+dataset = client.get_dataset(dataset_ref)
+
+
+
+# Construct a reference to the "licenses" table
+
+licenses_ref = dataset_ref.table("licenses")
+
+
+
+# API request - fetch the table
+
+licenses_table = client.get_table(licenses_ref)
+
+
+
+# Preview the first five lines of the "licenses" table
+
+client.list_rows(licenses_table, max_results=5).to_dataframe()
+# Construct a reference to the "sample_files" table
+
+files_ref = dataset_ref.table("sample_files")
+
+
+
+# API request - fetch the table
+
+files_table = client.get_table(files_ref)
+
+
+
+# Preview the first five lines of the "sample_files" table
+
+client.list_rows(files_table, max_results=5).to_dataframe()
+
+# Add safe config settings
+
+ONE_MB = 1000*1000
+
+TWO_GB = 2*1000*ONE_MB
+
+SIX_GB = 6*1000*ONE_MB
+
+query = """
+
+        SELECT files.repo_name, licenses.license, files.path
+
+        FROM `bigquery-public-data.github_repos.sample_files` AS files
+
+        INNER JOIN `bigquery-public-data.github_repos.licenses` AS licenses
+
+          ON files.repo_name = licenses.repo_name
+
+        LIMIT 20
+
+        """
+
+# safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=TWO_GB)
+
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=SIX_GB)
+
+licenses = client.query(query, job_config=safe_config).to_dataframe()
+
+licenses
+# Construct a reference to the "hacker_news" dataset
+
+dataset_ref = client.dataset("hacker_news", project="bigquery-public-data")
+
+
+
+# API request - fetch the dataset
+
+dataset = client.get_dataset(dataset_ref)
+
+
+
+tables = client.list_tables(dataset)
+
+for table in tables:
+
+  print(table.table_id)
+
+
+
+
+
+# Construct a reference to the "full" table
+
+table_ref = dataset_ref.table("full")
+
+
+
+# API request - fetch the table
+
+table = client.get_table(table_ref)
+
+
+
+# Preview the first five lines of the table
+
+full = client.list_rows(table, max_results=5).to_dataframe()
+
+full
+full[:2]
+query = """
+
+  SELECT
+
+    parent AS story_id,
+
+    title,
+
+    url,
+
+
+
+    by,
+
+    time,
+
+  FROM
+
+    `bigquery-public-data.hacker_news.full` AS stories
+
+  WHERE
+
+    EXTRACT(DATE FROM stories.time_ts) = '2012-01-01'
+
+"""
+
+
+
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=TWO_GB)
+
+comment_counts = client.query(query, job_config=safe_config).to_dataframe()
+
+comment_counts
+full.shape
+full.columns
+
+# Construct a reference to the "stories" table
+
+table_ref = dataset_ref.table("stories")
+
+
+
+# API request - fetch the table
+
+table = client.get_table(table_ref)
+
+
+
+# Preview the first five lines of the table
+
+stories = client.list_rows(table, max_results=5).to_dataframe()
+
+stories
+stories.shape
+
+stories.columns
+
+query = """
+
+        SELECT stories.id AS story_id, stories.by, stories.title, comments.ranking, comments.id
+
+        FROM `bigquery-public-data.hacker_news.stories` AS stories
+
+        LEFT JOIN `bigquery-public-data.hacker_news.comments` AS comments
+
+        ON stories.id = comments.parent
+
+        WHERE EXTRACT(DATE FROM stories.time_ts) = '2012-01-01'
+
+        """
+
+
+
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=TWO_GB)
+
+comment_counts = client.query(query, job_config=safe_config).to_dataframe()
+
+comment_counts
+1-comment_counts["ranking"].isnull().mean()
+
+query = """
+
+        SELECT
+
+          stories.id AS story_id,
+
+          stories.by,
+
+          stories.title,
+
+          comments.ranking,
+
+          comments.id
+
+        FROM
+
+          `bigquery-public-data.hacker_news.stories` AS stories
+
+        LEFT JOIN
+
+          `bigquery-public-data.hacker_news.comments` AS comments
+
+        ON
+
+          stories.id = comments.parent
+
+        WHERE
+
+          EXTRACT(DATE FROM stories.time_ts) = '2012-01-01'
+
+        """
+
+
+
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=TWO_GB)
+
+comment_counts = client.query(query, job_config=safe_config).to_dataframe()
+
+comment_counts
+full[:2]
+query = """
+
+        SELECT
+
+          parent,
+
+          title,
+
+          id
+
+        FROM
+
+          `bigquery-public-data.hacker_news.full`
+
+        WHERE
+
+          parent = 363 and title <> "None"
+
+        ORDER BY
+
+          id
+
+        LIMIT 20
+
+"""
+
+
+
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=TWO_GB)
+
+comment_counts = client.query(query, job_config=safe_config).to_dataframe()
+
+comment_counts

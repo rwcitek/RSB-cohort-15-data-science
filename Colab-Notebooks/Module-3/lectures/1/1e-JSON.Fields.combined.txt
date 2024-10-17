@@ -1,0 +1,178 @@
+#JSON
+
+We will be going over JSON fields to help with future projects. <br>
+
+JSON stands for JavaScript Object Notation. It is way of storing and transporting data.
+
+## JSON Syntax
+
+- JSON has six data types:
+
+  - a string
+
+  - a number
+
+  - an object (JSON object)
+
+  - an array
+
+  - a boolean
+
+  - null
+
+- Objects are in key/value pairs and separated by commas
+
+- Curly braces are used for objects
+
+- Square brackets are used for arrays
+
+
+
+When intepreted by Python, strings are strings and numbers become either integers or floats.  Objects become dictionaries and arrays become lists.  Booleans are booleans and null is null.
+## JSON Example
+
+
+
+Name/Value Pair: `'First Name':'Nevin'` <br>
+
+Object: `{'First Name':'Nevin', 'Last Name': 'Martin'}` <br>
+
+Array: `'employees':[{'First Name':'Nevin', 'Last Name': 'Martin'},
+
+{'First Name':'Joe', 'Last Name': 'Olonia'}]`
+
+
+
+## Extracting Data from JSON Fields
+## Reading JSON into a data frame
+## Writing a data frame to JSON
+import pandas as pd
+
+import json
+
+%%capture
+
+%%bash
+
+apt-get update
+
+apt-get install -y jq
+
+# This function will extract an element within a JSON entry
+
+def extract_json_fields(json_list, field_name):
+
+  '''
+
+  This function can pull an individual item within a JSON field. It takes the following arguments:
+
+  - JSON list in which the item is located
+
+  - The name of the item
+
+  '''
+
+  entry_list = json.loads(json_list)
+
+  return '|'.join([ str(element[field_name]) for element in entry_list ])
+
+#  return str(entry_list[0][field_name])
+
+dat_file = 'https://ddc-datascience.s3.amazonaws.com/animals.xlsx'
+
+animal_dat = pd.read_excel(dat_file, sheet_name = "Sheet3")
+
+animal_dat
+
+animal_dat.info()
+
+info_ds = animal_dat['Info'][0]
+
+info_ds
+# Notice that the item is a string
+
+type(info_ds)
+
+info_ds[0]
+
+# Interpret the string as a JSON object and convert to a Python object
+
+json_ds = json.loads(info_ds)
+
+json_ds
+
+type(json_ds)
+
+json_ds[0]
+
+type(json_ds[0])
+
+json_ds[0]['id']
+
+animal_dat_updated = animal_dat.copy()
+
+animal_dat_updated['Name_Extract'] = animal_dat_updated['Info'].apply(extract_json_fields, field_name = 'name') # extract_json_fields(x, "name")
+
+animal_dat_updated['ID_Extract']   = animal_dat_updated['Info'].apply(extract_json_fields, field_name = 'id')   # extract_json_fields(x, "id")
+
+animal_dat_updated
+
+animal_dat_updated.info()
+animal_dat_updated['Info'][0]
+
+foo = '''[
+
+  {
+
+      "id": 54,
+
+      "name":"Precious"
+
+    }
+
+]'''
+
+x = json.loads(foo)
+
+x
+type(x[0]['id'])
+animal_dat_updated.info()
+
+animal_dat_updated["ID_Extract"][0]
+animal_json = animal_dat_updated.to_json()
+
+animal_json
+
+type(animal_json)
+json_animal = json.loads(animal_json)
+
+type(json_animal)
+
+json_animal
+
+animals_v02 = pd.DataFrame.from_dict(json_animal)
+
+animals_v02
+
+
+
+animals_v02.info()
+
+!jq . sample_data/anscombe.json | head -30
+df = pd.DataFrame( json.load( open( 'sample_data/anscombe.json', 'r') ))
+
+df
+df.to_json(path_or_buf="anscombe.json", orient = "table")
+!jq . anscombe.json
+df = pd.read_json( 'anscombe.json', orient = "table")
+
+df
+df_dict= json.load( open("anscombe.json", 'r') )
+
+df_small = { "schema": df_dict["schema"],
+
+  "data": df_dict["data"][0]
+
+}
+df_small
+pd.read_json( json.dumps(df_small), orient="table" )

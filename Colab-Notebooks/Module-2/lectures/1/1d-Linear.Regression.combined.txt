@@ -1,0 +1,285 @@
+# Linear Regression Example on MPG Dataset
+A note on Model Validation. You can see all of the types of metrics that can be calculated in cross_val_score [here](https://scikit-learn.org/stable/modules/model_evaluation.html).
+## Import Libraries & Read in Data
+## Data Cleaning
+## EDA
+## What do we notice?
+
+- MPG distribution slightly skewed
+
+- Cylinders and origin are discrete
+
+- Model years only from 1970-1982
+
+- Doesn't appear to have outliers
+### What do we notice?
+
+
+
+
+
+*   Many predictors are highly correlated to each other
+
+*   Many predictors are highly correlated with MPG
+
+
+
+### What do we notice?
+
+
+
+
+
+*   MPG vs weight, displacement, horsepower has a strong relationship - doesn't appear to be quite linear.
+## Fit & Assess Our Model
+### Using Statsmodels
+### Using Sklearn
+#### Repeat, but this time scale the features using the StandardScaler ( Z-score ).
+## Residual Analysis
+import statsmodels.api as sm
+
+import matplotlib.pyplot as plt
+
+import pandas as pd
+
+import numpy as np
+
+import seaborn as sns
+
+from sklearn import datasets
+
+from sklearn.linear_model import LinearRegression
+
+from sklearn.model_selection import train_test_split
+
+from sklearn.model_selection import cross_val_score
+
+from sklearn.metrics import mean_squared_error
+LinearRegression?
+url = "http://ddc-datascience.s3-website-us-west-1.amazonaws.com/auto-mpg.csv"
+
+cars = pd.read_csv(url)
+
+cars.head()
+
+cars.shape
+cars.describe().transpose()
+# Check to see if there are any NA values
+
+cars.info()
+cars.isnull().sum()*10
+# Look at rows with NAs
+
+cars[cars['horsepower'].isnull()]
+# Look at horsepower column
+
+cars['horsepower'].describe()
+# Fill in NAs with mean value
+
+cars_clean = cars.copy()
+
+mean_hp = cars_clean['horsepower'].mean()
+
+cars_clean['horsepower'].fillna(mean_hp, inplace = True)
+# Confirm we don't have NAs anymore
+
+cars_clean['horsepower'].isnull().sum()
+# Let's plot mpg and all of our predictors
+
+fig, axs = plt.subplots(2,4, figsize = (20,8)) # Creating 2x4 subplots because we have 8 columns in our data
+
+column_names = cars_clean.columns
+
+n = 0
+
+for i in range(2): # Loop through rows
+
+  for j in range(4): # Loop through columns
+
+    axs[i,j].hist(cars_clean[column_names[n]])
+
+    axs[i,j].set_xlabel(column_names[n])
+
+    axs[i,j].set_ylabel('Count')
+
+    n = n + 1
+# Let's plot mpg and all of our predictors
+
+fig, subplots = plt.subplots(2,4, figsize = (20,8)) # Creating 2x4 subplots because we have 8 columns in our data
+
+column_names = cars_clean.columns
+
+
+
+subplots = subplots.flatten()[:len(column_names)]  # flatten and slice axs
+
+for n, subplot in enumerate(subplots):             # Loop through axs
+
+  subplot.hist(cars_clean[column_names[n]])
+
+  subplot.set_xlabel(column_names[n])
+
+  subplot.set_ylabel('Count')
+
+# Let's take a look at a correlation plot
+
+plt.figure(figsize=(10,10))
+
+correlation_matrix = cars_clean.corr().round(2)
+
+sns.heatmap(data=correlation_matrix, annot=True) ;
+corrs = cars_clean.corr().round(2).unstack().abs()
+
+corrs = corrs[corrs < 1]
+
+corrs.sort_values(ascending = False)[::2]
+# Let's plot a pairplot
+
+sns.pairplot(cars_clean) ;
+# First we will break up our data into training and testing sets
+
+X = cars_clean[['weight', 'model year', 'origin', 'displacement']]
+
+X2 = sm.add_constant(X) # add constant so that intercept is estimated
+
+print(X2.head())
+
+
+
+y = cars_clean['mpg']
+
+X_train, X_test, y_train, y_test = train_test_split(X2, y, test_size = 0.2, random_state=4)
+# Fit a linear model using statsmodels
+
+myfit = sm.OLS(y_train, X_train).fit()
+
+myfit.summary()
+# First we will break up our data into training and testing sets
+
+X = cars_clean[['weight', 'model year', 'origin', 'displacement']]
+
+y = cars_clean['mpg']
+
+
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state=4)
+# Fit a linear model using Sklearn
+
+model = LinearRegression()
+
+myfit2 = model.fit(X_train, y_train)
+
+
+
+( myfit2.intercept_, myfit2.coef_ )
+
+# See how well our model performs on our test data
+
+y_pred = myfit2.predict(X_test)
+
+plt.scatter(y_test, y_pred)
+
+plt.plot([min(y_pred), max(y_pred)],[min(y_pred), max(y_pred)], c='red')
+
+plt.xlabel('Actual MPG')
+
+plt.ylabel('Predicted MPG') ;
+list(zip(y_test,y_pred))[:10]
+# Calculate root mean squared error on test data
+
+rmse = mean_squared_error(y_test, y_pred, squared = False)
+
+print(f"RMSE: {rmse}")
+cross_val_score?
+# Use cross validation to assess model performance
+
+results = cross_val_score(model, X, y, scoring='neg_root_mean_squared_error', cv = 10)
+
+rmse = abs(results.mean())
+
+print(f"CV RMSE: {rmse}")
+# scale the features using the StandardScaler ( Z-score )
+
+from sklearn.preprocessing import StandardScaler
+
+
+
+scaler = StandardScaler()
+
+X_scaled = scaler.fit_transform(X)
+
+
+
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size = 0.2, random_state=4)
+X
+X_scaled
+pd.DataFrame(X_scaled).describe().transpose()
+# Fit a linear model using Sklearn
+
+model = LinearRegression()
+
+myfit2 = model.fit(X_train, y_train)
+
+
+
+(
+
+myfit2.intercept_,
+
+myfit2.coef_
+
+)
+
+# See how well our model performs on our test data
+
+y_pred = myfit2.predict(X_test)
+
+plt.scatter(y_test, y_pred)
+
+plt.plot([min(y_pred), max(y_pred)],[min(y_pred), max(y_pred)], c='red')
+
+plt.xlabel('Actual MPG')
+
+plt.ylabel('Predicted MPG') ;
+list(zip(y_test,y_pred))[:10]
+# Calculate root mean squared error on test data
+
+rmse = mean_squared_error(y_test, y_pred, squared = False)
+
+print(f"RMSE: {rmse}")
+# Use cross validation to assess model performance - scaled
+
+results = cross_val_score(model, X_scaled, y, scoring='neg_root_mean_squared_error', cv = 10)
+
+rmse = abs(results.mean())
+
+print(f"CV RMSE: {rmse}")
+# QQ Plot - Residuals are normally distributed
+
+res = y_test - y_pred
+
+sm.qqplot(res, fit=True, line="45") ;
+# Residuals vs Fitted (Predicted) Values - Constant variance
+
+plt.figure(figsize = (10,6))
+
+plt.scatter(y_pred, res)
+
+plt.xlabel("Fitted")
+
+plt.ylabel("Residuals")
+
+plt.hlines(0, min(y_pred), max(y_pred), colors = 'red', linestyles = 'dashed') ;
+# Residuals vs Time - indepedence
+
+plt.figure(figsize = (10,6))
+
+plt.scatter(range(len(res)), res)
+
+plt.plot(range(len(res)), res, 'b')
+
+plt.xlabel("Time")
+
+plt.ylabel("Residuals")
+
+plt.hlines(0, min(range(len(res))), max(range(len(res))), colors = 'red', linestyles = 'dashed') ;

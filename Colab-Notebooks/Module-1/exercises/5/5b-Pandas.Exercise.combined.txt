@@ -1,0 +1,195 @@
+# Python Exercises - Pandas
+## Problem 1
+
+Imagine three people, e.g. family, friends, cohort.
+
+
+
+Create a pandas data frame called `cities_df` that contains the following columns:
+
+
+
+* Cities - At least 5 cities in the US
+
+* States - The states that those cities reside in
+
+* Region - The region that those cities reside in (NW, SW, Midwest, etc.)
+
+* Times_1 - The number of times person 1 has been to each city
+
+* Times_2 - The number of times person 2 has been to each city
+
+* Times_3 - The number of times person 3 has been to each city
+
+## Problem 2
+
+Use the `.describe()` and `.info()` methods on your data frame
+
+## Problem 3
+
+Use indexing to access the Cities column
+## Problem 4
+
+Create a new column called `Total_Times` that contains the total number of times all team members have been to each city.
+## Problem 5
+
+Use indexing to access the cities that have been travelled to more than two times.
+## Problem 6
+
+Make a bar plot with `Cities` on the x axis and `Total_Times` on the y axis.
+## Problem 7
+
+Drop the 'Total_Times' column from your data frame.
+## Problem 8
+
+Restructure your data frame using the pandas `.melt()` method. In the `.melt()` method, specify `id_vars = ['Cities', 'States', 'Region']`. Save the melted data frame as a new variable called `cities_df_melted`. Print out `cities_df_melted`.
+
+
+
+> Note: make sure to read through the documentation for the `.melt()` method to understand what the method does.
+## Problem 9
+
+Use the seaborn `barplot()` function to create a barplot of `cities_df_melted` with `Cities` on the x axis, `value` on the y axis and the hue parameter set to `variable`.
+import pandas as pd
+
+import matplotlib.pyplot as plt
+
+# Define the data
+
+data = {
+
+    'Cities': ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix'],
+
+    'States': ['NY', 'CA', 'IL', 'TX', 'AZ'],
+
+    'Region': ['NE', 'W', 'Midwest', 'S', 'SW'],
+
+    'Times_1': [5, 3, 2, 1, 0],
+
+    'Times_2': [2, 4, 1, 3, 1],
+
+    'Times_3': [3, 2, 4, 0, 2]
+
+}
+
+
+
+# Create the DataFrame
+
+cities_df = pd.DataFrame(data)
+
+
+
+# Display the DataFrame
+
+print(cities_df)
+# Access the 'Cities' column
+
+cities_column = cities_df['Cities']
+
+
+
+# Print the result
+
+print(cities_column)
+
+# Create the new column 'Total_Times'
+
+cities_df['Total_Times'] = cities_df[['Times_1', 'Times_2', 'Times_3']].sum(axis=1)
+
+
+
+# Display the updated DataFrame
+
+print(cities_df)
+
+# Access cities that have been traveled to more than two times
+
+frequently_visited = cities_df[cities_df['Total_Times'] > 2]
+
+
+
+# Display the result
+
+print(frequently_visited)
+
+
+
+# Create the bar plot
+
+cities_df.plot(kind='bar', x='Cities', y='Total_Times')
+
+
+
+# Customize the plot
+
+plt.title('Total Visits to Cities')
+
+plt.xlabel('Cities')
+
+plt.ylabel('Total Visits')
+
+plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
+
+
+
+# Show the plot
+
+plt.tight_layout()
+
+plt.show()
+# Drop the 'Total_Times' column
+
+cities_df = cities_df.drop('Total_Times', axis=1)
+
+
+
+# Display the updated DataFrame
+
+print(cities_df)
+# Restructure the DataFrame using melt()
+
+cities_df_melted = cities_df.melt(id_vars=['Cities', 'States', 'Region'],
+
+                                  var_name='Person',
+
+                                  value_name='Times_Visited')
+
+
+
+# Print the melted DataFrame
+
+print(cities_df_melted)
+
+import seaborn as sns
+
+import matplotlib.pyplot as plt
+
+
+
+# Create the barplot
+
+plt.figure(figsize=(12, 6))
+
+sns.barplot(data=cities_df_melted, x='Cities', y='Times_Visited', hue='Person')
+
+
+
+# Customize the plot
+
+plt.title('City Visits by Person')
+
+plt.xlabel('Cities')
+
+plt.ylabel('Number of Visits')
+
+plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
+
+
+
+# Adjust layout and show the plot
+
+plt.tight_layout()
+
+plt.show()
+

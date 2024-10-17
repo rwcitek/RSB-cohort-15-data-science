@@ -1,0 +1,486 @@
+## Project 1: Transaction Success Prediction
+
+
+
+By: Robert S. Balch II
+## Problem Definition: #1
+
+
+
+This project is related to a binary classification problem using user historical data to predict whether or not a customer will make a transaction in the future based on their past transaction data.
+
+
+
+The data is available on AWS S3 at https://ddc-datascience.s3.amazonaws.com/Projects/Project.1-Transactions/Data/Transaction.train.csv
+
+## Data Collection/Imports
+### #2 Load Imports
+### #3 Load train.csv
+## Data Cleaning
+### #4 Examine Data
+#### create default data frame
+### #5 Determine Data Cleaning
+## My Cleaning Recommendations
+
+Unnamed: 0 and ID_code appear to have unusable data.
+
+- Unnamed: 0 data is simply listing the position of the row which isnt helpful for our purposes
+
+- ID_code is "object" data type
+## Copy of trans_data_df
+
+= trans_data_copy to trans_data_copy_2
+#### drop columns that seem to have un-corroborative data
+#### check for null values
+#### Mean, Median, Mode
+## Data Exploration
+
+
+
+ #6 In the following cells I have visualized the cleaned dataframe across each column on.
+
+ #7 I verified that the target column had no null values.
+
+ #8
+### #6 Visual Analysis of data
+### #7 Verify 'target' column
+## #8 Check Correlations between predictors
+### View correlation graphs and data
+### Correlation Analysis
+
+
+
+The correlations suggest that specific sale var_* have a higher (albeit small) chance of being involved in a successful sale.
+## Data Processing
+### #9 Create sale and no_sale Dataframes
+### #10 predictor and target Dataframes
+### #11 initialize GaussianNB()
+### create train_test_split
+### #12 Divide Data Frames
+
+### #13 Train Model on testing subset
+
+### #14 Train Model on training subset
+
+### #15 cross-validation loop to calculate model accuracy
+### #16 Histogram
+### #17 Confusion Matrix
+
+
+
+### #18 Remove enough no_sale transaction rows to get a 50% split on the remaining data
+### #19 cross_validate this dataset with previous dataset
+### #20 Compare the results of original model with balanced_data model
+### #21 Data Visualization
+### Confusion Matrix and results of classification report
+## Final thoughts/ Communicate Results
+
+
+
+### Data Cleaning and Exploration:
+
+The initial dataset contains 53 columns. Upon examination, the 'Unnamed: 0' and 'ID_code' columns appear irrelevant and are removed. The remaining data is checked for null values, and descriptive statistics are calculated. Histograms are generated for visual analysis of the data distribution. The 'target' column, representing transaction success (1) or failure (0), is verified.
+
+
+
+###Correlation Analysis:
+
+A correlation matrix is created to identify relationships between predictors. The analysis focuses on correlations with the 'target' variable, revealing the predictors with the prediction
+
+
+
+### Model Training and Evaluation (Initial):
+
+A Gaussian Naive Bayes (GNB) model is initialized. The data is split into training and testing sets. The model is trained and evaluated using a loop with 50 iterations, achieving a mean accuracy of 91.11%. Cross-validation is performed with 100 iterations, resulting in a mean accuracy of 75.857%.
+
+
+
+### Addressing Class Imbalance:
+
+The analysis recognizes a class imbalance in the dataset. To address this, a balanced dataset is created by randomly sampling an equal number of successful and unsuccessful transactions.
+
+
+
+### Model Training and Evaluation (Balanced Data):
+
+The GNB model is trained and evaluated on the balanced dataset. The mean accuracy on the balanced dataset is 75.8%, compared to 91.111% on the original dataset. This difference highlights the impact of class imbalance on model performance.
+
+
+
+### Results and Comparison:
+
+A bar chart visualizes the mean accuracy scores for both the original and balanced datasets. The confusion matrix and a classification report are generated to further evaluate the model's performance.
+
+
+
+# Hypothesis:
+
+
+
+The data suggests that the median chance of a customer making a purchase in the future is approximately 1/100.  However the Initial data is heavily biased towards unsuccessful transactions. By balancing our training data we see a higher probability around 25% chance of successful transactions.
+
+
+
+Upon closer inspection, we observe slightly higher correlations between certain var_* variables and successful transactions
+
+
+
+Specifically:
+
+
+
+The three highest correlated variables (var_20, var_31, and var_5) show correlation coefficients ranging from 0.080689 to 0.070015. While these correlations are not extremely strong, they do indicate a positive relationship between these variables and successful transactions.
+
+
+
+Variables with correlation coefficients greater than 0.05 suggest a higher chance of a successful transaction. This threshold, while not definitive, provides a baseline for identifying potentially influential factors.
+
+
+
+The correlation analysis reveals a pattern where certain variables are more strongly associated with successful purchases than others. This suggests that focusing on these variables could potentially improve predictive models and marketing strategies.
+
+
+
+It's important to note that correlation does not imply causation and to keep in mind that the original dataset is highly imbalanced.
+
+
+
+These relationships may indicate underlying factors that contribute to successful transactions, but further analysis would be needed to determine causal relationships.
+
+
+
+The relatively low correlation coefficients across all variables suggest that successful transactions are likely influenced by a complex interplay of factors, rather than being strongly determined by any single variable.
+
+
+
+This analysis provides valuable insights into the relationships between various factors and successful transactions, allowing for more informed decision-making in product development, marketing strategies, and customer targeting. However, it's crucial to interpret these findings in the context of broader market research and business knowledge to derive actionable insights.
+# Citations
+
+[Titanic Survival Project:](https://nbviewer.org/urls/ddc-datascience.s3.us-west-1.amazonaws.com/Projects/Example/Titanic.Survival.Prediction.Using.Naive.Bayes.ipynb)
+
+/
+
+[Kyla Bendt:](https://github.com/KylaBendt)
+
+from IPython.display import Image
+
+import matplotlib.pyplot as plt
+
+import numpy as np
+
+import pandas as pd
+
+import plotly.express as px
+
+import seaborn as sns
+
+
+
+from sklearn import datasets, metrics, model_selection
+
+from sklearn import model_selection
+
+from sklearn.metrics import confusion_matrix, classification_report
+
+from sklearn.naive_bayes import GaussianNB
+
+from sklearn.model_selection import train_test_split, cross_val_score
+base_path = "https://ddc-datascience.s3.amazonaws.com/Projects/Project.1-Transactions/Data/Transaction.train.csv"
+
+train_path = base_path + 'Transaction.train.csv'
+
+test_path = base_path + 'Testing.test.csv'
+train_path
+trans_data = pd.read_csv(base_path)
+trans_data_df = pd.DataFrame(trans_data)
+
+trans_data_df
+trans_data_df.info()
+trans_data_df.sample(n = 100)
+trans_data_copy = trans_data_df.copy()
+trans_data_drop1 = trans_data_copy.drop("Unnamed: 0", axis=1)
+trans_data_drop2 = trans_data_drop1.drop("ID_code", axis=1)
+trans_data_copy_2 = trans_data_drop2.copy()
+trans_data_copy_2.isnull().sum()
+trans_data_copy_2.describe()
+trans_data_copy_2.hist(figsize=(13, 13), bins=100)
+
+plt.tight_layout()
+
+plt.show()
+trans_data_copy_2.info()
+# Here we show a heatmap of the correlations in this remaining data
+
+
+
+# corr calculates the correlation matrix for the dataset in trans_data_copy_2
+
+corr = trans_data_copy_2.corr()
+
+# here the heatmap is generated and sized
+
+plt.figure(figsize=(12,8))
+
+sns.heatmap(corr, cmap='magma',annot = False);
+# Here we removes the perfect correlations so we can foCus on the relationships between different unique variables
+
+corr_unstacked = corr.unstack()
+
+corr_unstacked
+# Here we select correlations with the 'target' variable and take the absolute values of these correlations
+
+corr_unstacked_not_self = corr_unstacked[ corr_unstacked !=1 ]
+
+corr_unstacked_not_self
+corr_unstacked_not_self['target'].abs().sort_values(ascending = False)
+corr_pair = corr_unstacked_not_self.abs().sort_values(kind='quicksort', ascending = False)
+
+corr_pair
+corr_pair[::2].head(20)
+df_target_0 = trans_data_copy_2[trans_data_copy_2['target'] == 0]
+df_target_0.shape
+df_target_1 = trans_data_copy_2[trans_data_copy_2['target'] == 1]
+df_target_1.shape
+sale = pd.DataFrame(df_target_1).copy()
+no_sale = pd.DataFrame(df_target_0).copy()
+drop_target = trans_data_copy_2.copy()
+dropped_target = drop_target.drop("target", axis=1)
+predictors = dropped_target.copy()
+drop_var = trans_data_copy_2.copy()
+columns_to_drop = [col for col in drop_var.columns if col != 'target']
+dropped_var = drop_var.drop(columns=columns_to_drop)
+target = dropped_var
+
+target
+gnb = GaussianNB()
+X = predictors
+
+y = target['target']
+numLoops = 50
+
+accuracy_scores = np.zeros(numLoops)
+
+
+
+for idx in range(numLoops):
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
+
+    gnb.fit(X_train, y_train)
+
+    y_pred = gnb.predict(X_test)
+
+    accuracy_scores[idx] = metrics.accuracy_score(y_test, y_pred)
+
+
+
+mean_accuracy = accuracy_scores.mean()
+
+print(f"Mean accuracy over {numLoops} iterations: {mean_accuracy:.4f}")
+
+def cross_validate(X, y, num_loops):
+
+  """Randomly splits X and y values into train/test groups (test size = 20%).
+
+  Creates a GaussianNB model.
+
+  Returns a numpy array of accuracy scores for the tests.
+
+  """
+
+
+
+  accuracy_scores = np.zeros(num_loops)
+
+
+
+  for i in range(num_loops):
+
+    model_split_cv = GaussianNB()
+
+    X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_size = 0.2)
+
+    model_split_cv.fit(X_train, y_train)
+
+    y_split_pred = model_split_cv.predict(X_test)
+
+    accuracy_scores[i] = metrics.accuracy_score(y_test, y_split_pred)
+
+
+
+  return accuracy_scores
+accuracy_scores = cross_validate(X, y, 100)
+
+print(round(accuracy_scores.mean(), 5))
+plt.hist(accuracy_scores)
+
+plt.title('Frequency of accuracy scores for cross-validation')
+
+plt.show()
+# The difference between our true results and trained model results shows that the data is extremely biased towards non transaction data. This means we should balance the data to ensure the model learns equally from both classes
+
+
+
+metrics.ConfusionMatrixDisplay.from_estimator(
+
+    gnb,
+
+    X_test,
+
+    y_test,
+
+    normalize = 'true',
+
+    values_format = '.2%',
+
+    cmap = 'magma',
+
+    )
+
+plt.grid(False)
+
+plt.title('Confusion matrix') ;
+
+plt.savefig('confusion_matrix.png')
+# Calculate the number of successful transactions
+
+num_successful = sale.shape[0]
+
+
+
+# Calculate the number of unsuccessful transactions needed for a 50/50 split
+
+num_unsuccessful_needed = num_successful
+
+# Randomly sample the required number of unsuccessful transactions
+
+balanced_unsuccessful = no_sale.sample(n=num_unsuccessful_needed, random_state=42)
+
+
+
+# Combine the successful and balanced unsuccessful transactions
+
+balanced_data = pd.concat([sale, balanced_unsuccessful])
+# Shuffle the balanced data to mix successful and unsuccessful transactions
+
+balanced_data = balanced_data.sample(frac=1, random_state=42).reset_index(drop=True)
+X = balanced_data.drop('target', axis=1)
+
+y = balanced_data['target']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+num_successful = sale.shape[0]
+
+num_successful
+num_unsuccessful_needed = num_successful
+balanced_unsuccessful = no_sale.sample(n=num_unsuccessful_needed, random_state=42)
+
+balanced_unsuccessful
+whole_data_accuracy = trans_data_copy_2
+whole_mean_accuracy = round(accuracy_scores.mean(), 5)
+
+balanced_mean_accuracy = round(balanced_data.mean(), 5)
+
+whole_mean_accuracy
+
+balanced_data = pd.concat([sale, balanced_unsuccessful])
+
+balanced_data
+X_balanced = balanced_data.drop('target', axis=1)
+
+y_balanced = balanced_data['target']
+
+
+
+X_train, X_test, y_train, y_test = train_test_split(X_balanced, y_balanced, test_size=0.2, random_state=42)
+
+
+
+balanced_data_accuracy = cross_validate(X_balanced, y_balanced, 100)
+
+balanced_data_mean_accuracy = round(balanced_data_accuracy.mean(), 5)
+
+print(f"Mean accuracy on balanced dataset: {balanced_data_mean_accuracy}")
+X_whole = predictors
+
+y_whole = target['target']
+
+
+
+whole_data_accuracy = cross_validate(X_whole, y_whole, 100)
+
+whole_data_mean_accuracy = round(whole_data_accuracy.mean(), 5)
+
+print(f"Mean accuracy on whole dataset: {whole_data_mean_accuracy}")
+# Plot the results
+
+plt.figure(figsize=(10, 6))
+
+plt.bar(['Whole Dataset', 'Balanced Dataset'], [whole_data_mean_accuracy, balanced_data_mean_accuracy])
+
+plt.xlabel('Dataset')
+
+plt.ylabel('Mean Accuracy')
+
+plt.title('Cross-Validation Accuracy Comparison')
+
+plt.show()
+import seaborn as sns
+
+import matplotlib.pyplot as plt
+
+
+
+for var in ['var_20', 'var_31', 'var_5']:
+
+    sns.boxplot(x='target', y=var, data=trans_data_copy_2)
+
+    plt.title(f'Distribution of {var} by Target')
+
+    plt.tight_layout()
+
+    plt.show()
+from sklearn.ensemble import RandomForestClassifier
+
+
+
+rf = RandomForestClassifier()
+
+rf.fit(X, y)
+
+feature_importances = pd.Series(rf.feature_importances_, index=X.columns)
+
+print(feature_importances.sort_values(ascending=False).head(10))
+
+X_train_balanced, X_test_balanced, y_train_balanced, y_test_balanced = train_test_split(X_balanced, y_balanced, test_size=0.2, random_state=42)
+
+
+
+# Retrain the model on the balanced dataset
+
+gnb_balanced = GaussianNB()
+
+gnb_balanced.fit(X_train_balanced, y_train_balanced)
+
+
+
+# Create the confusion matrix
+
+metrics.ConfusionMatrixDisplay.from_estimator(
+
+    gnb_balanced,
+
+    X_test_balanced,
+
+    y_test_balanced,
+
+    normalize='true',
+
+    values_format='.2%',
+
+    cmap='magma',
+
+)
+
+plt.title('Confusion Matrix - Balanced Dataset')
+
+plt.show()

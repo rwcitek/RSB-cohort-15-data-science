@@ -1,0 +1,75 @@
+# Projects
+# Storage
+# API Keys
+# Assets
+%%capture output
+
+%%bash
+
+apt-get update
+
+apt-get install -y jq
+from google.colab import auth
+
+auth.authenticate_user()
+
+print('Authenticated')
+!gcloud help
+!gcloud cheat-sheet
+!gcloud info --help
+!gcloud help
+!gcloud info
+!gcloud --format=yaml info
+!gcloud --format=json info | jq .config.account
+
+import json
+
+gcloud_info = !gcloud --format=json info
+
+gcloud_dict = json.loads( "\n".join(gcloud_info) )
+
+gcloud_dict["config"]["account"]
+!gcloud help projects list
+
+!gcloud projects list --sort-by=projectId
+
+!gcloud --format=json projects list
+projects = !gcloud --format=json projects list | jq -r .[].projectId
+
+projects
+type(projects)
+!gcloud --format=yaml projects list
+for project in projects:
+
+  !gcloud projects describe {project}
+
+  print()
+!gcloud help storage ls
+
+for project in projects:
+
+  print(f"== {project}")
+
+  !gcloud storage ls --project={project}
+
+  print()
+
+!gcloud help services api-keys
+for project in projects:
+
+  !yes y | gcloud --project={project} services api-keys list
+
+  print()
+
+!gcloud help asset list
+for project in projects[:1]:
+
+  print(f"{project}:")
+
+  !gcloud --project={project} asset list | grep -v '^--' | sed -e 's/^/  /;/^  ancestors/s/^  /- /'
+
+  print()
+
+!bq ls --project_id bigquery-public-data
+help(client.list_datasets)
+

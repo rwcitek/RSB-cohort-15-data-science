@@ -1,0 +1,215 @@
+# Bayes Rule Exercises
+P(A|B) = P(B|A) * P(A) / P(B)
+
+
+
+
+
+Where:
+
+
+
+    P(A|B) is the posterior probability of A given B
+
+    P(B|A) is the likelihood of B given A
+
+    P(A) is the prior probability of A
+
+    P(B) is the marginal probability of B
+
+
+
+## Problem 1:
+Joan says she is itchy. There is a test for Allergy to Cats, but this test is not always
+
+right:
+
+
+
+- For people that really do have the allergy, the test says "Yes" 80% of the time
+
+- For people that do not have the allergy, the test says "Yes" 10% of the time
+
+
+
+If 1% of the population has the allergy, and Joan’s test says "Yes", what are the chances that Joan really has the allergy?
+## Problem 2:
+Beth is planning a picnic today, but the morning is cloudy.
+
+
+
+- 50% of all rainy days start off cloudy
+
+- Cloudy mornings are common (40% of all days start cloudy)
+
+- This is usually a dry month (10% of days tend to be rainy)
+
+
+
+What is the chance of rain during the day when it starts of cloudy?
+## Problem 3:
+An artist competition has entries from three painters: Pam, Paul and Peter.
+
+
+
+- Pam put in 15 paintings, 4% of her works have won First Prize.
+
+- Paul put in 5 paintings, 5% of his works have won First Prize.
+
+- Peter put in 10 paintings, 3% of his works have won First Prize.
+
+
+
+What is the probability that Pam will win First Prize?
+Key points:
+
+
+
+The Law of Total Probability
+
+- States that if you have a set of mutually exclusive and collectively exhaustive events (like Pam, Paul, and Peter playing), you can calculate the probability of another event (winning) by summing up the products of the conditional probabilities and the probabilities of each individual event.
+
+
+
+- In this case, Pam, Paul, and Peter are mutually exclusive (only one can play at a time) and collectively exhaustive (one of them must play).
+
+
+
+- The equation calculates the total probability of winning by considering all possible scenarios (each person playing) and their associated probabilities.
+
+## Problem 4: (Challenge)
+A man speaks the truth 2 out of 3 times. He throws one die and says that number
+
+obtained is a three. Find the probability that the number obtained is actually a three.
+# Define the given probabilities
+
+p_a = 0.01  # P(A) - Prior probability of having an allergy
+
+p_b_given_a = 0.80  # P(B|A) - Likelihood of positive test given allergy
+
+p_b_given_not_a = 0.1  # P(B|~A) - Likelihood of positive test given no allergy
+
+
+
+# Calculate the probability of not having an allergy
+
+p_not_a = 1 - p_a  # P(~A) - Prior probability of not having an allergy
+
+
+
+# Calculate the total probability of a positive test result
+
+# P(B) = P(B|A) * P(A) + P(B|~A) * P(~A)
+
+p_b = (p_b_given_a * p_a) + (p_b_given_not_a * p_not_a)
+
+
+
+# Calculate the probability of having an allergy given a positive test result
+
+# P(A|B) = P(B|A) * P(A) / P(B)
+
+p_a_given_b = (p_b_given_a * p_a) / p_b
+
+
+
+# Print the result as a percentage
+
+print(f'Joan has a {p_a_given_b * 100:.2f}% chance of really having an allergy to cats')
+
+# Given probabilities
+
+prior_rain = 0.1  # P(R) - Prior probability of rain
+
+cloud_given_rain = 0.5  # P(C|R) - Probability of cloud given rain
+
+overall_cloud = 0.4  # P(C) - Overall probability of cloud
+
+
+
+# Calculate probability of no rain
+
+no_rain = 1 - prior_rain  # P(~R) - Probability of no rain
+
+
+
+# Apply Bayes' theorem
+
+# P(R|C) = P(C|R) * P(R) / P(C)
+
+posterior_probability = (cloud_given_rain * prior_rain) / overall_cloud
+
+
+
+# Print the result as a percentage
+
+print(f'{posterior_probability * 100:.2f} % chance that it will rain when it gets cloudy during the day')
+
+# Given probabilities
+
+p_pam = 15 / 30  # P(Pam) - Prior probability of Pam painting
+
+p_paul = 5 / 30  # P(Paul) - Prior probability of Paul painting
+
+p_peter = 10 / 30  # P(Peter) - Prior probability of Peter painting
+
+
+
+# Likelihoods of winning given each artist
+
+p_win_given_pam = 0.04  # P(Win|Pam) - Probability of win given Pam painted
+
+p_win_given_paul = 0.05  # P(Win|Paul) - Probability of win given Paul painted
+
+p_win_given_peter = 0.03  # P(Win|Peter) - Probability of win given Peter painted
+
+
+
+# Calculate total probability of winning
+
+# P(Win) = P(Win|Pam) * P(Pam) + P(Win|Paul) * P(Paul) + P(Win|Peter) * P(Peter)
+
+p_win = (p_win_given_pam * p_pam) + (p_win_given_paul * p_paul) + (p_win_given_peter * p_peter)
+
+
+
+# Apply Naive Bayes
+
+# P(Pam|Win) = P(Win|Pam) * P(Pam) / P(Win)
+
+p_pam_given_win = (p_win_given_pam * p_pam) / p_win
+
+
+
+print(f"P(Pam|Win) = {p_pam_given_win * 100 :.2f} %")
+
+# Given probabilities
+
+p_tells_truth = 2/3  # Probability of telling the truth
+
+p_rolls_three = 1/6  # Probability of actually rolling a three
+
+p_not_three = 5/6   # Probability of not rolling a three
+
+
+
+# Calculate probability of saying three
+
+# P(Says Three) = P(Tells Truth AND Rolls Three) + P(Lies AND Doesn't Roll Three)
+
+p_says_three = (p_tells_truth * p_rolls_three) + ((1-p_tells_truth) * p_not_three)
+
+
+
+# Apply Bayes' theorem
+
+# P(Three | Says Three) = P(Says Three | Three) * P(Three) / P(Says Three)
+
+p_three_given_says_three = (p_tells_truth * p_rolls_three) / p_says_three
+
+
+
+# Print the result
+
+print(f"P(Three | Says Three) = {p_three_given_says_three * 100:.2f} %")
+

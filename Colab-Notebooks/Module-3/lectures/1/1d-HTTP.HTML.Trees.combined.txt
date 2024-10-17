@@ -1,0 +1,732 @@
+# curl, Requests, XPath, and CSS selectors
+Setup
+## Resources
+
+
+
+- [Introduction to web scraping]( https://carpentries-incubator.github.io/lc-webscraping/ )
+
+
+
+
+
+  - [Selecting content on a web page with XPath]( https://carpentries-incubator.github.io/lc-webscraping/02-xpath/index.html )
+
+
+
+  - [Web scraping using Python and Scrapy]( https://carpentries-incubator.github.io/lc-webscraping/04-scrapy/index.html )
+
+
+
+- [Playwright]( https://playwright.dev/python/ )
+
+
+
+- [HTML Scraping](https://python-docs.readthedocs.io/en/latest/scenarios/scrape.html)
+
+
+
+- [Parsing HTML with Beautiful Soup 4](https://automatetheboringstuff.com/2e/chapter12/#:~:text=Parsing%20HTML%20with%20the%20bs4%20Module)
+
+
+
+  - [Sample files as zip](https://nostarch.com/download/Automate_the_Boring_Stuff_onlinematerials_v.2.zip)
+
+
+
+- [CSS Selector notation]( https://www.w3schools.com/cssref/css_selectors.php )
+
+
+
+
+
+## Hyper Text Markup Language ( HTML )
+
+
+
+"HTML describes the structure of a web page semantically and originally included cues for its appearance."
+
+
+
+Features:
+
+- Text with "markup"
+
+- markup == HTML elements/tags
+
+- most tags paired, <html> ... </html>
+
+- nested: tags within tags forming a hierarchy or tree
+
+
+
+The term was coined by [Ted Nelson]( https://en.wikipedia.org/wiki/Ted_Nelson ) around 1963 and implemented by [Tim Berners-Lee]( https://en.wikipedia.org/wiki/Tim_Berners-Lee ) in 1989.
+
+
+
+A simple [markup example.]( https://en.wikipedia.org/wiki/HTML#Markup )
+
+
+
+
+
+
+
+## Viewing HTML from the browser
+
+
+
+### Example.com
+
+
+
+One way:
+
+1. View the webpage at http://www.example.com
+
+1. View the source ( Ctrl+U )
+
+
+
+Another way:
+
+1. Open Developer tools ( Ctrl+Shift+I )
+
+1. Click on the Elements tab
+
+1. Alt+click or right+click on the "<html>" tag and select "Expand Recursively"
+Locating individual elements:
+
+1. Click on the "Select an Element" arrow ( Ctrl+Shift+C )
+
+1. Click on the text "More information..."
+
+
+
+Notice that the corresponding section of HTML is highlighted.  You can also click on a section of HTML and the corresponding element in the page will be highlighted.
+
+
+
+
+
+
+
+### ABQ Library
+
+
+
+One way:
+
+1. Visit [ABQ databases]( https://abqlibrary.org/az.php?p=1 )
+
+1. View the source ( Ctrl+U )
+
+
+
+Another way:
+
+1. Open Developer tools ( Ctrl+Shift+I )
+
+1. Click on the Elements tab
+
+1. Alt+click or right+click on the "<html>" tag and select "Expand Recursively"
+
+
+
+## From the command line
+
+
+
+
+
+
+
+## Hyper Text Transfer Protocol ( HTTP )
+
+
+
+From [Wikipedia: HTTP]( https://en.wikipedia.org/wiki/HTTP )
+
+
+
+"The Hypertext Transfer Protocol (HTTP) is an application layer protocol in the Internet protocol suite model for distributed, collaborative, hypermedia information systems."
+
+
+
+"In 1991, the first documented official version of HTTP ..., HTTP/0.9, supported only GET method, allowing clients to only retrieve HTML documents from the server, but not supporting any other file formats or information upload."
+
+
+
+Features:
+
+- Data flows as a Request/Response pair
+
+- Connections are "stateless", i.e. the server doesn't remember previous requests/responses.
+
+- Requests contain a "verb" and key:value pairs in a Header, and sometimes a payload.
+
+- Responses contain a "status" and key:value pairs in a Header, and often a payload.
+
+
+
+
+
+Although the protocol has a number of methods/verbs, we will be primarily using GET, HEAD, and POST methods.
+
+- [HTTP methods]( https://en.wikipedia.org/wiki/HTTP#Request_methods )
+### Viewing request/response pair from the browser
+
+1. View the webpage at http://www.example.com
+
+1. Open Developer tools ( Ctrl+Shift+I )
+
+1. Click on the Network tab
+
+1. Refresh the page
+
+1. Under the Name field, click on "www.example.com"
+
+1. Scroll down to see the General, Request, and Response sections.
+
+1. Click on the Raw checkbox.
+
+1. Click on the Response tab to view the response payload.
+
+
+
+
+
+
+
+
+
+
+
+### Viewing request/response pair with curl
+
+Requests have a "> " at the beginning of the line.
+
+
+
+Responses have a "< " at the beginning of the line.
+## Using Python
+### Fetching files/pages using the requests module
+## Trees
+
+From [Wikipedia: Tree (Graph)]( https://en.wikipedia.org/wiki/Tree_(graph_theory) )
+
+
+
+"In graph theory, a tree is an undirected graph in which any two vertices are connected by exactly one path, or equivalently a connected acyclic undirected graph."
+
+
+
+Structure:
+
+- Type of graph, i.e. nodes and edges
+
+- Zero or one parent node
+
+- Zero or more children nodes
+
+
+
+Nomenclature:
+
+- Nodes
+
+- Edges
+
+- Directed edge
+
+- Levels, up, down
+
+- Parent, child, sibling
+
+- Ancestors, descendants
+
+- Root ( no parent )
+
+- Branches ( parents and children )
+
+- Leaves ( no children )
+
+- Path: sequence of nodes and edges between two nodes
+
+- Traversing, recursing; depth first, breadth first
+
+
+
+Type of trees:
+
+- Binary: at most two children
+
+- Balanced: equal number of levels for all children
+
+
+
+
+
+Examples:
+
+- Filesystem
+
+- Org charts
+
+- Family pedigrees
+
+- HTML, XML, JSON, YAML
+
+Example: `tree` command for viewing the filesystem
+## Beautiful Soup and CSS selectors
+
+### Using DBpedia
+Using only CSS selectors.
+### STEM Boomerang
+
+https://stemboomerang.org/stem-career-fair-23/
+
+
+
+Using curl to save an html file, then parse the html file.
+Using `requests` and `bs4`.
+Modify the `user-agent` header.
+Using only CSS selectors.
+## XPath
+Using the `lxml` library to pull the same information as the CSS selector.
+## CSS vs XPATH
+
+## HEAD request
+Having fun with HTTP headers:
+
+- [Fun and unusual HTTP response headers]( https://www.pingdom.com/blog/fun-and-unusual-http-response-headers/ )
+
+
+
+Response codes:
+
+- MDN [HTTP response status codes]( https://developer.mozilla.org/en-US/docs/Web/HTTP/Status )
+
+- Wikipedia [List of HTTP status codes]( https://en.wikipedia.org/wiki/List_of_HTTP_status_codes )
+
+## robots.txt
+
+"robots.txt is the filename used for implementing the Robots Exclusion Protocol, a standard used by websites to indicate to visiting web crawlers and other web robots which portions of the website they are allowed to visit."
+
+
+
+- Wikipedia [robots.txt]( https://en.wikipedia.org/wiki/Robots.txt )
+
+- Google docs [Introduction to robots.txt]( https://developers.google.com/search/docs/crawling-indexing/robots/intro )
+
+- [RFC 9309]( https://www.rfc-editor.org/rfc/rfc9309 )
+
+
+
+
+
+## Sitemaps
+
+
+
+
+
+- Wikipedia [sitemaps]( https://en.wikipedia.org/wiki/Sitemaps )
+
+
+
+%%capture output
+
+%%bash
+
+apt-get update
+
+apt-get install -y tree
+!curl http://www.example.com
+
+!curl -v https://abqlibrary.org/az.php?p=1
+!curl --help
+
+!curl -s -v http://www.example.com
+import requests
+
+import json
+
+page = requests.get('http://www.example.com')
+
+dict(page.headers)
+
+page.reason, page.status_code
+
+[
+
+page.request.url,
+
+page.request.method,
+
+page.request.path_url,
+
+page.request.headers,
+
+page.request.body,
+
+]
+page.url
+
+page.connection
+
+page.cookies
+
+page.text
+
+page.content
+
+type(page)
+!tree /etc/apt
+!find /etc/apt
+%%capture
+
+%%bash
+
+curl -s -L -O https://nostarch.com/download/Automate_the_Boring_Stuff_onlinematerials_v.2.zip
+
+unzip -jo Automate_the_Boring_Stuff_onlinematerials_v.2.zip automate_online-materials/example.html
+
+!unzip -l Automate_the_Boring_Stuff_onlinematerials_v.2.zip
+pwd
+ls -l
+!cat -n example.html
+import bs4
+
+
+
+with open('example.html') as exampleFile:
+
+  html = exampleFile.read()
+
+exampleSoup = bs4.BeautifulSoup( html, 'html.parser')
+
+print(html)
+
+html
+type(html)
+for i, line in enumerate(html.split('\n')):
+
+  print(i+1, line)
+type(exampleSoup)
+elems = exampleSoup.select('#author')
+
+elems
+type(elems) # elems is a list of Tag objects.
+len(elems)
+elems[0]
+type(elems[0])
+str(elems[0]) # The Tag object as a string.
+elems[0].getText()
+elems[0].attrs
+pElems = exampleSoup.select('p')
+
+pElems
+len(pElems)
+pElems[:2]
+pElems[0]
+type(pElems[0])
+str(pElems[0])
+pElems[0].getText()
+str(pElems[1])
+pElems[1].getText()
+str(pElems[2])
+pElems[2].getText()
+aElems = exampleSoup.select('a')
+
+aElems
+
+aElems[0]
+
+aElems[0].attrs
+
+aElems[0].attrs["href"]
+
+exampleSoup.select("body")[0].get_text().split('\n')
+dbpedia = requests.get("https://dbpedia.org/page/Digby_Morrell")
+
+dbpedia
+html = dbpedia.text
+
+html
+dom = bs4.BeautifulSoup(html, "html.parser")
+
+dom
+type(html)
+type(dom)
+a_tags = dom.select("a")
+
+a_tags
+len(a_tags)
+[ tag.attrs for tag in a_tags ]
+for a_tag in a_tags:
+
+  href = a_tag.attrs["href"]
+
+  if href.startswith("http"):
+
+    rev = a_tag.attrs.get("rev","")
+
+    if "foaf:primaryTopic" in rev:
+
+      print(href)
+
+foaf_pt = dom.select('a[href^="http"][rev="foaf:primaryTopic"]')
+
+foaf_pt[0].attrs["href"]
+
+foaf_pt[0].attrs["href"].split("/")[-1]
+
+url = "https://stemboomerang.org/stem-career-fair-23/"
+
+!curl -s {url} > boom.html
+
+!ls -la
+!grep -i tricore boom.html
+with open('boom.html') as boom_file:
+
+  html = boom_file.read()
+
+dom = bs4.BeautifulSoup( html, 'html.parser')
+
+str(dom)[:500]
+url = "https://stemboomerang.org/stem-career-fair-23/"
+
+boom = requests.get(url)
+
+boom
+boom.request.headers
+user_agent = {'User-agent': 'Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
+
+user_agent = {'User-agent': 'foobar'}
+
+user_agent = {'User-agent': 'python-requests'}
+
+user_agent = {'User-agent': 'I am a hacker.  I should be blocked from your site.'}
+
+boom = requests.get(url, headers = user_agent)
+
+boom
+boom.request.headers
+html = boom.text
+dom = bs4.BeautifulSoup( html, 'html.parser')
+
+str(dom)[:500]
+a_tags = dom.select("a")
+
+a_tags
+len(a_tags)
+[ tag.attrs for tag in a_tags ]
+[ tag.attrs["href"] for tag in a_tags[:10] ]
+hrefs = []
+
+for a_tag in a_tags:
+
+  href = a_tag.attrs["href"]
+
+  if href.startswith("http"):
+
+    foo = a_tag.attrs.get("class","")
+
+    if "block" in foo:
+
+      hrefs += [ href ]
+
+
+
+len(hrefs)
+sorted(hrefs)
+a_tags = dom.select("a[href^='http'][class*='block']")
+
+len(a_tags)
+a_tags[0]
+[ tag.attrs["href"] for tag in a_tags ]
+from lxml import html
+
+import requests
+
+page = requests.get('http://www.example.com')
+
+tree = html.fromstring(page.content)
+
+tree
+page.content
+title = tree.xpath('/html/head/title/text()')
+
+print(title[0])
+
+link = tree.xpath('/html/body/div/p[2]/a/@href')
+
+print(link[0])
+
+with open('example.html') as exampleFile:
+
+  content = exampleFile.read()
+
+print(content)
+
+# Get an element list
+
+tree = html.fromstring( content )
+
+elems_xp = tree.xpath('//*[@*="author"]')
+
+elems_xp
+
+# Get one element
+
+elems_xp[0]
+
+# Text bounded by the tag
+
+elems_xp[0].text
+# Element attributes
+
+elems_xp[0].attrib
+
+pElems_xp = tree.xpath('//p')
+
+pElems_xp
+
+pElems_xp[0]
+
+pElems_xp[0].text
+
+pElems_xp[1]
+
+pElems_xp[1].text
+
+pElems_xp[2]
+
+pElems_xp[2].text
+
+example = '''
+
+<body>
+
+  <p class="phrase">Hello, world!</p>
+
+  <p>By <span id="name">Foo Bar</span></p>
+
+</body></html>
+
+'''
+
+example
+
+# Using CSS selectors
+
+import bs4
+
+tree_css = bs4.BeautifulSoup( example, 'html.parser')
+
+elems_css = tree_css.select('#name')
+
+elems_css
+tree_css
+elems_css[0]
+elems_css[0].text
+str(elems_css[0])
+# Using XPath
+
+from lxml import html
+
+tree = html.fromstring( example )
+
+elems_xp = tree.xpath('//*[@*="name"]')
+
+elems_xp
+
+elems_xp[0]
+
+# Text bounded by the tag
+
+elems_xp[0].text
+# Can't seem to get the text of the entire tag
+
+str(elems_xp[0])
+
+!curl -s -I -XHEAD 'https://jgmsinc.com/'
+!curl -s -I -XHEAD 'https://careers-encantadotech.icims.com/jobs/search?ss=1&searchRelation=keyword_all&searchCategory=8730'
+!curl -s -L -I -XHEAD 'https://cnmingenuity.org/'
+
+!curl -I -s https://ddc-datascience.s3.amazonaws.com/Projects/Project.1-Transactions/Data/Transaction.train.csv
+!curl -s 'https://cnmingenuity.org/robots.txt'
+
+!curl -s 'https://www.cabq.gov/robots.txt'
+
+!zcat --help
+!curl -s 'https://www.cabq.gov/sitemap.xml.gz' | zcat
+
+!curl -s 'https://www.cabq.gov/sitemap1.xml.gz' | zcat | head -20
+%%bash
+
+curl -s 'https://www.cabq.gov/sitemap1.xml.gz' |
+
+zcat |
+
+fgrep '<loc>' |
+
+sed -e 's#<loc>##g ; s#</loc>##g' |
+
+head -3 |
+
+while read url ; do
+
+  echo == ${url}
+
+  curl -s -I ${url}
+
+done
+%%bash
+
+curl -s 'https://www.cabq.gov/sitemap1.xml.gz' |
+
+zcat |
+
+fgrep '<loc>' |
+
+sed -e 's#<loc>##g ; s#</loc>##g' |
+
+wc
+%%bash
+
+curl -s 'https://www.cabq.gov/sitemap2.xml.gz' |
+
+zcat |
+
+fgrep '<loc>' |
+
+sed -e 's#<loc>##g ; s#</loc>##g' |
+
+wc
+!curl -s https://blog.nimblebox.ai/robots.txt
+!curl -s -I https://blog.nimblebox.ai/sitemap.xml
+%%bash
+
+curl -s https://blog.nimblebox.ai/sitemap.xml |
+
+fgrep '<loc>' |
+
+sed -e 's#<loc>##g ; s#</loc>##g' |
+
+while read url ; do
+
+  echo == ${url}
+
+  curl -s -I ${url}
+
+done > nimblebox.txt
+
+!cat nimblebox.txt | head -100
+
+!grep ^HTTP nimblebox.txt | sort | uniq -c
+
+!grep team nimblebox.txt
+!curl -s -L https://nimblebox.ai/blog/mlops-team-structure | head -200
+

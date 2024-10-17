@@ -1,0 +1,226 @@
+6. Create two sets and find the intersection between them.
+7. Find another method to run on one or both of your sets.
+# Python Data Types Exercises
+
+
+
+This contains two sets of exercises - Basic and Advanced.  
+
+
+
+**!!!Only the basic exercises are required.!!!**
+
+
+
+The advanced exercises require concepts we haven't gone over yet.  They will require prior coding knowledge and/or some Googling.  If you breeze through the basic exercises try your hand at the advanced ones.  
+##  Basic
+1. Given	a list,	remove the	element	at	index	number 4 and add	it at index position 2 (over-writing what is currently there) and also add it at the end of the list.
+
+
+
+```python
+
+list1 = [34, 56, 49, 4900, 249, 494]
+
+```
+2. Create a dictionary to store some information about yourself.  For example you might have key value pairs like:
+
+- favorite ice cream & chocolate
+
+- hair color & blond
+3. Add an additional piece of information about yourself to your dictionary from above.
+4. Remove one of the entries from your dictionary
+5. Create your own tuple.  You can put whatever you want in it.  
+6. Create two sets and find the intersection between them.
+7. Find another method to run on one or both of your sets.
+---
+## Advanced (Optional- for fun)
+You have two lists.  Create a new list with the elements with odd indices from the first list and the elements with even indices from the second list.
+
+
+
+```python
+
+list1 = [34, 56, 49, 4900, 249, 494]
+
+list2 = [45, 65, 34, 23, 67, 5]
+
+```
+
+Starting with a given list, count the occurrences of each unique element.  Create a dictionary to store the count of each element.
+
+
+
+```python
+
+list1 = [34, 544, 544, 34, 67, 67, 34, 5, 7, 9]
+
+```
+
+Given two sets, find the intersection of the sets and remove those elements from the first set.
+
+
+
+```python
+
+set1 = {x for x in range(20)}
+
+set2 = {x for x in range(3,10)}
+
+```
+Given a list, check if each element already exists in a dictionary as a key's value.  If not, delete the element from the list.
+
+
+
+```python
+
+list1 = [4, 5, 6, 7, 3, 5, 4, 3]
+
+fruit_counts = {
+
+    "apple" : 4,
+
+    "orange": 8,
+
+    "grapefruit": 3,
+
+    "grapes": 7
+
+}
+
+```
+
+With a given dictionary, get all values and add to a list, but don't add duplicates.
+
+
+
+```python
+
+fruit = {
+
+  "apple" : 4,
+
+  "orange": 8,
+
+  "grapefruit": 3,
+
+  "grapes": 7,
+
+  "cherries": 4,
+
+  "nanas": 3
+
+}
+
+```
+
+fruit = {
+
+  "apple" : 4,
+
+  "orange": 8,
+
+  "grapefruit": 3,
+
+  "grapes": 7,
+
+  "cherries": 4,
+
+  "nanas": 3
+
+}
+
+fruit
+Given a string input calculate and display the number of digits and letters.
+
+
+
+```python
+
+s = "I <3 python"
+
+```
+set1 = {1,4,6,'five','o9'}
+
+set2 = {'up','down',6,10,15}
+
+set1.intersection(set2)
+list1 = [34, 56, 49, 4900, 249, 494]
+list_pop = list1.pop(4)
+
+list1.pop(2)
+
+list1.insert(2, list_pop)
+
+list1.append(list_pop)
+
+print(list1)
+that_rob_guy = { 'height': '5 11' , 'weight': 151, 'eye-color': 'brown/hazel' }
+that_rob_guy.update({"pets": 5 })
+that_rob_guy
+that_rob_guy.update({'favorite distro': 'manjaro'})
+that_rob_guy
+help(that_rob_guy.pop)
+help(that_rob_guy.popitem)
+that_rob_guy.pop('height')
+that_rob_guy
+tuple = ( 1,"two", 3, 4, "five" )
+set1 = {1,4,6,'five','o9'}
+
+set2 = {'up','down',6,10,15}
+
+set1.intersection(set2)
+set1 & set2
+list1 = [34, 56, 49, 4900, 249, 494]
+
+list2 = [45, 65, 34, 23, 67, 5]
+list1 = [1, 2, 3]
+
+list2 = [4, 5, 6]
+
+
+
+combined = list1 + list2
+
+combined
+odd =  [num for num in list1 + list2 if num % 2 == 1]
+
+even = [num for num in list1 + list2 if num % 2 == 0]
+
+
+
+list3 = even + odd
+
+list3
+list1 = [34, 544, 544, 34, 67, 67, 34, 5, 7, 9]
+list1
+if list1 == list1:
+
+  list1.remove(list1[ ])
+set1 = {x for x in range(20)}
+
+set2 = {x for x in range(3,10)}
+
+print(set1)
+
+print(set2)
+set1.intersection(set2)
+set1 & set2
+list1 = [4, 5, 6, 7, 3, 5, 4, 3]
+
+fruit_counts = {
+
+    "apple" : 4,
+
+    "orange": 8,
+
+    "grapefruit": 3,
+
+    "grapes": 7
+
+}
+remove = [value for value in list1 if value in fruit_counts.values()]
+
+
+
+list1

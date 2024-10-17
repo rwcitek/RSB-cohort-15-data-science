@@ -1,0 +1,141 @@
+# Missing Data
+Imputation is used to fill in missing values in a data set, i.e. fill in the blanks. Missing values are values in a dataset that are missing or have a null value. For example, it could be data that weren't collected or were mistakenly not recorded or were recorded incorrectly.
+
+
+
+**Note**: A zero data value is not necessarily a missing value. Zero can be a useful measure, depending on the variable.
+
+
+
+Missing values can cause issues in ML because many ML algorithms are not equipped to handle missing data.
+## Simple Strategies
+There are a few simple strategies for handling missing data:
+
+
+
+1) **Drop rows with null values.** We can drop rows if the missing data in the dataset is missing at random, and if the number of null rows is low relative to the total number of rows in our dataset. We have to be careful because dropping too much data can cause bias in our model.
+
+
+
+2) **Drop columns that mostly contain null values** We can drop columns if most of the values are null. However, we have to take caution when doing this because we don't want to drop a column that could have been useful for our predictions.
+## Imputation
+Imputation involves replacing a null value with a different value. There are numerous ways that a null value can be imputed, including:
+
+
+
+1. Using the mean or median of the variable (for continuous data).
+
+2. Using the mode of the variable (for categorical data).
+
+3. Using a constant value (e.g., 0)
+
+4. Using machine learning!
+
+5. Many other ways that are beyond the scope of the class.
+## Implementation
+
+
+
+There are three commonly used ways to perform imputation in Python.
+
+
+
+1. pandas `fillna()` - fills in missing values for a single column using a constant or summary statistic. This is particularly useful if you need to fill NA values differently for different columns.
+
+1. sklearn `SimpleImputer` - fills in missing values using a constant or summary statistic. Useful if you want to fill in NA values in different columns using the same constant or the same summary statistic.
+
+1. sklearn `IterativeImputer` - fills in missing values as a function of other variables.
+## Example
+
+https://medium.com/analytics-vidhya/a-quick-guide-on-missing-data-imputation-techniques-in-python-2020-5410f3df1c1e
+# Imports
+
+import pandas as pd
+
+import numpy as np
+# Generate Data
+
+np.random.seed(42)
+
+my_df = pd.DataFrame()
+
+my_df["A"] = np.random.randint( 1, 10, 10 )
+
+my_df["B"] = np.random.random( 10 )
+
+my_df["C"] = np.random.randint( 1, 20, 10 )
+
+my_df["D"] = np.random.normal( 0, 10, 10 )
+
+
+
+my_df
+my_df.shape
+my_df.describe().transpose()
+my_df.info()
+# Randomly change some values to NA
+
+np.random.seed(11)
+
+rand_Index_A = np.random.randint( 0, 9, 3 )
+
+rand_Index_B = np.random.randint( 0, 9, 4 )
+
+
+
+( rand_Index_A, rand_Index_B )
+my_df['A'].loc[rand_Index_A] = np.NaN
+
+my_df['B'].loc[rand_Index_B] = np.NaN
+
+
+
+my_df
+# Calculate the mode of Column A
+
+my_df_clean_1 = my_df.copy()
+
+mode_A = my_df_clean_1['A'].mode(dropna = True)[0]
+
+# mode_A = my_df_clean_1['A'].dropna().mode()[0]  # Alternate way to calc mode
+
+mode_A
+# Fill in A using the mode of Column A
+
+my_df_clean_1['A'].fillna( mode_A, inplace = True)
+
+my_df_clean_1
+# Fill in B using 0
+
+my_df_clean_1['B'].fillna(0, inplace = True)
+
+my_df_clean_1
+my_df
+# Simple Imputer
+
+from sklearn.impute import SimpleImputer
+
+imp = SimpleImputer(missing_values = np.nan, strategy = 'mean')
+
+my_df_simple_impute = imp.fit_transform(my_df)
+
+pd.DataFrame( my_df_simple_impute, columns = my_df.columns )
+# Iterative Imputer
+
+from sklearn.experimental import enable_iterative_imputer
+
+from sklearn.impute import IterativeImputer
+
+
+
+imp = IterativeImputer(max_iter=10, random_state = 4)
+
+my_df_iter_impute = imp.fit_transform(my_df)
+
+pd.DataFrame( my_df_iter_impute, columns = my_df.columns )
+my_df_iter_impute[:,0].reshape(-1,1)
+my_df
+m, s = (my_df["A"].mean(), my_df["A"].std())
+
+m,s
+np.random.normal(m, s, 3 )

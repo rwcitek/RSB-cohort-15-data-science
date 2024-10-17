@@ -1,0 +1,122 @@
+# Coding Interview Tips
+## Practice!
+
+
+
+Practice solving coding questions using tools such as [CodeWars]( https://www.codewars.com/kata/search/python?q=&r%5B%5D=-8&r%5B%5D=-7&tags=Data%20Science&order_by=sort_date%20desc ), [CodingBat](https://www.codingbat.com/python), [LeetCode](https://leetcode.com/), [HackerRank](https://www.hackerrank.com/), and more. The more you practice with these types of questions, the more comfortable you will be solving coding problems on the spot.
+
+
+
+Also take a look at data science specific coding questions, for example:
+
+
+
+* [Technical Data Science Interview Questions: SQL and Coding]( https://hackernoon.com/technical-data-science-interview-questions-sql-and-coding-jv1k32bf )
+
+
+
+## Review Common Data Science Topics
+
+There are several topics that are fundamental to data science that any data scientist should feel comfortable talking about and writing code for. Some topics you should review include:
+
+
+
+
+
+*   Reading in data
+
+*   Cleaning data
+
+*   Fitting a model
+
+*   Performing cross validation
+
+*   Confusion matrix
+
+*   Plotting data
+
+
+
+## Use Pseudocode
+
+
+
+The idea behind pseudocode is to map out the logic for the code while not necessarily being syntactically correct.  
+
+
+
+**Example:** FizzBuzz
+
+Write a function that will go through the numbers from 1 to n and print Fizz if the number is divisible by 3, Buzz if the number is divisible by 5 or FizzBuzz if the number is divisible by 3 and 5.  If it’s not divisible by 3 or 5, print the number.  
+
+
+
+**Psuedocode:**
+
+
+
+Function fizzbuzz(n):  
+
+ >   loop for i from 1 to n:  
+
+     >> if i mod 3 is 0 and i mod 5 is 0 print 'FizzBuzz'  
+
+      else if i mod 3 is 0 print 'Fizz'  
+
+      else if i mod 5 is 0 print 'Buzz'  
+
+      else print i  
+
+
+
+## Ask Questions
+
+Before starting the problem (and while you're working through it), ask your interview clarifying questions to ensure you understand what they want you to accomplish:
+
+* Do you want me to write a function?
+
+* What are the inputs? What data types are the input?
+
+* Do you have a preference on the data type of the output?
+
+* Do you want the result to be printed to the screen or returned?
+
+* Etc.
+## When Done, Test & Refine Your Code
+
+When you feel like you have solved the problem (and if you have extra time), do the following:
+
+
+
+1) Refine your code (clean it up, remove typos/bugs)
+
+
+
+2) Test your code (verbally explain how your code would perform with different inputs)
+## General Tips
+
+
+
+- I'd recommend using Colab and aiming for Python code since you're probably more comfortable with that at this point (Applies to students doing coding interviews remotely and sharing their screen.  May not apply depending on interview format).
+
+- Don't get hung up if you don't know how to do a part
+
+  - **If you don't know the Python syntax, just use English to fill in the part you don't know**.  (i.e. if you need to sort a list, but don't remember the name of the sort method just write in `sort list`.  Say something like "I know there is a built-in method to sort the list, but I'd have to look it up to remember what it's called so I'm just going to say sort list for now.")  This is sort of combining psuedocode and Python code which is 100% OK.  
+
+- **TALK the whole way through**.  If you go quiet they don't know what you are thinking.  Even if you say, "I'm thinking through how to approach this part... the part that I find tricky is trying to make sure that it doesn't print Fizz when it's divisible by 3 AND 5."
+
+- You can **start by reading the problem out loud** to give yourself some time to start thinking about it.  
+
+- **Then start with basics and whatever part of the problem you DO know how to solve right away** so you have time to think through the rest of the problem.  For example the fizzbuzz question says 'Write a function...' so start with that part.  Talk through it... "Functions in Python start with def and then the function name.  I'll call it fizzbuzz because then it will be obvious what the function does.  The problem says it should take a number 'n' so the input to the function will be 'n'." Then here's your code for that part: `def fizzbuzz(n):`
+
+- **Refer back to the problem and try to remember what the goal is.**  "The problem says that the function should print out these things so everything will be print statements instead of using a return statement."
+
+- **Keep the goal of the problem in mind.** Sometimes it helps to work through backwards a little too.  For example if a question asks you to return a specific thing you can start with:   
+
+`def myfunction(n):`  
+
+`answer = []`  
+
+`return(answer)`  
+
+Then you can start in on your code to build `answer`.  This helps to keep you on track for your final goal. While you're doing this part, you might say something like "The question says to return the value so I'll start by defining an empty list named answer to put the answer in and then I'll put the return statement at the end."

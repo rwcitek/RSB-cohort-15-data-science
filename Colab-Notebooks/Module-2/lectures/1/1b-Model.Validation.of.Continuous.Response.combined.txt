@@ -1,0 +1,108 @@
+## Example 1
+## MSE: Mean Square of the Error
+## RMSE: Root Mean Square of the Error
+## RMSPE: Root Mean Square Percentage Error
+## MAE: Mean Absolute Error
+## Example 2
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+from sklearn import metrics
+# Results
+
+y_pred = [101, 90, 82, 80, 91, 97, 93, 88, 85, 90]
+
+y_actual = [100, 95, 87, 80, 94, 95, 92, 84, 87, 93]
+# Convert to numpy arrays
+
+y_pred = np.array(y_pred)
+
+y_actual = np.array(y_actual)
+# Visualize results
+
+plt.scatter(y_actual, y_pred)
+
+plt.plot([min(y_actual), max(y_actual)],[min(y_pred), max(y_pred)], c='red')
+
+plt.xlabel('Actual Weight')
+
+plt.ylabel('Predicted Weight') ;
+# MSE - functional
+
+np.mean(np.square(y_actual - y_pred))
+# MSE - vectorized method
+
+((y_actual - y_pred)**2).mean()
+# MSE - Sklearn
+
+metrics.mean_squared_error(y_actual, y_pred)
+# RMSE - functional
+
+np.sqrt(np.mean(np.square(y_actual - y_pred)))
+# RMSE - vectorize method
+
+((y_actual - y_pred)**2).mean()**(1/2)
+# RMSE - Sklearn
+
+np.sqrt(metrics.mean_squared_error(y_actual, y_pred))
+# RMSPE
+
+np.sqrt(np.mean(np.square((y_actual - y_pred) / y_actual))) * 100
+# RMSPE - vectorize method
+
+(((y_actual - y_pred) / y_actual) **2).mean()**(1/2) * 100
+# RMSPE - no Sklearn version
+# MAE
+
+np.mean(np.abs(y_actual - y_pred))
+# MAE - vectorize method
+
+(np.abs(y_actual - y_pred)).mean()
+# MAE - Sklearn
+
+metrics.mean_absolute_error(y_actual, y_pred)
+# Results
+
+y_pred2 = [120, 90, 82, 80, 91, 97, 93, 88, 85, 90]
+
+y_actual2 = [100, 95, 87, 80, 94, 95, 92, 84, 87, 93]
+# notice the first predicted value differs from the previous list
+
+y_pred2 - y_pred
+# notice there is no difference in the actual values
+
+y_actual2 - y_actual
+
+# Convert to numpy arrays
+
+y_pred = np.array(y_pred2)
+
+y_actual = np.array(y_actual2)
+# Visualize results
+
+plt.scatter(y_actual, y_pred)
+
+p1 = max(max(y_pred), max(y_actual))
+
+p2 = min(min(y_pred), min(y_actual))
+
+plt.plot([p1, p2], [p1, p2], 'red')
+
+#plt.plot([min(y_pred), max(y_pred)],[min(y_pred), max(y_pred)], c='red')
+
+plt.xlabel('Actual Weight')
+
+plt.ylabel('Predicted Weight') ;
+# MSE - Sklearn
+
+metrics.mean_squared_error(y_actual, y_pred)
+# RMSE - Sklearn
+
+np.sqrt(metrics.mean_squared_error(y_actual, y_pred))
+# RMSPE
+
+np.sqrt(np.mean(np.square((y_actual - y_pred) / y_actual))) * 100
+# MAE - Sklearn
+
+metrics.mean_absolute_error(y_actual, y_pred)

@@ -1,0 +1,584 @@
+# Practicing SQL Queries Using BigQuery
+
+
+
+We will be looking at the "covid19_google_mobility" dataset located [here](https://console.cloud.google.com/bigquery?p=bigquery-public-data&d=covid19_open_data&page=dataset&project=cool-monolith-286222&ws=!1m4!1m3!3m2!1sbigquery-public-data!2scovid19_open_data).
+
+## Setup
+## Initial Exploration
+### List the data sets
+
+https://cloud.google.com/bigquery/docs/listing-datasets#python_1
+
+
+
+### Data set properties
+
+
+
+https://cloud.google.com/bigquery/docs/listing-datasets#get_information_about_datasets
+#### Friendly name
+#### Description
+### Show labels
+### List the tables
+#### Version 1
+
+#### Version 2
+### Look at the table schema
+#### Schema in a dataframe
+##  Add safe config settings
+BigQuery allows you to query up to 1 TB per month. You can quickly reach this limit if you are not careful. Luckily, there are ways to assess and limit the amount of data you are querying.
+Set constants for sizes
+Sample Query 1 - Covid - Dry Run
+
+You can use a 'dry run' to estimate the size of a query before running it.
+Sample Query 1 - Covid - Safe Config
+
+You can also specify a limit for how much data you want to scan.
+## What do a couple of entries look like?
+##What do the next 5 entries look like?  
+
+5 just wasn't enough!  
+## How many records are there?
+## What countries are represented in this dataset?
+**There are 193 or maybe 195 total countries so we are missing 60 countries in this dataset!!!**
+## What the subregions are in the US?
+This isn't very informative. Let's look where the sub_regions do not equal 'None'.
+Sub_region_1 appears to be the state and sub_region_2 appears to be the county.
+## What dates does this cover?
+We have data from mid-February 2020 to mid-October of 2022
+
+## On average have retail and recreation trips decreased in Bernalillo County?
+## Are there any Bernalillo Counties in other states?
+We're the only one!!!
+## How many states have a subregion 2 that is Lincoln County or similar?
+## What was the lowest level of retail & recreation in Bernalillo county and when was that?
+Christmas! We probably don't want to account for that day (or Thanksgiving day).
+## Was that in a period of low retail and recreation activity or just noise in the data?
+## What country has decreased retail and recreation activity the most?
+## How does New Mexico compare to similar states?
+
+## What does all the data for Bernalillo County look like?
+##  How many counties in the U.S. have a name that starts with a B?
+## What does all the data for Bernalillo County look like for June?
+## Your Turn
+
+You will now practice using queries with Kaggle's Intro to SQL, located [here](https://www.kaggle.com/learn/intro-to-sql).
+from google.cloud import bigquery
+
+from google.colab import auth
+
+import pandas as pd
+
+import plotly.express as px
+
+
+
+auth.authenticate_user()
+# assign the project ID for BILLING purposes, i.e. who is going to pay for the query?
+
+project_id = 'cool-monolith-286222'
+
+
+
+# Create client object
+
+client = bigquery.Client(project=project_id)
+# assign the project ID that OWNS the data set
+
+owner_project_id = "bigquery-public-data"
+
+
+
+datasets = list(client.list_datasets(project=owner_project_id))  # Make an API request.
+
+
+
+len(datasets)
+if datasets:
+
+  print(f"Datasets in project {owner_project_id}:")
+
+  print("\n".join( f"\t{d.dataset_id}" for d in datasets[:10] ) )
+
+else:
+
+  print(f"{owner_project_id} project does not contain any datasets.")
+
+for dataset in datasets[:10]:
+
+  full_dataset_id = f"{dataset.project}.{dataset.dataset_id}"
+
+  friendly_name = dataset.friendly_name
+
+  print(
+
+    f"Got dataset '{full_dataset_id}' with friendly_name '{friendly_name}'."
+
+  )
+
+import textwrap
+
+for dataset in datasets[:10]:
+
+  print("==> " + dataset.full_dataset_id)
+
+  fdi = f"{dataset.project}.{dataset.dataset_id}"
+
+  dataset = client.get_dataset(fdi)
+
+  desc = f"Description: {dataset.description}".split("\n")
+
+  desc = "\n".join( [ f"\t{t}" for l in desc for t in textwrap.fill(l, 100).split("\n") ] )
+
+  print(f"{desc if desc else 'None'}")
+
+  print()
+
+
+
+for dataset in datasets[:10]:
+
+  print("==> " + dataset.full_dataset_id)
+
+  fdi = f"{dataset.project}.{dataset.dataset_id}"
+
+  labels = client.get_dataset(fdi).labels
+
+  if labels:
+
+    print("Labels:")
+
+    print( "\n".join( f"\t{k}: {v}" for k, v in labels.items() ) )
+
+  print()
+for dataset in datasets[:10]:
+
+  print("==> " + dataset.full_dataset_id)
+
+  # list tables
+
+  print( "\n".join( "\t" + t.table_id \
+
+                   for t in list(client.list_tables(dataset)) ))
+
+# assign the project ID that OWNS the data set
+
+owner_project_id = "bigquery-public-data"
+
+
+
+# Construct a reference to the "covid19_google_mobility" dataset
+
+project_dataset = "covid19_google_mobility"
+
+# project_dataset = "bitcoin_blockchain"
+
+
+
+dataset_ref = client.dataset(project_dataset, project=owner_project_id)
+
+
+
+# API request - fetch the dataset
+
+dataset = client.get_dataset(dataset_ref)
+
+
+
+# Get all the tables in the dataset
+
+tables = list(client.list_tables(dataset))
+
+
+
+# Print names of all tables in the dataset
+
+for table in tables:
+
+  print(table.table_id)
+# Construct a reference to the "mobility report" table
+
+table_ref = dataset.table("mobility_report")
+
+
+
+# API request - fetch the table
+
+table = client.get_table(table_ref)
+
+
+
+# See the table's schema - name, field type, mode, description
+
+table.schema
+fields = pd.DataFrame( [ x.to_api_repr() for x in table.schema ] )
+
+fields.shape
+
+fields
+
+# Preview the first five lines of the table
+
+client.list_rows(table, max_results=5).to_dataframe()
+ONE_MB = 1_000*1_000
+
+ONE_GB = 1_000*ONE_MB
+query = """
+
+        SELECT *
+
+        FROM bigquery-public-data.covid19_google_mobility.mobility_report
+
+        LIMIT 5
+
+        """
+
+
+
+dry_run_config = bigquery.QueryJobConfig(dry_run = True)
+
+dry_run_query_job = client.query(query, job_config= dry_run_config)
+
+size = dry_run_query_job.total_bytes_processed
+
+print(f"{size:_}")
+# This line should be included every time
+
+# It seems like you should be able to set it and reuse it, but that doesn't work
+
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=ONE_GB)
+
+
+
+safe_query_job = client.query(query, job_config=safe_config)
+
+df = safe_query_job.to_dataframe()
+
+df.head()
+df.shape
+query = """
+
+        SELECT *
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        LIMIT 5
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head()
+query = """
+
+        SELECT *
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        LIMIT 5 OFFSET 5
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head()
+query = """
+
+        SELECT COUNT(1) as record_count
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head()
+data_prefix = 'bigquery-public-data.covid19_google_mobility'
+
+data_table = 'mobility_report'
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=ONE_MB)
+
+query = f"""
+
+        SELECT DISTINCT country_region
+
+        FROM {data_prefix}.{data_table}
+
+        """
+
+df = client.query(query, job_config = safe_config).to_dataframe()
+
+df.head()
+df.shape
+
+countries = df['country_region']
+
+print(f"There are {countries.count()} countries")
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=ONE_MB)
+
+query = """
+
+        SELECT sub_region_1, sub_region_2
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        WHERE country_region = 'United States'
+
+        LIMIT 10
+
+        """
+
+df = client.query(query, job_config = safe_config).to_dataframe()
+
+df.head()
+query = """
+
+        SELECT DISTINCT sub_region_1, sub_region_2
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        WHERE country_region = 'United States' AND sub_region_2 != 'None'
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head(10)
+query = """
+
+        SELECT MIN(date) AS min_date, MAX(date) AS max_date
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        WHERE country_region = 'United States'
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head()
+query = """
+
+        SELECT AVG(retail_and_recreation_percent_change_from_baseline) as mean
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        WHERE sub_region_2 = "Bernalillo County" AND sub_region_1 = "New Mexico"
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head()
+query = """
+
+        SELECT DISTINCT sub_region_1
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        WHERE sub_region_2 = "Bernalillo County"
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head()
+query = """
+
+        SELECT DISTINCT sub_region_1, sub_region_2, country_region
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        WHERE sub_region_2 LIKE "Lincoln%"
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head(50)
+query = """
+
+        SELECT MIN(retail_and_recreation_percent_change_from_baseline)
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        WHERE sub_region_2 = "Bernalillo County"
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head()
+query = """
+
+        SELECT date
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        WHERE sub_region_2 = "Bernalillo County" AND sub_region_1 = "New Mexico"
+
+              AND retail_and_recreation_percent_change_from_baseline = -86
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head()
+query = """
+
+        SELECT MIN(retail_and_recreation_percent_change_from_baseline)
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        WHERE sub_region_2 = "Bernalillo County"
+
+          AND date not in
+
+          ('2020-12-25','2020-11-26','2021-12-25','2021-11-25','2022-11-24','2022-12-25')
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head()
+query = """
+
+        SELECT date
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        WHERE sub_region_2 = "Bernalillo County" AND sub_region_1 = "New Mexico"
+
+              AND retail_and_recreation_percent_change_from_baseline = -61
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head()
+query = """
+
+        SELECT date, retail_and_recreation_percent_change_from_baseline
+
+        -- SELECT COUNT(*)
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        WHERE sub_region_2 = "Bernalillo County"
+
+              AND retail_and_recreation_percent_change_from_baseline < -40
+
+        -- ORDER BY retail_and_recreation_percent_change_from_baseline
+
+        ORDER BY date
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head(25)
+query = """
+
+        SELECT country_region, ROUND(AVG(retail_and_recreation_percent_change_from_baseline), 1) as mean
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        GROUP BY country_region
+
+        ORDER BY mean
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head()
+df.tail(5)
+query = """
+
+        SELECT sub_region_1, AVG(retail_and_recreation_percent_change_from_baseline) as mean
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        WHERE sub_region_1 IN ( "New Mexico", "Colorado", "Arizona", "Oklahoma", "Texas", "Utah" )
+
+        GROUP BY sub_region_1
+
+        ORDER BY mean
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head()
+table.schema
+query = """
+
+        SELECT date,
+
+               retail_and_recreation_percent_change_from_baseline AS retail_recreation,
+
+               grocery_and_pharmacy_percent_change_from_baseline AS grocery,
+
+               parks_percent_change_from_baseline AS parks,
+
+               transit_stations_percent_change_from_baseline AS transit,
+
+               workplaces_percent_change_from_baseline AS work,
+
+               residential_percent_change_from_baseline AS residential
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        WHERE sub_region_1 ="New Mexico" AND sub_region_2 = "Bernalillo County"
+
+        ORDER BY date
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head(40)
+query = """
+
+        SELECT DISTINCT sub_region_2
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        WHERE sub_region_2 LIKE "B%" AND country_region = "United States"
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head(6)
+df.count()
+query = """
+
+        SELECT date,
+
+               retail_and_recreation_percent_change_from_baseline AS retail_recreation,
+
+               grocery_and_pharmacy_percent_change_from_baseline AS grocery,
+
+               parks_percent_change_from_baseline AS parks,
+
+               transit_stations_percent_change_from_baseline AS transit,
+
+               workplaces_percent_change_from_baseline AS work,
+
+               residential_percent_change_from_baseline AS residential
+
+        FROM `bigquery-public-data.covid19_google_mobility.mobility_report`
+
+        WHERE sub_region_1 ="New Mexico" AND sub_region_2 = "Bernalillo County"
+
+              AND date BETWEEN '2021-06-01' AND '2021-06-30'
+
+        ORDER BY date
+
+        """
+
+df = client.query(query).to_dataframe()
+
+df.head(30)

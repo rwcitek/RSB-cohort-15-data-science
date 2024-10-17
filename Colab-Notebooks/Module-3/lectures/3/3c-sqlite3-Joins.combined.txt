@@ -1,0 +1,751 @@
+# Join Examples
+
+
+
+We are going to use the following website to practice SQL joins: https://www.w3schools.com/sql/trysqlserver.asp?filename=trysql_asc
+
+
+
+Joins are often described using [Venn diagrams]( https://www.w3schools.com/sql/sql_join.asp#:~:text=Different%20Types%20of%20SQL%20JOINs ).  Just be aware that using Venn diagrams can be misleading.  For example, there is no Venn diagram that describes a cross/cartesian join.
+
+
+
+## Setup
+# Joins
+## Cross or Cartesian Join
+
+
+
+A join of both tables that returns ALL rows from the left table paired with ALL the rows from the right table. This results in a table of size n x m, where n is the number of rows in the left table and m is the number of rows in the right table.
+### Cross or Cartesian Join Syntax
+
+
+
+`SELECT * FROM people JOIN cities`
+
+
+
+or
+
+
+
+`SELECT * FROM people, cities `
+
+
+
+
+
+### Cross or Cartesian Join Example
+
+## Inner Join
+
+Inner join returns data where there are matching records in both tables. There must be some matching data in the two (or more) tables that are being joined. In the above example, we can perform an inner join on the people and cities tables because they have the city column in common.
+
+An inner join on cities will only return the cities they both have in common.
+
+
+
+### Inner Join Syntax
+
+
+
+```
+
+SELECT *
+
+FROM people
+
+INNER JOIN cities
+
+ON people.city = cities.city
+
+```
+
+
+
+or
+
+
+
+```
+
+SELECT *
+
+FROM people, cities
+
+WHERE people.city = cities.city
+
+```
+
+### Inner Join Example
+
+[Inner Join](https://www.w3schools.com/sql/sql_join_inner.asp)
+## Outer Join
+
+
+
+An outer join can be made on the left or right table.
+
+An outer join from the left table returns ALL rows from the left table and nulls for columns on the right table if no entries match.
+### Outer Join Syntax
+
+
+
+`SELECT * FROM people LEFT JOIN cities ON people.city = cities.city`
+### Outer Join Example
+
+
+
+[Left Join](https://www.w3schools.com/sql/sql_join_left.asp)
+
+
+
+[Right Join](https://www.w3schools.com/sql/sql_join_right.asp)
+## Full Outer Join
+
+
+
+A full outer join contains all rows unique to the left table, all rows unique to the right table, and all rows that match an inner join between the two tables.
+
+### Full Outer Join Syntax
+
+
+
+```
+
+SELECT *
+
+FROM people
+
+FULL OUTER JOIN cities
+
+ON people.city = cities.city
+
+```
+
+
+
+or to emulate on those SQL systems that do not support a full outer join ( e.g. SQLite3. )
+
+
+
+```
+
+SELECT people.*, cities.*
+
+FROM people
+
+LEFT JOIN cities
+
+ON people.city = cities.city
+
+UNION
+
+SELECT people.*, cities.*
+
+FROM cities
+
+LEFT JOIN people
+
+ON people.city = cities.city
+
+```
+
+
+
+
+
+
+
+### Full Outer Join Example
+
+
+
+[Full Outer Join](https://www.w3schools.com/sql/sql_join_full.asp)
+## Self Join
+
+
+
+A self join is when a table is joined with itself.  This is usefull when rows in a table are to be compared with other rows in the table.  For example, finding people who are in the same city.
+### Self Join Syntax
+
+
+
+```
+
+SELECT *
+
+FROM people p1, people p2
+
+```
+
+
+
+or
+
+
+
+```
+
+SELECT *
+
+FROM people as p1
+
+JOIN people as p2
+
+```
+
+
+
+
+
+
+
+### Self Join Example
+
+
+
+[Self Join](https://www.w3schools.com/sql/sql_join_self.asp)
+
+## `ON` vs `WHERE` in Joins
+
+
+
+It seems like using an `ON` conditional outputs the same result as a `WHERE`.  And it does, when using an `INNER JOIN`.  However, when using an `OUTER JOIN`, the results differ.
+### `ON` vs `WHERE` Example
+
+## Union
+
+Combines ( stacks ) columns from two data sets.  By default, only unique rows are returned.  Use the ALL keyword to keep duplicates.
+### Union Syntax
+
+
+
+```
+
+SELECT city FROM people
+
+UNION
+
+SELECT city FROM cities
+
+;
+
+```
+### Union Example
+
+
+
+[Union](https://www.w3schools.com/sql/sql_union.asp)
+## Join tips
+### Start small, building up the query
+
+
+
+Start with a cross join of a small data set first, then build up the query by adding conditionals and adjusting the fields.
+
+### Create synthetic data sets
+%%capture
+
+%%bash
+
+apt-get update
+
+apt-get install -y sqlite3
+
+!sqlite3 --help
+
+!sqlite3 --version
+import pandas as pd
+
+import markdown
+
+import base64
+
+!curl -s -o people.sql3 http://ddc-datascience.s3-website-us-west-1.amazonaws.com/people.sqlite3.db
+
+!ls -l
+# Look at the schema
+
+%%script sqlite3 --column --header people.sql3
+
+.schema
+
+# Verify the data
+
+%%script sqlite3 --column --header people.sql3
+
+select * from cities ;
+
+select * from people ;
+
+select * from people where city is null ;
+
+# A cross/cartesian join
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people
+
+JOIN cities
+
+;
+
+# A cross/cartesian join
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people, cities
+
+;
+
+# Inner Join
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people
+
+INNER JOIN cities
+
+ON people.city = cities.city
+
+;
+
+# Inner Join
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people, cities
+
+WHERE people.city = cities.city
+
+;
+
+# Inner Join
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people
+
+INNER JOIN cities
+
+ON people.age = cities.state
+
+;
+
+# Left outer join
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people
+
+LEFT JOIN cities ON people.city = cities.city
+
+;
+
+# Left outer join
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM cities
+
+LEFT JOIN people ON people.city = cities.city
+
+;
+
+# Full outer join
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT people.*, cities.*
+
+FROM people
+
+LEFT JOIN cities
+
+ON people.city = cities.city
+
+;
+
+SELECT people.*, cities.*
+
+FROM cities
+
+LEFT JOIN people
+
+ON people.city = cities.city
+
+ORDER BY people.id
+
+;
+
+# Full outer join
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT people.*, cities.*
+
+FROM people
+
+LEFT JOIN cities
+
+ON people.city = cities.city
+
+UNION ALL
+
+SELECT people.*, cities.*
+
+FROM cities
+
+LEFT JOIN people
+
+ON people.city = cities.city
+
+ORDER BY people.id
+
+;
+
+# Full outer join
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT people.*, cities.*
+
+FROM people
+
+LEFT JOIN cities
+
+ON people.city = cities.city
+
+UNION
+
+SELECT people.*, cities.*
+
+FROM cities
+
+LEFT JOIN people
+
+ON people.city = cities.city
+
+ORDER BY people.id
+
+;
+
+# Self join
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people as p1, people as p2
+
+# Self join
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people as p1, people as p2
+
+WHERE p1.city == p2.city
+
+;
+
+# Self join
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people as p1, people as p2
+
+WHERE p1.city == p2.city
+
+  AND p1.id != p2.id
+
+;
+
+# Self join
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT p1.*
+
+FROM people as p1, people as p2
+
+WHERE p1.city == p2.city
+
+  AND p1.id != p2.id
+
+;
+
+# ON vs WHERE -- INNER JOIN
+
+%%script sqlite3 --column --header people.sql3
+
+-- ON
+
+SELECT *
+
+FROM people
+
+JOIN cities
+
+ON people.city == cities.city
+
+;
+
+
+
+-- WHERE
+
+SELECT *
+
+FROM people
+
+JOIN cities
+
+WHERE people.city == cities.city
+
+;
+
+
+
+# ON vs WHERE -- OUTER JOIN
+
+%%script sqlite3 --column --header people.sql3
+
+-- ON
+
+SELECT *
+
+FROM people
+
+LEFT JOIN cities
+
+ON people.city == cities.city
+
+;
+
+
+
+-- WHERE
+
+SELECT *
+
+FROM people
+
+LEFT JOIN cities
+
+WHERE people.city == cities.city
+
+;
+
+# Union
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT city FROM people
+
+UNION
+
+SELECT city FROM cities
+
+;
+
+# Union
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT * FROM people
+
+UNION
+
+SELECT * FROM people
+
+;
+
+# Union all
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT * FROM people
+
+UNION ALL
+
+SELECT * FROM people
+
+;
+
+# Step 1
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people as p1, people as p2
+
+;
+
+# Step 2
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people as p1, people as p2
+
+WHERE p1.city == p2.city
+
+;
+
+# Step 3
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT *
+
+FROM people as p1, people as p2
+
+WHERE p1.city == p2.city
+
+  AND p1.id != p2.id
+
+;
+
+# Step 4
+
+%%script sqlite3 --column --header people.sql3
+
+SELECT p1.*
+
+FROM people as p1, people as p2
+
+WHERE p1.city == p2.city
+
+  AND p1.id != p2.id
+
+;
+
+%%script sqlite3 --column --header
+
+-- A single number
+
+SELECT 1 as "Number"
+
+;
+
+%%script sqlite3 --column --header
+
+-- A series of numbers
+
+select 0 as "Number" union all values (1),(2),(3),(2)
+
+;
+
+%%script sqlite3 --column --header
+
+--  A series of numbers using a CTE
+
+with recursive Numbers as (
+
+    select 0 as "Number"
+
+  union all
+
+    select Number + 1
+
+    from Numbers
+
+    where Number < 3
+
+)
+
+select *
+
+from Numbers n1, Numbers n2
+
+;
+
+%%script sqlite3 --column --header
+
+.help
+
+%%script sqlite3 --column --header people.sql3
+
+.dump
+
+!rm -f people.v02.sql3
+%%script sqlite3 --column --header people.v02.sql3
+
+PRAGMA foreign_keys=OFF;
+
+BEGIN TRANSACTION;
+
+CREATE TABLE IF NOT EXISTS "people"(
+
+  "id" TEXT,
+
+  "name" TEXT,
+
+  "age" TEXT,
+
+  "city" TEXT
+
+);
+
+INSERT INTO people VALUES('1','Joe','5','Durango');
+
+INSERT INTO people VALUES('2','Alice','55','Albuquerque');
+
+INSERT INTO people VALUES('3','Veronica','105','Albuquerque');
+
+INSERT INTO people VALUES('4','Matt','43',NULL);
+
+CREATE TABLE IF NOT EXISTS "cities"(
+
+  "id" TEXT,
+
+  "city" TEXT,
+
+  "state" TEXT,
+
+  "population" TEXT
+
+);
+
+INSERT INTO cities VALUES('1','Tijeras','NM','987');
+
+INSERT INTO cities VALUES('2','Albuquerque','NM','8776');
+
+INSERT INTO cities VALUES('3','Santa Fe','NM','907');
+
+INSERT INTO cities VALUES('4','Durango','CO','9');
+
+COMMIT;
+
+
+
+.schema
+!ls -l
+%%script sqlite3 --column --header people.v02.sql3
+
+select *
+
+from people, cities
+
+where people.age < cities.population

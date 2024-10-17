@@ -1,0 +1,155 @@
+# Conditionals Exercises
+1. Print 'A is really BIG!' if a is greater than b.
+
+
+
+```python
+
+a = 900
+
+b = 7
+
+```
+2. If a and b are equal print 'These things are the same'.  Otherwise, print 'These things are not the same'.
+
+
+
+```python
+
+a = 2
+
+b = 4
+
+```
+3. If a is greater than b AND b is greater than c, print your own silly sentence.
+
+
+
+```python
+
+a = 9
+
+b = 5
+
+c = 2
+
+```
+4. If your favorite ice cream is in the list of flavors, print 'I am so happy!'
+
+
+
+```python
+
+flavors = [
+
+  'chocolate',
+
+  'vanilla',
+
+  'strawberry',
+
+  'chocolate-chip',
+
+  "Ben and Jerry's Half-Baked",
+
+]
+
+```
+5. Make a list called mypets with your pets (real or imaginary) as elements.  
+
+- if mypets contains 'dog' and 'cat', print 'I am a dog person and a cat person'
+
+- else if mypets contains 'dog', print 'I am a dog person'
+
+- else if mypets contains 'cat', print 'I am a cat person'
+
+- otherwise, print 'I am not a cat person or a dog person'
+
+
+
+```python
+
+mypets = [  ]
+
+```
+
+a = 900
+
+b = 7
+
+if a > b:
+
+  print("A is really BIG!")
+a = 2
+
+b = 4
+
+if a == b:
+
+  print("These things are the same.")
+
+else:
+
+  print("These things are not the same.")
+a = 9
+
+b = 5
+
+c = 2
+
+if a > b and b > c:
+
+  print("A is alpha for a reason.")
+
+else:
+
+  print("A? it isnt that great.")
+flavors = [
+
+  'chocolate',
+
+  'vanilla',
+
+  'strawberry',
+
+  'chocolate-chip',
+
+  "Ben and Jerry's Half-Baked",
+
+]
+
+if 'sorbet' in flavors:
+
+  print('I love sorbet!')
+
+else:
+
+  print('I wish I had sorbet (I know it isnt ice cream TECHNICALLY)')
+
+mypets = ["dog", "cat"]
+
+# mypets = ["cat"]
+
+# mypets = ["dog"]
+
+# mypets = ['iguana']
+
+if "dog" in mypets and  "cat" in mypets:
+
+  print("I am a dog and a cat person")
+
+elif "dog" in mypets and "cat" not in mypets:
+
+  print("I am a dog person")
+
+elif "cat" in mypets and "dog" not in mypets:
+
+  print("I am a cat person")
+
+elif "dog" not in mypets and "cat" not in mypets:
+
+  print("I am not a dog or cat person")
+
+else:
+
+  print("I somehow ended up here")

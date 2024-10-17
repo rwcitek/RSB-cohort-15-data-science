@@ -1,0 +1,89 @@
+# Introduction to Python
+## Getting started
+
+- Save this notebook to your Google Drive
+
+- Move it to your Exercises folder for the current module
+
+- Some code cells have a little bit to get you started
+## Numbers
+Pick your own numbers to perform the following operations:
+
+- addition
+
+- subtraction
+
+- multiplication
+
+- division
+
+- exponentiation
+
+- modulation
+
+## Numbers in variables
+Pick two numbers (one integer and one float) and assign them to the variables `first_number` and `second_number`.
+Make a variable called `product` that is the product of your two variables from above.  
+## Strings in variables
+Come up with your own fun sentence to use a string and assign it to a variable name.  (Make sure to pick a variable name that follows the naming conventions.)
+## Printing
+Make print statements for each of your variables
+
+- first_number
+
+- second_number
+
+- product
+
+- your string
+## Displaying types
+Print the type of each of your variables
+
+- first_number
+
+- product
+- your string
+## Exploring
+Find a string method that we did not go over in class to use on your string. You can find a list of string methods by checking the [documentation]( https://docs.python.org/3.10/library/stdtypes.html#string-methods ).
+
+aa = 2
+
+aa
+a = 3
+
+a
+print(a + aa)
+4 - 8
+big_num = 3000
+
+big_num
+small_num = 45.3245
+
+small_num
+mid_num = small_num * big_num
+
+mid_num
+60 / 100
+7**3
+40 % 15
+  first_number = 6.78
+
+  first_number
+  second_number = 5
+
+  second_number
+product = first_number * second_number
+
+product
+big_variable_energy = "A fun sentence (to assign a variable to)."
+
+big_variable_energy
+print(first_number)
+print(second_number)
+print(product)
+print(big_variable_energy)
+print(type(first_number))
+print(type(second_number))
+print(type(product))
+print(type(big_variable_energy))
+"96".zfill(100)

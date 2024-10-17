@@ -1,0 +1,113 @@
+# Interpolation vs. Extrapolation
+
+**Interpolation**
+
+-  Making guesses about data points in between other data points with known values
+
+-  Often produces very good results
+
+-  Ex. know temperature at 6am and 8am - guess temperature at 7am. ~ GOOD
+
+
+
+**Extrapolation**
+
+-  Making guesses about data points beyond the range you have data for
+
+-  OK results if you extrapolate a little
+
+-  Tends to give worse results the further you get from known data points
+
+-  Ex. know temperature at 6 am and 8 am - guess the temperature at 10am  ~ OK
+
+-  Ex. know temperature at 6 am and 8 am - guess the temperature at 5pm  ~ BAD
+
+-  Predictions about the future - housing prices in 5 years
+
+-  Drug trials - done on one group - extrapolate dosage, etc. to other populations
+
+
+
+## Interpolation & Extrapolation Example
+import numpy as np
+
+import matplotlib.pyplot as plt
+# Generate data
+
+x = np.linspace(-100,101,30)
+
+ytrue = x**3 # true form
+
+xobs = x[15:]
+
+yobs = xobs**3 + np.random.normal(0,100000,15)
+
+
+
+# Plot all data with the true form
+
+plt.figure()
+
+plt.plot(xobs, yobs, 'o', label = 'Observed Values')
+
+plt.plot(x, ytrue, '-r', label = 'True Form')
+
+plt.xlabel("x")
+
+plt.ylabel("y")
+
+plt.legend()
+
+# Now we want to fit a model and interpolate so we can estimate y when x = 25
+
+z = np.polyfit(xobs, yobs, 3) # fit a 3rd degree polynomial
+
+f = np.poly1d(z)
+
+yinterpolate = f(25) #estimate y when x = 25
+
+plt.plot(xobs, yobs, 'o', label = 'Observed Values')
+
+plt.plot(25, yinterpolate, 'og', markersize = 10, label = "Interpolated Value")
+
+plt.plot(x, ytrue, '-r', label = 'True Form')
+
+plt.xlabel("x")
+
+plt.ylabel("y")
+
+plt.legend()
+# Now let's use the same model to extrapolate when x = -50
+
+yextrapolate = f(-50)
+
+plt.figure()
+
+plt.plot(xobs, yobs, 'o', label = 'Observed Values')
+
+plt.plot(-50, yextrapolate, 'og', markersize = 10, label = 'Extrapolated Value')
+
+plt.plot(x, ytrue, '-r', label = 'True Form')
+
+plt.xlabel("x")
+
+plt.ylabel("y")
+
+plt.legend()
+# Why is this happening? Let's take a look at how our model is predicting values across the range of x
+
+yextrapolate = f(x)
+
+plt.figure()
+
+plt.plot(xobs, yobs, 'o', label = 'Observed Values')
+
+plt.plot(x, ytrue, '-r', label = 'True Form')
+
+plt.plot(x, yextrapolate, 'og', label = 'Model Predictions')
+
+plt.xlabel("x")
+
+plt.ylabel("y")
+
+plt.legend()

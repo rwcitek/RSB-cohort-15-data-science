@@ -1,0 +1,242 @@
+# Exploring the Metadata of Data Frames
+
+## What is metadata?
+
+
+
+It is data about data.  Or as [Wikipedia says]( https://en.wikipedia.org/wiki/Metadata ):
+
+
+
+> "data that provides information about other data",[1] but not the content of the data itself, such as the text of a message or the image itself.
+
+
+
+For example, given a file, the data are the contents of the file.  The metadata is the data about the file: the size, date, ownership, group membership, permissions, the file type, etc.
+
+
+
+A sound track will contain audio, but the metadata would include the length of the recording, the recording date, the author's name, any copyright info, the performers names, etc.
+
+
+
+An digital photo will contain the image with the metadata containing the date, time, exposure settings, GPS info, camera make/model, etc.  Usually this information is stored in the [EXIF portion]( https://en.wikipedia.org/wiki/Exif ) of the digital image.
+
+
+
+
+
+
+
+For a data frame, the metadata is the number of rows and columns, the column names, the column data types, the row indices, the value counts of categorical data, the min/median/mean/max of continuous data, etc.
+
+
+
+For a web resource ( e.g. file ), the metadata is what is in the headers of the response to an HTTP request, e.g. the server type, the last update date, the content-length, the content-type, etc.
+
+
+
+Metadata is useful for understanding the data itself.  For ML algorithms it is important to understand the metadata to determine what types of ML algorithms are appropriate for the data and if any transformations need to happen if the data is not appropriate.
+
+
+
+## Exploring dataframes
+
+Getting the shape ( rows, columns ) of a Data Frame
+
+### Data types and nulls
+Notice info() provides five kinds of information:
+
+- the number of rows and columns
+
+- the number of rows of each column that are not-nulls
+
+- the data type of the column
+
+- a count of column data types
+
+- the amount of memory used by the Data Frame
+
+
+
+How can I extract that information to work with it?
+It's a "none" data type.  Hmmm.  That means that you cannot do anything ( easily ) with the information that it is giving to you.
+
+
+
+
+
+Let's put this aside for the moment.
+### Some basic statistics
+
+A data frame.  I can work with that using all the methods that a data frame has.
+### Nulls
+#### Calculate proportion of nulls
+### Data types
+### Memory usage
+## Automate: first pass
+Notes:
+
+- remove columns with 20% or more of null values
+
+
+
+
+
+- remove rows with 5% or fewer null values
+
+
+
+
+
+## Automate: second pass
+Function
+## Automate: import from GitHub
+import pandas as pd
+
+url = "https://ddc-datascience.s3.amazonaws.com/Projects/Project.2-Housing/Data/Housing.Data.csv"
+
+housing = pd.read_csv( url )
+
+housing.shape
+type(housing.shape)
+rows, columns = housing.shape
+
+{
+
+  "Rows": rows,
+
+  "Columns" : columns
+
+}
+housing.info()
+type(housing.info())
+housing.describe()
+type(housing.describe())
+housing.describe().columns
+len(housing.describe().columns)
+len(housing.describe( include = "all" ).columns)
+(
+
+  housing
+
+  .describe( include = "all" )
+
+  .transpose()
+
+  .astype({"count": int})
+
+)
+housing.isnull()
+type(housing.isnull())
+housing.isnull().sum()
+type(housing.isnull().sum())
+nulls = housing.isnull().sum()
+
+filter = nulls > 0
+
+( nulls[ filter ].sort_values( ascending = False ) / housing.shape[0] * 100 ).round(1)
+housing.dtypes
+type(housing.dtypes)
+housing.memory_usage(deep=False, index = False)
+housing.memory_usage(deep=False, index = False).sum()
+housing.memory_usage(deep=True, index = False).sum()
+df = housing
+
+df_info = pd.concat( [
+
+  pd.DataFrame( [ df.isna().sum().to_dict() ], index = ["Nulls"] ).transpose().astype( { "Nulls": int } ),
+
+  pd.DataFrame( [ df.dtypes.to_dict() ], index = [ "Data_Types"] ).transpose().astype( { "Data_Types": 'category' }),
+
+  pd.DataFrame( [ df.memory_usage(deep=True, index = False).to_dict() ], index = ["Memory"] ).transpose(),
+
+  df.describe( include = "all" ).transpose().astype( { "count": int } ).rename( columns = { "50%" : "median"} ),
+
+], axis = "columns")
+
+df_info["IRQ"] = df_info["75%"] - df_info["25%"]
+
+df_info["range"] = df_info["max"] - df_info["min"]
+
+df_info["sum"] = df_info["mean"] * df_info["count"]
+
+df_info.insert( 1, "Nulls_pct" , round( df_info["Nulls"] / df_info.shape[0], 2) )
+
+
+
+
+
+print( f"Memory: { (df_info['Memory'].sum() / 1000 / 1000 ):_} MB" )
+
+print( df_info["Data_Types"].value_counts().to_json() )
+
+df_info.sort_values(by = ["Data_Types", "max"], ascending=[1,0])
+
+for dt in df_info["Data_Types"].unique():
+
+  print(dt)
+df_info["Data_Types"].value_counts()
+
+for dt in df_info["Data_Types"].unique():
+
+  filter = df_info["Data_Types"] == dt
+
+  cols = df_info[ filter ].index
+
+  housing[ cols ].info()
+filter = df_info["Data_Types"] == "int64"
+
+cols = df_info[ filter ].index
+
+housing[ cols ].nunique().sort_values(ascending = False) / 2637 * 100
+metatdata_df = pd.DataFrame()
+
+metatdata_df
+metatdata_df["Nulls"] = housing.isnull().sum()
+
+metatdata_df
+metatdata_df["Nulls_pct"] = ( metatdata_df["Nulls"] / housing.shape[0] * 100 ).round(1)
+
+metatdata_df
+metatdata_df["Data_types"] = housing.dtypes
+
+metatdata_df
+metatdata_df["Memory"] = housing.memory_usage( deep = True)
+
+metatdata_df
+metatdata_df = metatdata_df.join( housing.describe( include = "all" ).transpose() )
+
+metatdata_df
+metatdata_df = metatdata_df.astype( {"count": int }).rename( columns = {"50%": "median"})
+
+metatdata_df
+def metadata( dataframe ):
+
+  '''Given a dataframe, returns a dataframe of metadata about the dataframe'''
+
+  metatdata_df = pd.DataFrame()
+
+  metatdata_df["Nulls"] = dataframe.isnull().sum()
+
+  metatdata_df["Nulls_pct"] = ( dataframe.isnull().mean() * 100 ).round(1)
+
+  metatdata_df["Data_types"] = dataframe.dtypes
+
+  metatdata_df["Memory"] = dataframe.memory_usage( deep = True )
+
+  metatdata_df = metatdata_df.join( dataframe.describe( include = "all" ).transpose() )
+
+  metatdata_df = metatdata_df.astype( {"count": int }).rename( columns = {"50%": "median"})
+
+  return metatdata_df
+metadata(housing)
+!curl -s -O https://raw.githubusercontent.com/rwcitek/example-c11/main/python.modules/metadata.py
+
+!ls -l
+
+import metadata
+md = metadata.metadata(housing)
+
+md
+metadata.cols_to_drop(housing)

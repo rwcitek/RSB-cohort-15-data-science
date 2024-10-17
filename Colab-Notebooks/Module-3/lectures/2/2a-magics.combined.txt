@@ -1,0 +1,305 @@
+# Working with Colab/Jupyter magics
+
+
+
+## Getting help
+
+
+
+### Two kinds of magics: cell and line
+## Timeit
+Numbers
+
+- ms = 1/1e3 s = 1e-3 s = $10^{-3}$ s
+
+- $\mu$s = 1/1e6 s = 1e-6 s = $10^{-6}$ s
+
+- ns = 1/1e9 s = 1e-9 s = $10^{-9}$ s
+## Working with the shell
+
+
+
+
+
+[CoLab and Shell Commands]( https://colab.research.google.com/github/jakevdp/PythonDataScienceHandbook/blob/master/notebooks/01.05-IPython-And-Shell-Commands.ipynb )
+### Shell commands
+## Magic Aliases
+### Your turn
+Using a mix of Python and Jupyter magics, answer these questions.
+
+
+
+- How many files do you have on your Google drive?
+
+- Of those, how many are Jupyter notebooks? ( Jupyter notebooks have the extension ".ipynb". )
+
+- If you were to randomly pick a file on your Google Drive, what's the probably that it is a Jupyter notebook?
+# Quick reference guide to all magics
+
+%quickref
+# Detail of all magic commands
+
+%magic
+# List all line and cell magics.
+
+# Also show state of Automagic
+
+%lsmagic
+# Display help for specific magic command, e.g. %%writefile
+
+?%%writefile
+?%reset
+def sum(num):
+
+  tally = 0
+
+  for i in range(0,int(num+1)):
+
+    tally += i
+
+  return tally
+
+sum(100)
+
+def gaus_sum(num):
+
+  return int(num*(num+1)/2)
+
+gaus_sum(100)
+max = 1e2
+%%timeit
+
+sum(max)
+
+%%timeit
+
+gaus_sum(max)
+
+# Collection of n, time sum, time gaus_sum; time in ns
+
+[
+
+  ( 1e4, 782_000, 240 ),
+
+  ( 1e6, 66_600_000, 241),
+
+  ( 1e8, 7_590_000_000, 324 )
+
+]
+
+# Cell magic using %%script
+
+%%script bash
+
+ls -1A
+
+# Cell magic using %%bash, a shortcut to %%script bash
+
+%%bash
+
+ls -1A
+
+ls -1A   # Line magic, if %automagic is enabled
+# Line magic regardless of %automagic state
+
+%ls -1A
+
+# Shell command using "!"
+
+!ls -1A
+# Assigning the output of a shell command to a Python variable
+
+files = !ls -1a
+
+files
+
+# The number of files
+
+len(files)
+
+# Traverse the filesystem
+
+!find /etc/apt
+
+# Traverse the filesystem and assign to a Python variable
+
+files = !find /etc/apt
+
+files
+
+# Traverse the filesystem, sort the output, and assign to a Python variable
+
+files = !find /etc/apt -type f | sort
+
+files
+
+# Create a subset list of files
+
+[ file for file in files if file.endswith("list") ]
+
+ls
+# Capture both standard output (stdout) and standard error (stderr) to a variable "data"
+
+%%capture data
+
+!find ./sample_data/ | xargs -r -n1 file
+
+print(data.stdout)
+# Use Python variable in shell commands
+
+foo = "hello world"
+
+!echo {foo}
+
+# Python variables are not available in cell magics
+
+%%bash
+
+echo {foo}
+
+# Combining magics
+
+# Capture the output from installing extra software using the system package manager
+
+%%capture output
+
+%%bash
+
+apt-get update
+
+apt-get install -y ruby
+
+print(output.stdout)
+# Run a ruby script
+
+%%script ruby
+
+puts("hello")
+
+# List other magic commands
+
+%lsmagic
+
+# Experiment with HTML
+
+%%html
+
+<html>
+
+  <body>
+
+    <h1>Hello world</h1>
+
+  </body>
+
+</html>
+
+# Experiment with markdown
+
+%%markdown
+
+## Second heading
+
+hello world
+
+%%javascript
+
+alert("hello world")
+# Show a cheat sheet of magic commands
+
+%quickref
+
+?%alias
+%dir
+%alias dir ls -la
+%dir
+%alias stitch cat
+stitch /etc/passwd /etc/group
+%alias type cat
+%type /etc/passwd
+!ls -lA ./
+pwd
+from google.colab import drive
+
+drive.mount('/content/drive', readonly=True)
+
+!ls -lA ./
+!ls -lA ./drive/
+# Solution 1
+
+files = !find ./drive/MyDrive/
+len(files)
+# Solution 2
+
+notebooks = [ file for file in files if file.endswith("ipynb") ]
+
+len(notebooks)
+# Solution 3
+
+len(notebooks)/len(files)
+# An answer
+
+import base64
+
+
+
+def reveal(text, show=False):
+
+  answer_b64 = text.encode("utf-8")
+
+  if show: print(base64.b64decode(answer_b64).decode('ascii'))
+
+
+
+reveal('''CiMgU29sdXRpb24gMQpmaWxlcyA9ICFmaW5kIC4gLXR5cGUgZg
+
+          p0b3RhbCA9IGxlbihmaWxlcykKdG90YWwKCjIwCgojIFNvbHV0
+
+          aW9uIDIKY3N2ID0gbGVuKFsgeCBmb3IgeCBpbiBmaWxlcyBpZi
+
+          B4LmVuZHN3aXRoKCIuY3N2IildKQpjc3YKCjQKCiMgU29sdXRp
+
+          b24gMwpwcm9iID0gY3N2L3RvdGFsICogMTAwCnByb2IKCjIwLj
+
+          AKCg==
+
+''', show = False
+
+)
+import base64
+
+
+
+def obscure(text):
+
+  answer = text.encode("utf-8")
+
+  b64 = base64.b64encode(answer).decode("utf-8")
+
+  n=50
+
+  print("\n".join([ b64[i:i+n] for i in range(0,len(b64),n) ]))
+
+
+
+obscure('''hello world''')
+reveal("aGVsbG8gd29ybGQ=", show= True)
+%%capture
+
+%%bash
+
+apt-get update
+
+apt-get install -y fzf
+
+
+
+%%bash
+
+fzf --help
+%%bash
+
+
+
+find . -type f | fzf --preview 'cat {}' --height 50%
+

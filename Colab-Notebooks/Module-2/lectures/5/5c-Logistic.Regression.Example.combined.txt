@@ -1,0 +1,316 @@
+# Logistic regression
+## Imports
+
+## Read In & Understand Data
+
+We will be looking at the Pima Indians Diabetes dataset that can be used to predict whether or not someone has diabetes based on a set of a predictors. Information about this dataset is provided [here](https://www.kaggle.com/uciml/pima-indians-diabetes-database).
+## Read in the data
+
+
+
+Notice that the data set does not have column names.  So, we will create our own and include them when we create the data frame.
+
+## EDA
+### Correlation matrix plot
+### Feature distributions
+## Fit Logistic Model
+### Cross validation
+### Confusion matrix
+We are often predicting that someone does not have diabetes even if they do. What can we do to combat this?
+### Balance classes
+### Cross validation
+### Confusion matrix
+Let's look at the confusion matrix using the last validation run
+
+How does it make its classifications?
+Pair up preditions with probabilities.  The default threshold is 50%.
+## ROC-AUC
+
+
+
+A receiver operating characteristic ( ROC ) and area under the curve ( AUC ) plot illustrates the performance of a binary classifier model at varying threshold values.  It also enables us to pick an optimal threshold for classification.
+
+
+
+
+
+
+
+
+
+### Compute ROC curve and AUC
+
+### Plot ROC curve
+
+### Calculate predictions usin ROC-AUC threshold
+
+### Confusion matrix
+### Calculate performance metrics
+## References
+
+
+
+- [ROC-AUC]( https://en.wikipedia.org/wiki/Receiver_operating_characteristic )
+import pandas as pd
+
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+import seaborn as sns
+
+
+
+import sklearn.model_selection as model_selection
+
+from sklearn import metrics
+
+from sklearn.linear_model import LogisticRegression
+
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_curve, auc
+
+url = "http://ddc-datascience.s3-website-us-west-1.amazonaws.com/pima-indians-diabetes.csv"
+
+!curl -s {url} | head | cut -c1-100
+
+col_names = ['pregnant', 'glucose', 'bp', 'skin', 'insulin', 'bmi', 'pedigree', 'age', 'label']
+
+pima = pd.read_csv( url, header=None, names=col_names)
+
+pima.head()
+pima.shape
+pima.info()
+pima.describe().transpose()
+pima['label'].value_counts( dropna = False)
+
+X = pima.drop('label',axis=1).copy()
+
+y = pima['label'].copy()
+# Checking correlations between predictors
+
+plt.figure(figsize=(10,10))
+
+correlation_matrix = X.corr().round(2)
+
+sns.heatmap(data=correlation_matrix, annot=True)
+
+plt.show()
+
+# Look at the distribution of a few predictors for different labels
+
+predictors = ['glucose', 'bmi', 'bp', 'pregnant']
+
+
+
+fig, axes = plt.subplots(1,4, figsize= (22,4))
+
+for i,pred in enumerate(predictors):
+
+  sns.kdeplot(pima[pred][y==1], label = 'Yes', ax = axes[i])
+
+  sns.kdeplot(pima[pred][y==0], label = 'No', ax = axes[i])
+
+  axes[i].legend()
+
+plt.show()
+
+numLoops = 50
+
+predict_accuracy = np.zeros(numLoops)
+
+predict_f1 = np.zeros(numLoops)
+
+
+
+for idx in range(0,50):
+
+  # Train/test split
+
+  X_train, X_test, y_train, y_test = model_selection.train_test_split( X, y, test_size=0.2 )
+
+
+
+  # Create model
+
+  logreg = LogisticRegression( max_iter=1000 )
+
+
+
+  # Fit ( train ) model
+
+  logreg.fit( X_train, y_train )
+
+
+
+  # Predict
+
+  y_pred = logreg.predict( X_test )
+
+
+
+  # Calculate and record performance metrics
+
+  predict_accuracy[idx] = metrics.accuracy_score(y_test,y_pred)
+
+  predict_f1[idx] = metrics.f1_score(y_test,y_pred)
+
+
+
+print(f"Mean Accuracy: {predict_accuracy.mean()*100:.1f}%")
+
+print(f"F1 Score: {predict_f1.mean()*100:.1f}%")
+# Let's look at the confusion matrix
+
+cm = confusion_matrix(y_test, y_pred)
+
+plt.figure(figsize=(8,8))
+
+disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+
+disp.plot()
+
+plt.show()
+# Let's balance our classes
+
+pima_balanced = pima.groupby('label').sample(n = 268, replace = False)
+pima_balanced['label'].value_counts( dropna = False)
+X = pima_balanced.drop('label',axis=1).copy()
+
+y = pima_balanced['label'].copy()
+numLoops = 50
+
+predict_accuracy = np.zeros(numLoops)
+
+predict_f1 = np.zeros(numLoops)
+
+for idx in range(0,50):
+
+  # Train/test split
+
+  X_train, X_test, y_train, y_test = model_selection.train_test_split(X,y,test_size=0.2)
+
+
+
+  # Create model
+
+  logreg = LogisticRegression(max_iter=1000)
+
+
+
+  # Fit ( train ) model
+
+  logreg.fit(X_train,y_train)
+
+
+
+  # Predict
+
+  y_pred = logreg.predict(X_test)
+
+
+
+  # Calculate and record performance metrics
+
+  predict_accuracy[idx] = metrics.accuracy_score(y_test,y_pred)
+
+  predict_f1[idx] = metrics.f1_score(y_test,y_pred)
+
+
+
+print(f"Mean Accuracy: {predict_accuracy.mean()*100:.1f}%")
+
+print(f"F1 Score: {predict_f1.mean()*100:.1f}%")
+cm = confusion_matrix( y_test, y_pred )
+
+plt.figure(figsize=(8,8))
+
+disp = ConfusionMatrixDisplay( confusion_matrix = cm )
+
+disp.plot()
+
+plt.show()
+
+y_pred_proba = logreg.predict_proba(X_test)[:,1]
+
+print(y_pred_proba[0:15]*100)
+sorted( zip( y_pred, y_pred_proba[0:15]*100))
+
+fpr, tpr, thresholds = roc_curve( y_test, y_pred_proba )
+
+roc_auc = auc(fpr, tpr)
+
+roc_auc
+plt.figure()
+
+plt.plot(
+
+  fpr,
+
+  tpr,
+
+  color = 'blue',
+
+  label = f'ROC curve (area = {roc_auc:.2f})',
+
+)
+
+plt.plot(
+
+  [0, 1],
+
+  [0, 1],
+
+  color='red',
+
+  linestyle='--',
+
+)
+
+plt.xlabel('False Positive Rate')
+
+plt.ylabel('True Positive Rate')
+
+plt.title('Receiver Operating Characteristic')
+
+plt.legend(loc='lower right')
+
+plt.show()
+
+# Find the optimal threshold
+
+optimal_idx = np.argmax(tpr - fpr)  # Point closest to top-left corner
+
+optimal_threshold = thresholds[optimal_idx]
+
+
+
+print(f'Optimal threshold: {optimal_threshold}')
+
+y_pred = ( y_pred_proba >= optimal_threshold ).astype(int)
+
+y_pred = ( y_pred_proba >= .3 ).astype(int)
+
+
+
+y_pred
+# Let's look at the confusion matrix
+
+cm = confusion_matrix( y_test, y_pred )
+
+plt.figure(figsize=(8,8))
+
+disp = ConfusionMatrixDisplay( confusion_matrix = cm )
+
+disp.plot()
+
+plt.show()
+
+predict_accuracy = metrics.accuracy_score( y_test, y_pred )
+
+predict_f1 = metrics.f1_score( y_test, y_pred )
+
+
+
+print(f"Mean Accuracy: {predict_accuracy*100:.1f}%")
+
+print(f"F1 Score: {predict_f1*100:.1f}%")

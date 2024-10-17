@@ -1,0 +1,55 @@
+# Python Exercises - Intro to Python & Lists
+## Working with lists
+1. Use a variable to represent a famous person’s name and then print that person’s name in lowercase, uppercase and title case.
+2. Print a message about the person you defined above using an f-string.
+3. Store the names of at least 5 of your favorite movies in a list called `movies`.
+4. Remove one of the movies from your `movies` list.
+5. Sort your `movies` list in reverse alphabetical order.
+6. Use a slice to access the first 3 of your favorite movies.
+7. Add your least favorite movie to your `movies` list.
+8. Convert the float `16.4` to an integer.
+## Challenge (only if you have time)
+
+
+
+1. Create a variable called `birthday` and set it equal to the string `'Happy Birthday to You!'`. Use slicing to access every other character in `birthday`.
+2. Create a variable called `nested` and set it equal to the following nested list: `[[1,2,3], ['a','b','c']]`. Use indexing to access the `b` from your nested list. Use indexing to access `[2,3]` from your nested list.
+name = "Charlie Sheen"
+
+NAME = "CHARLIE SHEEN"
+
+Name = "Charlie Sheen"
+f"that actor, you know - {NAME}"
+
+# I made an f string
+
+f"that actor, you know - {name.title()}"
+movies = ["Barbarian","LOR","Final Fantasy: The Spirit Within","Yes Man","Meet the Fockers"]
+movies.remove("LOR")
+
+movies
+movies.sort(reverse = True)
+
+print(movies)
+movies[0:2]
+movies.insert(5, "N/A")
+movies
+int(16.4)
+birthday = "Happy Birthday to You"
+birthday
+birthday.rsplit()
+word = "hello"
+
+letters = list(word)
+
+print(letters)
+birthday = list(birthday)
+
+birthday
+birthday[6:14:2]
+nested = [[1,2,3],['a','b','c']]
+((nested)[1])[1]
+type(nested)
+nested[1]
+nested[0]
+((nested)[0])[1:3]

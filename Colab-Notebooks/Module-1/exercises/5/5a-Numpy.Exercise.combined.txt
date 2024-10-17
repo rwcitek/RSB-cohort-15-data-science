@@ -1,0 +1,171 @@
+# Playing with NumPY
+## Setup: Import numpy
+## Problem 1: random integers
+
+
+
+### Part 1
+
+Create a 1 dimensional array with 10 random integers
+### Part 2
+
+Create a second 1 dimensional array with 10 random integers.  Concatenate it with your first array to create a 2 dimensional array with shape (2,10).
+
+
+
+**Note:**  You may have to get creative to make this work.  
+### Part 3
+
+Use indexing to access the first two columns in the array you created in #2.
+## Problem 2: 2D array
+
+
+
+Convert the array below into a 2 dimensional array
+
+```python
+
+arr = np.arange(70)
+
+```
+## Problem 3: multiply
+
+Multiply all numbers in the array below by a number of your choice.  
+```python
+
+arr = np.arange(30)
+
+```
+## Problem 4: stats
+
+Find the min, max, and mean and standard deviation for the array below.
+```python
+
+arr = np.random.normal(5,10,10000)
+
+```
+
+## Problem 5: filtering
+
+### Part 1
+
+Create a 4X6 array with random integers between 0 and 10.  
+
+### Part 2
+
+Create a boolean array with `True` entries where the entries in your array are greater than 6
+
+### Part 3
+
+Use your boolean array as a filter to pull out the entries greater than 6
+import numpy as np
+import numpy as np
+
+
+
+# Create a 1-dimensional array with 10 random integers between 0 and 100
+
+random_array = np.random.randint(0, 100, 10)
+
+
+
+print(random_array)
+
+random_array2 = np.random.randint(0, 50, 10)
+
+
+
+print(random_array2)
+concat_array = np.array((random_array, random_array2))
+
+concat_array
+concat_array[0:2:]
+print(concat_array[:,0:2])
+arr = np.arange(70)
+
+arr
+# find the middle value
+
+middle = arr2d = len(arr) // 2
+
+first_half = arr[:middle]
+
+second_half = arr [middle:]
+
+
+
+print(first_half)
+
+print(second_half)
+odd_numbers = arr[arr % 2 != 0]
+
+even_numbers = arr [arr % 2 == 0]
+
+
+
+print(odd_numbers)
+
+print(even_numbers)
+np.reshape(arr, (10,7))
+array_x = arr * 10
+
+print(array_x)
+mean = arr.mean()
+
+min = arr.min()
+
+max = arr.max()
+
+std = arr.std()
+
+
+
+print(mean)
+
+print(min)
+
+print(max)
+
+print(std)
+import numpy as np
+
+
+
+# Create a 4x6 array with random integers between 0 and 10
+
+random_array = np.random.randint(0, 11, (4, 6))
+
+
+
+print(random_array)
+
+random_array = np.random.randint(0, 11, (4, 6))
+
+
+
+boolean_array = random_array > 6
+
+
+
+print("Original array:")
+
+print(random_array)
+
+print("\nBoolean array (entries > 6):")
+
+print(boolean_array)
+filtered_array = random_array[boolean_array]
+
+
+
+print("Original array:")
+
+print(random_array)
+
+print("\nBoolean array (entries > 6):")
+
+print(boolean_array)
+
+print("\nFiltered array (entries > 6):")
+
+print(filtered_array)

@@ -1,0 +1,144 @@
+# EDA Exercise
+In this exercise, you will read in your data, do some preliminary data cleaning, and do EDA to better understand your data.
+
+
+
+[The dataset]( http://ddc-datascience.s3-website-us-west-1.amazonaws.com/auto-mpg.csv ) for this exercise is saved in an Amazon Web Services ( AWS ) S3 bucket. The original source and details about this dataset can be found [here](https://archive.ics.uci.edu/ml/datasets/Auto+MPG).
+
+
+
+Below are the steps you'll need to perform for the EDA. Make sure to use text blocks to organize your analysis.  Discuss any trends/relationships/issues you discover at each step in the analysis.
+
+
+
+1. Import `pandas` as `pd`, `matplotlib.pyplot as plt`, and `seaborn as sns`.
+
+1. Read in the csv file found at http://ddc-datascience.s3-website-us-west-1.amazonaws.com/auto-mpg.csv .
+
+1. Understand your data by using at least 4 pandas methods (e.g., `.head()`).
+
+1. Make a copy of your data frame. In your copy, remove any rows that contain null values.  
+
+1. Calculate summary statistics on one or more columns.
+
+1. Generate at least 3 univariate plots.
+
+1. Generate a correlation plot.
+
+1. Generate a pairplot.
+
+9. If we were going to build a predictive model ( supervised learning ) using this dataset, what do you think would be a good response ( aka target ) variable and why?
+## Step 1: Import
+
+
+
+Import pandas as pd, matplotlib.pyplot as plt, and seaborn as sns.
+## Step 2: Get data
+
+Read in the csv file found at http://ddc-datascience.s3-website-us-west-1.amazonaws.com/auto-mpg.csv .
+
+## Step 3: Understand data
+
+Understand your data by using at least 4 pandas methods (e.g., .head()).
+
+## Step 4: Copy and clean
+
+Make a copy of your data frame. In your copy, remove any rows that contain null values.
+
+## Step 5: Summary stats
+
+Calculate summary statistics on one or more columns.
+
+## Step 6: Univariate plots
+
+Generate at least 3 univariate plots.
+
+## Step 7: Bivariate plot (1/2)
+
+Generate a correlation plot.
+
+## Step 8: Bivariate plot (2/2)
+
+Generate a pairplot.
+
+## Step 9: Conclusion
+
+If we were going to build a predictive model ( supervised learning ) using this dataset, what do you think would be a good response ( aka target ) variable and why?
+I think that mpg is the target because of how all of the other variables have outsized correlation to effects with mpg
+import pandas as pd
+
+import matplotlib.pyplot as plt
+
+import seaborn as sns
+base_path = 'http://ddc-datascience.s3-website-us-west-1.amazonaws.com/auto-mpg.csv'
+df = pd.read_csv(base_path)
+df.info()
+df.head()
+df.isnull().sum()
+df['horsepower']=df['horsepower'].fillna(150.0)
+
+df.isnull().sum()
+df_copy = df.copy()
+df_copy['cylinders'].info()
+df_copy['horsepower'].head()
+# 1. Histogram of mpg
+
+plt.figure(figsize=(10, 6))
+
+df['mpg'].hist(bins=20)
+
+plt.title('Histogram of MPG')
+
+plt.xlabel('MPG')
+
+plt.ylabel('Frequency')
+
+plt.show()
+
+
+
+# Box plot of horsepower
+
+plt.figure(figsize=(10, 6))
+
+sns.boxplot(data=df['horsepower'])
+
+plt.title('Box Plot of Horsepower')
+
+plt.show()
+
+
+
+# 4. Density plot of weight
+
+plt.figure(figsize=(10, 6))
+
+sns.kdeplot(data=df['weight'], shade=True)
+
+plt.title('Density Plot of Weight')
+
+plt.xlabel('Weight')
+
+plt.ylabel('Density')
+
+plt.show()
+# 4. Heatmap of correlation matrix
+
+corr_matrix = df.corr(numeric_only=True)
+
+plt.figure(figsize=(12, 10))
+
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm')
+
+plt.title('Correlation Heatmap')
+
+plt.show()
+# 3. Pair plot of selected columns
+
+selected_columns = ['mpg', 'cylinders', 'horsepower', 'weight']
+
+sns.pairplot(df[selected_columns])
+
+plt.suptitle('Pair Plot of Selected Columns')
+
+plt.show()

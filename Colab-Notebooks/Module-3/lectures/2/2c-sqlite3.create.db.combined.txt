@@ -1,0 +1,198 @@
+# Creating a DB in sqlite3
+
+## SQL in sqlite3
+## Using pandas and sqlite3 Python modules
+%%capture
+
+%%bash
+
+apt-get update
+
+apt-get install -y sqlite3 wamerican-insane
+
+!sqlite3 --help
+
+!sqlite3 --version
+!ls -l /usr/share/dict/
+
+!wc -l /usr/share/dict/american-english-insane
+
+%%bash
+
+egrep '^[a-z]{5}$' /usr/share/dict/american-english-insane | wc -l
+%%bash
+
+{
+
+  echo "blah blah blah"
+
+  echo
+
+  echo
+
+  echo words{1..7} | tr ' ' ,
+
+  egrep '^[a-z]{5}$' /usr/share/dict/words |
+
+    shuf -n 420 |
+
+    paste -d, - - - - - - |
+
+    cat -n |
+
+    tr -d ' ' |
+
+    tr '\t' ,
+
+} > /tmp/words.5.csv
+
+# Show the first few entries
+
+!head /tmp/words.5.csv | cat -nvet
+
+# Count the number of lines, words, characters
+
+!wc /tmp/words.5.csv
+
+# Remove any existing database
+
+!rm -rf words.sql3
+
+# Import CSV into SQLite3
+
+%%script sqlite3 --column --header words.sql3
+
+.mode csv
+
+.import '| grep -A 100000000 ^words /tmp/words.5.csv' words
+
+# Show that the database now exists
+
+!ls -l
+
+# Query the table
+
+%%script sqlite3 --column --header words.sql3
+
+select *
+
+from words
+
+limit 10
+
+# View schema
+
+%%script sqlite3 --column --header words.sql3
+
+.schema
+
+# Create a table with correct data types, including a primary key ( unique, indexed column )
+
+%%script sqlite3 --column --header words.sql3
+
+CREATE TABLE words_real(
+
+  "words1" INTEGER PRIMARY KEY ASC,
+
+  "words2" TEXT,
+
+  "words3" TEXT,
+
+  "words4" TEXT,
+
+  "words5" TEXT,
+
+  "words6" TEXT,
+
+  "words7" TEXT
+
+);
+
+# View schema
+
+%%script sqlite3 --column --header words.sql3
+
+.schema
+
+# Select data into correct table, i.e. "copy" the data
+
+%%script sqlite3 --column --header words.sql3
+
+INSERT INTO words_real
+
+SELECT *
+
+FROM words
+
+# Show the schema and the first 10 entries
+
+%%script sqlite3 --column --header words.sql3
+
+.schema
+
+select * from words_real limit 10 ;
+
+# Create an index on the last column
+
+%%script sqlite3 --column --header words.sql3
+
+create index if not exists words7 on words_real (words7) ;
+
+# Show the schema, noting the index
+
+%%script sqlite3 --column --header words.sql3
+
+.schema
+
+# Create a derived column
+
+%%script sqlite3 --column --header words.sql3
+
+select *, words6 || "+" || words7 as "both"
+
+from words_real
+
+limit 10
+
+import sqlite3 as db
+
+import pandas as pd
+
+# Connect to a sqlite database and load a result set into a data frame
+
+db_con = db.connect("words.sql3")
+
+words = pd.read_sql_query("select * from words", db_con)
+
+words
+
+# Show some info about the data frame
+
+words.info()
+
+# Query the database and load the result into a data frame
+
+words_real = pd.read_sql_query("select * from words_real", db_con)
+
+words_real
+
+# Show some info about the data frame
+
+words_real.info()
+
+# Show the first 10 entries in the new data frame
+
+words_real2 = words_real[:10]
+
+words_real2
+
+# Save the entire dataframe to a new table in the existing database
+
+words_real2.to_sql("words_real2", db_con, if_exists="replace")
+
+# Show the schema of the entire database
+
+%%script sqlite3 --column --header words.sql3
+
+.schema
+

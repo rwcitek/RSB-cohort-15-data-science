@@ -1,0 +1,582 @@
+# Using a DB in sqlite3
+
+## SQL in sqlite3
+## Sample database
+The [Chinook sample](https://www.sqlitetutorial.net/sqlite-sample-database/)
+
+
+
+- Zip file of [sqlite DB](https://www.sqlitetutorial.net/wp-content/uploads/2018/03/chinook.zip)
+
+
+
+- [ER diagram](https://www.sqlitetutorial.net/wp-content/uploads/2018/03/sqlite-sample-database-diagram-color.pdf)
+
+
+
+- [ER symbols/meanings](https://d2slcw3kip6qmk.cloudfront.net/marketing/pages/chart/erd-symbols/ERD-Notation.PNG)
+
+
+
+- [Draw IO](https://app.diagrams.net/) for creating ER diagrams, flowcharts, etc.
+### Building a complex join using a CTE
+
+## You Turn
+- How many unique albums are in the Tracks table?
+
+- How many tracks are on the album with AlbumID 1?
+
+- Do the totals in the Invoices table add up to the lineitems in the Invoice_Items table?
+
+%%capture
+
+%%bash
+
+apt-get update
+
+apt-get install -y sqlite3
+
+!sqlite3 --help
+
+!sqlite3 --version
+%%bash
+
+[ -f chinook.zip ] ||
+
+  curl -s -O https://www.sqlitetutorial.net/wp-content/uploads/2018/03/chinook.zip
+
+unzip -l chinook.zip
+
+!unzip -u chinook.zip
+
+!ls -la
+# Get a list of the tables in the database
+
+%%script sqlite3 --column --header chinook.db
+
+.tables
+
+# Show the schema for the entire database
+
+%%script sqlite3 --column --header chinook.db
+
+.schema
+
+# Select the first 10 entries from the employees table
+
+%%script sqlite3 --column --header chinook.db
+
+select *
+
+from employees
+
+limit 10
+
+# Count the number of unique albums
+
+%%script sqlite3 --column --header chinook.db
+
+select count(distinct AlbumID)
+
+from tracks
+
+# Select the first 10 entries from the albums table
+
+%%script sqlite3 --column --header chinook.db
+
+select *
+
+from albums
+
+limit 10
+
+# Select the first 10 entries from the artists table
+
+%%script sqlite3 --column --header chinook.db
+
+select *
+
+from artists
+
+limit 10
+
+# Select the first 10 entries from joining the artists and albums tables
+
+%%script sqlite3 --column --header chinook.db
+
+select *
+
+from artists
+
+join albums
+
+on artists.ArtistID = albums.ArtistID
+
+limit 10
+
+# Select albums by AC/DC
+
+%%script sqlite3 --column --header chinook.db
+
+select *
+
+from artists
+
+join albums
+
+on artists.ArtistID = albums.ArtistID
+
+where Name = 'AC/DC'
+
+limit 10
+
+# Select some fields from the employees table
+
+%%script sqlite3 --column --header chinook.db
+
+select EmployeeId, LastName, FirstName, Title, ReportsTo
+
+from employees
+
+# Select employees and their bosses
+
+%%script sqlite3 --column --header chinook.db
+
+select emp1.EmployeeId, emp1.LastName, emp1.FirstName, emp1.Title, emp1.ReportsTo, emp2.ReportsTo, emp2.EmployeeId, emp2.LastName, emp2.FirstName
+
+from employees as emp1
+
+join employees as emp2
+
+on emp1.ReportsTo = emp2.EmployeeID
+
+# The first three entries from a self cross join of employees
+
+%%script sqlite3 --column --header chinook.db
+
+select *
+
+from employees as emp1
+
+join employees as emp2
+
+limit 3
+# Select a few columns from a self cross joins of employees
+
+%%script sqlite3 --column --header chinook.db
+
+select emp1.EmployeeID, emp1.FirstName, emp1.ReportsTo, emp2.EmployeeID, emp2.FirstName
+
+from employees as emp1
+
+join employees as emp2
+
+# Select the first 10 entries from a self cross joins of employees
+
+%%script sqlite3 --column --header chinook.db
+
+select emp1.EmployeeID, emp1.FirstName, emp1.ReportsTo, emp2.EmployeeID, emp2.FirstName
+
+from employees as emp1
+
+join employees as emp2
+
+limit 10
+# Select employees and their supervisors
+
+%%script sqlite3 --column --header chinook.db
+
+select emp1.EmployeeID, emp1.FirstName, emp1.ReportsTo, emp2.EmployeeID, emp2.FirstName
+
+from employees as emp1
+
+join employees as emp2
+
+where emp1.ReportsTo = emp2.EmployeeID
+
+order by emp1.EmployeeID
+# Select customers, their rep, and the rep's supervisor
+
+## uses CTEs
+
+%%script sqlite3 --column --header chinook.db
+
+
+
+with
+
+emp as (
+
+  select EmployeeID, FirstName, Lastname, ReportsTo
+
+  from employees
+
+)
+
+
+
+select *
+
+from emp
+
+limit 10
+
+
+
+# Select customers, their rep, and the rep's supervisor
+
+## uses CTEs
+
+%%script sqlite3 --column --header chinook.db
+
+
+
+with
+
+emp as (
+
+  select EmployeeID, FirstName, Lastname, ReportsTo
+
+  from employees
+
+),
+
+reps as (
+
+  select *
+
+  from emp
+
+)
+
+
+
+select *
+
+from reps
+
+# Select customers, their rep, and the rep's supervisor
+
+## uses CTEs
+
+%%script sqlite3 --column --header chinook.db
+
+
+
+with
+
+emp as (
+
+  select EmployeeID, FirstName, Lastname, ReportsTo
+
+  from employees
+
+),
+
+reps as (
+
+  select EmployeeID, FirstName, Lastname, ReportsTo
+
+  from emp
+
+),
+
+supervisors as (
+
+  select EmployeeID, FirstName, Lastname
+
+  from emp
+
+)
+
+
+
+select *
+
+from supervisors
+
+
+
+# Select customers, their rep, and the rep's supervisor
+
+## uses CTEs
+
+%%script sqlite3 --column --header chinook.db
+
+
+
+with
+
+emp as (
+
+  select EmployeeID, FirstName, Lastname, ReportsTo
+
+  from employees
+
+),
+
+reps as (
+
+  select EmployeeID, FirstName, Lastname, ReportsTo
+
+  from emp
+
+),
+
+supervisors as (
+
+  select EmployeeID, FirstName, Lastname
+
+  from emp
+
+),
+
+workers as (
+
+  select r.EmployeeID as "EmpID", r.Firstname as "Rep", r.ReportsTo as "ReportID", s.EmployeeID as "SuperID", s.FirstName as "Supervisor"
+
+  from reps as r
+
+  join supervisors as s
+
+  where r.ReportsTo = s.EmployeeID
+
+)
+
+
+
+select *
+
+from workers
+
+
+
+
+
+# Select customers, their rep, and the rep's supervisor
+
+## uses CTEs
+
+%%script sqlite3 --column --header chinook.db
+
+
+
+with
+
+emp as (
+
+  select EmployeeID, FirstName, Lastname, ReportsTo
+
+  from employees
+
+),
+
+reps as (
+
+  select EmployeeID, FirstName, Lastname, ReportsTo
+
+  from emp
+
+),
+
+supervisors as (
+
+  select EmployeeID, FirstName, Lastname
+
+  from emp
+
+),
+
+workers as (
+
+  select r.EmployeeID as "EmpID", r.Firstname as "Rep", r.ReportsTo as "ReportID", s.EmployeeID as "SuperID", s.FirstName as "Supervisor"
+
+  from reps as r
+
+  join supervisors as s
+
+  where r.ReportsTo = s.EmployeeID
+
+),
+
+cust as (
+
+  select CustomerID, FirstName as "Customer", SupportRepID
+
+  from customers
+
+)
+
+
+
+select *
+
+from cust
+
+limit 10
+# Select customers, their rep, and the rep's supervisor
+
+## uses CTEs
+
+%%script sqlite3 --column --header chinook.db
+
+
+
+with
+
+emp as (
+
+  select EmployeeID, FirstName, Lastname, ReportsTo
+
+  from employees
+
+),
+
+reps as (
+
+  select EmployeeID, FirstName, Lastname, ReportsTo
+
+  from emp
+
+),
+
+supervisors as (
+
+  select EmployeeID, FirstName, Lastname
+
+  from emp
+
+),
+
+workers as (
+
+  select r.EmployeeID as "EmpID", r.Firstname as "Rep", r.ReportsTo as "ReportID", s.EmployeeID as "SuperID", s.FirstName as "Supervisor"
+
+  from reps as r
+
+  join supervisors as s
+
+  where r.ReportsTo = s.EmployeeID
+
+),
+
+cust as (
+
+  select CustomerID, FirstName as "Customer", SupportRepID
+
+  from customers
+
+)
+
+
+
+select Customer, Rep, Supervisor
+
+from cust
+
+join workers
+
+where EmpID = SupportRepID
+
+limit 10
+
+# How many unique records are in the Tracks table?
+
+%%script sqlite3 --column --header chinook.db
+
+select count(distinct AlbumID) as unique_albums
+
+from `tracks`
+
+;
+
+# How many unique records are in the Tracks table?
+
+%%script sqlite3 --column --header chinook.db
+
+select count(AlbumID)
+
+from tracks
+
+;
+# How many tracks are on the album with AlbumID 1?
+
+%%script sqlite3 --column --header chinook.db
+
+select count(1) as track_count
+
+from tracks
+
+where albumid = 1
+
+;
+# Do the totals in the Invoices table add up to the lineitems in the Invoice_Items table?
+
+%%script sqlite3 --column --header chinook.db
+
+select InvoiceID, Total * 100 as foo
+
+from invoices
+
+limit 10
+
+# Do the totals in the Invoices table add up to the lineitems in the Invoice_Items table?
+
+%%script sqlite3 --column --header chinook.db
+
+select invoiceID, sum((unitprice * quantity)) as line_total
+
+from invoice_items
+
+group by invoiceid
+
+limit 10
+
+%%script sqlite3 --column --header chinook.db
+
+with
+
+invoices_ as (
+
+  select InvoiceID, Total * 100  as Total
+
+  from invoices
+
+),
+
+line_items as (
+
+  select invoiceID, sum((unitprice *100 * quantity)) as line_total
+
+  from invoice_items
+
+  group by invoiceid
+
+),
+
+side_by_side as (
+
+  select *
+
+  from invoices_ as i
+
+  join line_items as li
+
+  on i.invoiceid = li.invoiceid
+
+)
+
+select * from side_by_side
+
+where total != line_total
+
+limit 10
+
+
+
+
+
+%%script sqlite3 --column --header chinook.db
+
+%%script sqlite3 --column --header chinook.db
+

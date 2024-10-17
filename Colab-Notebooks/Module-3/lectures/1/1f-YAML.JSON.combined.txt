@@ -1,0 +1,368 @@
+# Working with YAML
+"[YAML]( https://en.wikipedia.org/wiki/YAML ) is a human-readable data-serialization language. It is commonly used for configuration files and in applications where data is being stored or transmitted."
+
+
+
+"Originally YAML was said to mean *Yet Another Markup Language* ... it was then repurposed as *YAML Ain't Markup Language*, a recursive acronym, to distinguish its purpose as data-oriented, rather than document markup."
+
+References:
+
+
+
+- [Reading and parsing a YAML file with Python](https://python.land/data-processing/python-yaml)
+## What is YAML?
+YAML is a simplified data format for serializing ( i.e. converting to a string ) data structure.  It is a superset of JSON and therefore supports the six main data types/structures of JSON:
+
+
+
+- numbers
+
+- strings
+
+- boolean
+
+- nulls
+
+- arrays
+
+- objects/hashes/dictionaries
+
+
+
+YAML uses an indented syntax to represent nested objects.  YAML documents start with three dashes `---` on their own line.
+
+
+
+Examples:
+
+- number ( unquoted otherwise it will be interpreted as a string ):
+
+```
+
+1234
+
+```
+
+as octal ( becomes 10 decimal )
+
+```
+
+012
+
+```
+
+as hex ( becomes 18 decimal )
+
+```
+
+0x12
+
+```
+
+
+
+- string (text can be quoted or unquoted):
+
+```
+
+  Apple
+
+  "Banana"
+
+```
+
+- boolean ( lower case ):
+
+```
+
+true
+
+false
+
+```
+
+- nulls ( lower case ):
+
+```
+
+null
+
+```
+
+- arrays ( surrounded with square brackets ):
+
+```
+
+[ 1 ,2 , 3 ]
+
+```
+
+or each element on its own line prefixed with a dash:
+
+
+
+  ```
+
+  - 1
+
+  - 2
+
+  - 3
+
+  ```
+
+
+
+
+
+- objects:
+
+```
+
+key: value
+
+```
+
+or with curly braces
+
+```
+
+{ key: value }
+
+```
+
+or multi-line with indents
+
+```
+
+key:
+
+    value
+
+```
+
+
+
+- nested objects:
+
+
+
+  ```
+
+  key:
+
+    value:
+
+    - 1
+
+    - 2
+
+    - 3
+
+  ```
+
+## Why use YAML
+
+It's easier to read ( sometimes ) as it does not have all the curly braces that JSON has.  It is also nicely indented, which goes along with the programming style of Python.  Furthermore, it is often used for configuration, for example, Docker compose files. ( See [ELK Stack example]( https://github.com/docker/awesome-compose/blob/master/elasticsearch-logstash-kibana/compose.yaml ) ).  Lastly, it is easy ( most of the time ) to convert into JSON and back.
+
+
+
+## Setup
+## Reading and parsing (loading) a YAML file
+
+Read YAML into a dictionary.
+## Reading and parsing (loading) YAML strings with Python
+
+### Example
+Creating a string of YAML text, assign it to a variable, and read the string into a dictionary. Notice the use of triple quotes.
+## Writing (dumping) YAML to a file
+
+
+
+## Convert YAML to JSON
+Convert the dictionary to a JSON string.
+Convert the dictionary to a JSON file.
+Read the JSON file into a dictionary
+## Convert JSON to YAML
+# Converting free text to YAML to JSON
+Using the ABQ air quality data.
+Convert the first few lines of the air quality data into YAML using `sed` and save to a file.
+Read the YAML file into a string variable.
+Convert the string variable into a dictionary.
+Convert the dictionary to JSON.
+%%capture
+
+%%bash
+
+apt-get update
+
+apt-get install -y jq tree
+!curl -s https://raw.githubusercontent.com/docker/awesome-compose/master/elasticsearch-logstash-kibana/compose.yaml
+
+import yaml
+
+import json
+
+%%bash
+
+<<'eof' cat > config.yaml
+
+---
+
+rest:
+
+  url: "https://example.org/primenumbers/v1"
+
+  port: 8443
+
+prime_numbers: [2, 3, 5, 7, 11, 13, 17, 19]
+
+eof
+
+
+
+cat -n config.yaml
+ls -l
+with open('config.yaml', 'r') as file:
+
+  prime_service = yaml.safe_load(file)
+
+prime_service
+
+prime_service['rest']['url']
+
+names_yaml = """
+
+- 'eric'
+
+- 'justin'
+
+- 'mary-kate'
+
+"""
+
+names_yaml
+
+names = yaml.safe_load(names_yaml)
+
+names
+
+type(names)
+omlet_recipe = '''
+
+Ingredients:
+
+- eggs: 2
+
+- salt: 1 tsp
+
+- water: 1 tbsp
+
+Directions:
+
+- break eggs into a bowl
+
+- wisk in salt and water
+
+- put pan on stove at high heat
+
+- add egg mixture to pan and cook
+
+- put on plat when done
+
+- eat
+
+'''
+
+print(omlet_recipe)
+
+omlet_dict = yaml.safe_load(omlet_recipe)
+
+omlet_dict['Ingredients'][0]
+with open('names.yaml', 'w') as file:
+
+  yaml.dump(omlet_dict, file)
+
+!cat -n names.yaml
+with open('config.yaml', 'r') as file:
+
+  configuration = yaml.safe_load(file)
+
+configuration
+
+config_js = json.dumps(configuration)
+
+config_js
+
+with open('config.json', 'w') as json_file:
+
+    json.dump(configuration, json_file)
+
+!cat -n config.json
+!jq . config.json
+dict_js = json.dumps(json.load(open('config.json')), indent=2)
+
+print(dict_js)
+
+with open('config.json', 'r') as file:
+
+    configuration = json.load(file)
+
+configuration
+with open('config.v02.yaml', 'w') as yaml_file:
+
+    yaml.dump(configuration, yaml_file)
+
+!cat -n config.v02.yaml
+!curl -s -O http://data.cabq.gov/airquality/aqindex/history/042222.0017
+
+!ls -l 042222.0017
+
+%%bash
+
+head -6 042222.0017
+!tail -6 042222.0017
+%%bash
+
+cat 042222.0017 |
+
+tr -s '\r\n' '\n' |
+
+sed -re '/,/ { s/^/  / }' |
+
+sed -re '/,/! { s/$/:/ }' |
+
+sed -re '{ s/,/: / }' |
+
+sed -re '{ s/: (.*)/: "\1"/ }' |
+
+tee aq.yaml
+
+!ls -la aq.yaml
+
+!wc aq.yaml
+!cat aq.yaml
+
+with open('aq.yaml', 'r') as file:
+
+  aq_yaml = file.read()
+
+print(aq_yaml)
+
+for line in aq_yaml.split("\n"):
+
+  if ": 0" in line:
+
+    print(line)
+aq_dict = yaml.safe_load(aq_yaml)
+
+aq_dict
+
+(aq_dict['BEGIN_FILE']['TZONE']).split(",")[0]
+
+(aq_dict['BEGIN_GROUP']['INTERVAL']).split(",")[0]
+
+aq_json = json.dumps( aq_dict, indent = 2 )
+
+print(aq_json)
+

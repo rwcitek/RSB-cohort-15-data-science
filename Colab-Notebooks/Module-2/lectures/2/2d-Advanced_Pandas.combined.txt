@@ -1,0 +1,336 @@
+# Advanced Pandas
+This lecture covers an array of advanced pandas methods that may be useful as you continue to work on more challenging data science problems. Topics that are covered include:
+
+- Accessor Methods
+
+- Filtering Data
+
+- Changing Data Types
+
+- Apply, Group By
+
+- Merging & Reshaping DataFrames
+## Read in Data
+## Filtering
+## Accessor Methods
+Accessors are used to access methods that correspond to certain data types. We are going to focus on two commonly used accessors:
+
+- `str` (string)
+
+- `dt` (datetime)
+
+
+
+### str
+### dt
+## Data Types
+There are two ways to convert data types:
+
+1. `.astype()` - typically used when the conversion is straightforward
+
+2. `pd.to_numeric()` or `pd.to_datetime()` - has options for you to specify what to do if there is an error in the conversion
+## Apply
+## Group By
+## Merging Data Frames
+## Reshaping DataFrames
+Other methods:
+
+- pivot()
+
+- pivot_table()
+
+- melt()
+
+- stack()
+
+- unstack()
+
+- explode()
+
+- get_dummies()
+
+References
+
+
+
+https://towardsdatascience.com/learn-advanced-features-for-pythons-main-data-analysis-library-in-20-minutes-d0eedd90d086
+
+https://medium.com/@tamoghnasaha.22/all-you-really-need-to-know-python-notebook-advanced-pandas-da1697aee647
+import pandas as pd
+
+import numpy as np
+
+import matplotlib.pyplot as plt
+# Read in the googleplaystore.csv data
+
+url = "http://ddc-datascience.s3-website-us-west-1.amazonaws.com/googleplaystore.csv"
+
+goo = pd.read_csv(url)
+
+goo.head()
+!curl -s -O {url}
+
+# 10472
+!ls -la
+!cat -n googleplaystore.csv | tr -s '\r\n' '\n' | grep -C2 'Life Made WI-Fi Touchscreen'
+goo.shape
+goo.info()
+filter = ( goo["App"] == "ROBLOX" )
+
+goo[filter]
+
+# Make a copy for cleaning
+
+google = goo.copy()
+# Take a look at the data types
+
+google.dtypes
+google.select_dtypes(include = ['float64', 'int64'])
+# Look at values in the 'Installs' column
+
+google['Installs'].value_counts()
+filter = ( goo["Installs"] == "Free" )
+
+goo[filter]
+
+filter.shape
+goo.iloc[[10472]]
+google.iloc[[10472]]
+# Let's remove the 'Free' row
+
+# Find row
+
+np.where(google['Installs'] == 'Free')
+
+# Compare with "0+"
+
+# Find row
+
+np.where(google['Installs'] == '0+')[0]
+
+# Let's remove the 'Free' row
+
+# Get index value
+
+np.where(goo['Installs'] == 'Free')[0]
+# Drop that row
+
+index_filter = ( np.where(goo['Installs'] == 'Free')[0] )
+
+google.drop(index_filter, inplace = True)
+# Confirm it dropped by looking at value counts of Installs column
+
+google['Installs'].value_counts()
+google['Price'].info()
+# Look at the value counts of the Price column
+
+google['Price'].value_counts()
+# Let's remove the $ by replacing $ with a blank string
+
+google['Price'] = google['Price'].str.replace('$', '', regex = False)
+# Confirm it worked by looking at the first five rows of the Price column
+
+google['Price'].value_counts()
+goo.dtypes
+google['Installs'].value_counts()
+# Remove the + and , from Installs column. Confirm it worked by looking at the first five rows.
+
+google['Installs'] = google['Installs'].str.replace(',','', regex = False)
+
+google['Installs'] = google['Installs'].str.replace('+','', regex = False)
+
+google['Installs'].head()
+goo.dtypes
+# Look at the first five rows of the Type column
+
+google['Type'].head()
+# Look at the first five rows of the Type column
+
+google['Type'].value_counts()
+# Make the Type column lowercase
+
+google['Type'] = google['Type'].str.lower()
+
+google['Type'].head()
+# Look at the first five rows of the Type column
+
+google['Type'].value_counts()
+google.dtypes
+# Look at the Last Updated column
+
+google['Last Updated'].head()
+# Change this column to datetime
+
+google['Last Updated'] = pd.to_datetime(google['Last Updated'])
+
+google['Last Updated'].head()
+google.dtypes
+# See how many days are in each month
+
+google['Last Updated'].dt.days_in_month
+# Extract the year from the datetime object
+
+google['Last Updated'].dt.year
+# Extract the month from the datetime object
+
+google['Last Updated'].dt.month
+# Extract the month from the datetime object
+
+google['Last Updated'].dt.day_name().value_counts()
+google.info()
+# Look at data types
+
+google.dtypes
+google['Installs']
+# Change Installs column to be integer
+
+google['Installs'] = google['Installs'].astype('int')
+
+google['Installs'].head()
+# Change Price column to be float
+
+google['Price'] = google['Price'].astype('float')
+
+google['Price'].head()
+# Look at data types
+
+google.dtypes
+# See current data types
+
+google.dtypes
+# Separate numeric data
+
+num_google = google.select_dtypes(include = ['float64', 'int64'])
+
+num_google.head()
+num_google.dtypes
+# Calculate the mean of each column using apply()
+
+num_google.apply(np.mean)
+num_google.apply(sum)
+num_google.info()
+num_google.apply(np.sum)
+# Calculate the maximum of each column using apply()
+
+num_google.apply(np.max)
+google.head()
+google["Category"].value_counts()
+# Calculate average rating by category
+
+google.groupby(['Category'])['Category'].apply(len).sort_values( ascending=False )
+# Calculate average rating by category
+
+google.groupby('Category')['Rating'].mean()
+# Let's make a plot!
+
+ratings_by_cat = google.groupby('Category')['Rating'].mean().sort_values( ascending=False)
+
+ratings_by_cat.plot(kind = 'bar')
+
+plt.ylabel('Rating') ;
+# Calculate median installs by type
+
+google.groupby('Type')['Installs'].median()
+url = "https://www.nmnetlinks.com/_files/ugd/d981c0_517836cde274483fa4a4f75f0350285d.xlsx?dn=Job%20Openings%20-%20January%202024.xlsx"
+
+nmnetlinks = pd.read_excel( url, skiprows=8)
+
+nmnetlinks[:10]
+nmnetlinks["Link"].value_counts()
+nmnetlinks.groupby(['Location'])['Link'].apply(len).sort_values( ascending = False )
+# Read in googleplaystore_user_reviews.csv
+
+url = "http://ddc-datascience.s3-website-us-west-1.amazonaws.com/googleplaystore_user_reviews.csv"
+
+rev = pd.read_csv(url)
+
+rev.head()
+rev.shape
+# Look at google dataframe
+
+google.head()
+google["App"].value_counts().head()
+rev["App"].value_counts().head()
+# Combine dataframes using pd.merge.
+
+# Note: there are a lot of options you can change in pd.merge()
+
+google_and_rev = pd.merge(google, rev, on = 'App')
+
+google_and_rev.head()
+google.shape
+(google['App'] == "CBS Sports App - Scores, News, Stats & Watch Live").sum()
+rev.shape
+(rev['App'] == "CBS Sports App - Scores, News, Stats & Watch Live").sum()
+google_and_rev.shape
+(google_and_rev['App'] == "CBS Sports App - Scores, News, Stats & Watch Live").sum()
+google_and_rev["App"].value_counts().head()
+8*320
+data1 = {'ID': [1, 2, 3]}
+
+df1 = pd.DataFrame(data1)
+
+df1
+
+# Create the second DataFrame
+
+data2 = {'Name': ['A', 'B', 'C']}
+
+df2 = pd.DataFrame(data2)
+
+df2
+
+# Perform a cross join
+
+cross_join = df1.assign(key=1).merge(df2.assign(key=1), on='key').drop('key', axis=1)
+
+
+
+cross_join
+
+# Extract the first 10 rows of the google_and_rev dataframe
+
+first_10 = google_and_rev.iloc[:10].copy()
+
+first_10
+# Transpose the data set
+
+first_10_t = first_10.T
+
+first_10_t
+google.describe().transpose()
+google.query?
+(
+
+  google
+
+    .describe()
+
+    .transpose()
+
+    .query("count < 10000")
+
+)
+# Detect positive skew
+
+pd.set_option('display.precision', 2)
+
+(
+
+  google
+
+    .describe()
+
+    .transpose()
+
+    .astype({"count": int})
+
+    .rename({"50%":"median"}, axis = 1)
+
+    .query("mean > median")
+
+)
+google.describe().transpose()
+len([ x for x in dir(pd.DataFrame) if not x.startswith("_") ])
+len([ x for x in dir(pd.Series) if not x.startswith("_") ])
+len([ x for x in dir(np.ndarray) if not x.startswith("_") ])

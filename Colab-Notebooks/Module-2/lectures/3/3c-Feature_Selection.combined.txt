@@ -1,0 +1,462 @@
+# Feature Selection
+
+Feature selection is the process of determining what features to include in your model. Why do we need feature selection?
+
+
+
+
+
+*   To prevent overfitting - models with more features are more prone to overfitting
+
+*   To simplify our model - simpler models are easier to interpret and debug
+
+*   To reduce computation time - models run faster with less features
+
+
+
+
+
+There are several ways we can perform feature selection
+
+1. Filter methods
+
+2. Wrapper methods such as forward selection (there are known issues with some of these methods)
+
+3. Regularization methods (these are discussed in more detail in another lecture)
+
+## Read in Data
+## Data Cleaning
+## Processing
+First, we will fit a model with all predictors.
+## Feature Selection
+## Filter Methods
+
+With filter methods, we will calculate a statistical metric for each column. Based on that metric, it will be decided whether that feature will be kept or removed from our predictive model. *Note*: the choice of statistical metric depends on the data type of the feature.
+
+
+
+**Pros**: Easy to implement
+
+
+
+**Cons**: Does not account for interactions between features
+
+
+
+Image from [Toward Data Science:](https://towardsdatascience.com/learn-how-to-do-feature-selection-the-right-way-61bca8557bef)
+
+
+
+![An image](https://miro.medium.com/max/1400/1*tzfWABEHK9-4SOaSl1mdRA.png)
+
+### Numerical Predictors & Numerical Response - Pearson Correlation Coefficient
+WARNING: The correlation coefficient only measures the strength of the linear relationship between two variables. If the relationship is nonlinear, it may not be reflected in the correlation coefficient.
+
+
+
+Example from [Toward Data Science:](https://towardsdatascience.com/learn-how-to-do-feature-selection-the-right-way-61bca8557bef)
+
+![An image](https://miro.medium.com/max/1400/1*cY24YPkTGmuzaSaUmdTbmw.png)
+### ANOVA - Categorical Predictors & Numerical Response
+
+ANOVA works by testing if the means of different categories are statistically different. For example, it would test to see if the mean price for BMWs is statistically different from the mean price of Buicks.
+
+
+
+It is based on the following two hypotheses
+
+H0: Means of all groups are equal. (null hypothesis)
+
+H1: At least one mean of the groups are different.
+
+
+
+ANOVA calculates an F-Test for statistical signficance. The larger the value of the F-test, the more likely we are to reject the null hypothesis.
+## Regularization
+This data set is the cleaned without the feature selection from correlation.
+import numpy as np
+
+import pandas as pd
+
+import matplotlib.pyplot as plt
+
+import seaborn as sns
+
+from sklearn.linear_model import LinearRegression
+
+from sklearn.metrics import mean_squared_error
+
+from sklearn.metrics import r2_score
+# from google.colab import drive
+
+# drive.mount('/content/drive')
+# Read in data
+
+url = "http://ddc-datascience.s3-website-us-west-1.amazonaws.com/CarPrice_Assignment.csv"
+
+cars = pd.read_csv( url )
+
+cars.head()
+cars.shape
+cars.info()
+cars.describe().transpose()
+# Drop car_ID column
+
+cars.drop('car_ID', inplace = True, axis = 1)
+# Look at CarName column
+
+cars['CarName'].value_counts()
+# Keep just the name of the car manufacturer
+
+car_split = lambda x: x.split(" ")[0]
+
+
+
+def car_split(x):
+
+  return x.split(" ")[0]
+
+
+
+cars['carCompany'] = cars['CarName'].apply(lambda x: x.split(" ")[0])
+
+
+
+# pd.Series([ x.split(" ")[0] for x in cars['CarName'] ][:10])
+
+
+
+# cars['CarName'].apply(lambda x: x.split(" ")[0])
+
+cars['carCompany'].value_counts()
+# # Fix spelling
+
+# cars['carCompany'] = cars['carCompany'].str.replace('vw', 'volkswagen')
+
+# cars['carCompany'] = cars['carCompany'].str.replace('vokswagen', 'volkswagen')
+
+# cars['carCompany'] = cars['carCompany'].str.replace('porcshce', 'porsche')
+
+# cars['carCompany'] = cars['carCompany'].str.replace('maxda', 'mazda')
+
+# cars['carCompany'] = cars['carCompany'].str.replace('toyouta', 'toyota')
+
+# cars['carCompany'] = cars['carCompany'].str.replace('Nissan', 'nissan')
+
+# create mapping between incorrect and correct spelling
+
+spelling_dict={
+
+  'alfa-romero': 'alfa-romeo',
+
+  'maxda': 'mazda',
+
+  'Nissan': 'nissan',
+
+  'porcshce': 'porsche',
+
+  'toyouta': 'toyota',
+
+  'vw': 'volkswagen',
+
+  'vokswagen': 'volkswagen',
+
+}
+# Fix spelling
+
+for k, v in spelling_dict.items():
+
+  cars['carCompany'] = cars['carCompany'].str.replace( k, v )
+
+
+
+cars['carCompany'].value_counts()
+
+# Drop carname column
+
+cars.drop('CarName', axis = 1, inplace = True)
+cars.head()
+cars['doornumber'].value_counts(), cars['cylindernumber'].value_counts()
+# Change doornumber and cylindernumber to numeric form
+
+cars['doornumber'] = cars['doornumber'].replace({
+
+    'four': 4,
+
+    'two':  2,
+
+    })
+
+cars['cylindernumber'] = cars['cylindernumber'].replace({
+
+    'two':    2,
+
+    'three':  3,
+
+    'four':   4,
+
+    'five':   5,
+
+    'six':    6,
+
+    'eight':  8,
+
+    'twelve': 12,
+
+    })
+
+cars.head()
+cars.dtypes.sort_values()
+# Pull out object data types
+
+cars_categorical = cars.select_dtypes(include = 'object')
+
+cars_categorical.head()
+# One hot encode these categories
+
+cars_encoded = pd.get_dummies(cars_categorical)
+
+cars_encoded.head()
+cars_encoded.shape
+cars_categorical.shape
+# Combine encoded dataframe to data frame with just numeric values
+
+cars_numerical = cars.select_dtypes(include = ['int64', 'float64'])
+
+cars_numerical.shape
+cars_combined = pd.concat([cars_numerical, cars_encoded], axis = 1)
+
+cars_combined.head()
+cars_combined.shape
+from sklearn.linear_model import LinearRegression
+
+from sklearn.model_selection import train_test_split
+
+# split into Target and Features
+
+X = cars_combined.drop('price', axis = 1)
+
+y = cars_combined['price']
+# Perform CV
+
+n = 500
+
+results = np.zeros(n)
+
+for idx in range(n):
+
+  X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.25)
+
+  model = LinearRegression()
+
+  model.fit(X_train, y_train)
+
+  y_pred = model.predict(X_test)
+
+  results[idx] = np.sqrt(mean_squared_error(y_test,y_pred))
+
+print(f"CV RMSE: {results.mean().round(2)}")
+
+print(f"Number of Predictors: {len(X.columns)}")
+# Look at numerical predictors
+
+cars_numerical.head()
+# Sort correlations w/ price
+
+cars_numerical.corr()['price'].abs().sort_values(ascending = False)
+# Plot result
+
+cars_numerical.corr()['price'].abs().sort_values(ascending = False).plot(kind = 'bar', figsize = (10,5)) ;
+# Fit linear regression model w/ just continuous predictors highly correlated with response
+
+corrs = cars_numerical.corr()['price'].abs().sort_values(ascending = False)
+
+keep = corrs[(corrs>.2) & (corrs <1)]
+
+keep
+X_corr = X[keep.index]
+
+X_corr.head()
+# Combine correlated numerical predictors with all encoded categorical predictors
+
+X = pd.concat([X_corr, cars_encoded], axis = 1)
+
+X.head()
+X.shape
+# Perform CV
+
+n = 500
+
+results = np.zeros(n)
+
+for idx in range(n):
+
+  X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.25)
+
+  model = LinearRegression()
+
+  model.fit(X_train, y_train)
+
+  y_pred = model.predict(X_test)
+
+  results[idx] = np.sqrt(mean_squared_error(y_test,y_pred))
+
+print(f"CV RMSE: {results.mean().round(2)}")
+
+print(f"Number of Predictors: {len(X.columns)}")
+from sklearn.feature_selection import SelectKBest
+
+from sklearn.feature_selection import f_regression
+
+
+
+fvalue_selector = SelectKBest(f_regression, k='all')  #select features best ANOVA F-Values
+
+fvalue_selector.fit_transform(cars_encoded, y)
+
+
+
+# Plot results
+
+results = pd.DataFrame({'ANOVA': fvalue_selector.scores_}, index = cars_encoded.columns)
+
+results.sort_values(by = 'ANOVA', ascending = False).plot(kind = 'bar', figsize = (15,5))
+# Just keep the results with F-values greater than 20
+
+anova = results.sort_values(by = 'ANOVA', ascending = False)
+
+keep = anova['ANOVA'][anova['ANOVA'] > 20]
+
+keep
+X_anova = X[keep.index]
+X_anova
+X2 = pd.concat([X_anova, X_corr], axis = 1)
+
+X2.head()
+( X_corr.shape, X_anova.shape, X.shape, X2.shape)
+# Perform CV
+
+n = 500
+
+rmse_results = np.zeros(n)
+
+for idx in range(n):
+
+  X_train, X_test, y_train, y_test = train_test_split(X2,y,test_size=0.25)
+
+  model = LinearRegression()
+
+  model.fit(X_train, y_train)
+
+  y_pred = model.predict(X_test)
+
+  rmse_results[idx] = np.sqrt(mean_squared_error(y_test,y_pred))
+
+print(f"CV RMSE: {rmse_results.mean().round(2)}")
+
+print(f"Number of Predictors: {len(X2.columns)}")
+from sklearn.linear_model import Lasso
+# %%capture --no-stdout
+
+X_lasso = cars_combined.drop('price', axis = 1)
+
+y_lasso = cars_combined['price']
+
+
+
+# Specify values of alpha we want to try
+
+alph = [1e-3, 1e-2, 1e-1, 1, 2, 3, 5, 7, 10, 20]
+
+
+
+# Create empty list to hold results
+
+results_alpha = []
+
+
+
+for i in alph:
+
+  # Train the model
+
+  my_fit_lasso = Lasso(alpha = i, tol = .01, max_iter=10000); # Looping through alpha
+
+
+
+  # Calculate CV RMSE
+
+  n = 200
+
+  results = np.zeros(n)
+
+  for idx in range(n):
+
+    X_train, X_test, y_train, y_test = train_test_split(X_lasso, y_lasso, test_size=0.25)
+
+    my_fit_lasso.fit(X_train, y_train)
+
+    y_pred = my_fit_lasso.predict(X_test)
+
+    results[idx] = np.sqrt(mean_squared_error(y_test,y_pred))
+
+
+
+  results_alpha.append(results.mean())
+
+
+
+results_df = pd.DataFrame({'Alpha': alph, 'RMSE': results_alpha})
+
+results_df.sort_values( by = 'RMSE' )
+# %%capture --no-stdout
+
+# Perform CV
+
+n = 500
+
+results = np.zeros(n)
+
+for idx in range(n):
+
+  X_train, X_test, y_train, y_test = train_test_split(X_lasso, y_lasso, test_size=0.25)
+
+  model = Lasso(alpha = 10, tol = .01, max_iter=10000)
+
+  model.fit(X_train, y_train)
+
+  y_pred = model.predict(X_test)
+
+  results[idx] = np.sqrt(mean_squared_error(y_test,y_pred))
+
+print(f"CV RMSE: {results.mean().round(2)}")
+
+print(f"Number of Predictors: {sum(model.coef_ >0)}")
+X_lasso.shape
+len(X_lasso.columns)
+# Plot model coefficients
+
+model_results = pd.DataFrame()
+
+model_results['Predictor'] = X_lasso.columns
+
+model_results['Lasso'] = model.coef_
+
+model_results.plot(
+
+    x = 'Predictor',
+
+    kind = 'bar',
+
+    figsize = (20,5)
+
+    )
+
+plt.grid()
+# Plot parameters with coefficients greater than 0
+
+greater_0 = model_results[(model_results['Lasso'] > 1000 ) | (model_results['Lasso'] < -5000 )]
+
+greater_0.plot(x = 'Predictor', kind = 'bar', figsize = (10,5))
+
+plt.grid()

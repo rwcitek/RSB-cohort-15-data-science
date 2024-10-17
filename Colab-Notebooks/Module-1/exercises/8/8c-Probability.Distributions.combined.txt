@@ -1,0 +1,517 @@
+# Common Distributions
+## Bernoulli & Binomial Distributions
+## Poisson Distribution
+## Normal
+## Lognormal
+# Central Limit Theorem
+Roll a die ten times.
+Roll a die once, many times
+Roll a die 10 times, many times
+## QQ Plots
+Try "s", "r", "45", "q" for line=.
+
+
+
+Try dist= functions/methods from sklearn.
+import numpy as np
+
+from matplotlib import pyplot as plt
+
+import seaborn as sns
+# Bernoulli Distribution Generation
+
+
+
+# np.random.binomial(n, p, size)
+
+# Where:
+
+#   n: Number of trials (for Bernoulli, always 1)
+
+#   p: Probability of success (between 0 and 1)
+
+#   size: Number of experiments to run
+
+
+
+# Generate 100,000 Bernoulli trials with 25% chance of success
+
+bern1 = np.random.binomial(1, .25, 100_000)
+
+
+
+# Generate 100,000 Bernoulli trials with 50% chance of success
+
+bern2 = np.random.binomial(1, .5, 100_000)
+
+
+
+# Generate 100,000 Bernoulli trials with 90% chance of success
+
+bern3 = np.random.binomial(1, .90, 100_000)
+
+# Help for binomial
+
+
+
+# np.random.binomial?
+plt.figure(figsize = (10,5))
+
+sns.histplot(bern1, stat = 'density');
+
+# sns.histplot(bern2, stat = 'density');
+
+# sns.histplot(bern3, stat = 'density');
+
+plt.figure(figsize = (10,5))
+
+sns.histplot(bern2, stat = 'density');
+plt.figure(figsize = (10,5))
+
+sns.histplot(bern3, stat = 'density');
+# Binomial Distribution Simulation
+
+
+
+# np.random.binomial(n, p, size)
+
+# Where:
+
+#   n: Number of trials (6 coin tosses in this case)
+
+#   p: Probability of success (0.5 for fair coin)
+
+#   size: Number of experiments to run (10,000)
+
+
+
+# Generate 10,000 experiments of 6 coin tosses each
+
+binom = np.random.binomial(6, .50, 10_000)
+
+
+
+# Create a figure with size 8x4 inches
+
+plt.figure(figsize = (8,4))
+
+
+
+# Create a histogram plot of the binomial distribution
+
+# stat='density' ensures the y-axis represents probability density
+
+sns.histplot(binom, stat = 'density')
+
+
+
+# Add title and labels
+
+plt.title("Binomial Distribution of 6 Coin Tosses")
+
+plt.xlabel("Number of Heads")
+
+plt.ylabel("Probability Density")
+
+
+
+# Show the plot
+
+plt.show()
+
+# Poisson Distribution Simulation
+
+
+
+# Mean number of children per family: 1.94
+
+# Mean number of car accidents per day in ABQ: 32
+
+
+
+# np.random.poisson(lam, size)
+
+# Where:
+
+#   lam: Expected number of events occurring in a fixed-time interval
+
+#   size: Output shape
+
+
+
+# Generate 100,000 samples from a Poisson distribution with λ=1.94
+
+pois = np.random.poisson(1.94, 100_000)
+
+
+
+# testing different lam
+
+# Generate 100,000 samples from a Poisson distribution with λ=32
+
+# pois = np.random.poisson(32, 100_000)
+
+
+
+# Create a figure with size 10x5 inches
+
+plt.figure(figsize = (10,5))
+
+
+
+# Create a histogram plot of the Poisson distribution
+
+# stat='density' ensures the y-axis represents probability density
+
+sns.histplot(pois, stat = 'density')
+
+
+
+# Add title and labels
+
+plt.title("Poisson Distribution of Children per Family")
+
+plt.xlabel("Number of Children")
+
+plt.ylabel("Probability Density")
+
+
+
+# Show the plot
+
+plt.show()
+
+# Normal Distribution Simulation
+
+
+
+# np.random.normal(loc, scale, size)
+
+# Where:
+
+#   loc: Mean of the distribution (0 in this case)
+
+#   scale: Standard deviation of the distribution (1 in this case)
+
+#   size: Number of samples to generate (10,000)
+
+
+
+# Generate 10,000 samples from a standard normal distribution (μ=0, σ=1)
+
+norm = np.random.normal(0, 1, 10_000)
+
+
+
+# Create a figure with size 8x4 inches
+
+plt.figure(figsize = (8,4))
+
+
+
+# Create a histogram plot of the normal distribution
+
+# stat='density' ensures the y-axis represents probability density
+
+sns.histplot(norm, stat = 'density')
+
+
+
+# Add title and labels
+
+plt.title("Standard Normal Distribution")
+
+plt.xlabel("Value")
+
+plt.ylabel("Probability Density")
+
+
+
+# Show the plot
+
+plt.show()
+
+# Lognormal Distribution Simulation
+
+
+
+# np.random.lognormal(mean, sigma, size)
+
+# Where:
+
+#   mean: Mean of the underlying normal distribution (10 in this case)
+
+#   sigma: Standard deviation of the underlying normal distribution (1 in this case)
+
+#   size: Number of samples to generate (10,000)
+
+
+
+# Generate 10,000 samples from a lognormal distribution with μ=10 and σ=1
+
+ln = np.random.lognormal(100, 1, 10_000)
+
+
+
+# Create a figure with size 8x4 inches
+
+plt.figure(figsize = (8,4))
+
+
+
+# Create a histogram plot of the lognormal distribution
+
+# stat='density' ensures the y-axis represents probability density
+
+sns.histplot(ln, stat = 'density')
+
+
+
+# Add title and labels
+
+plt.title("Lognormal Distribution")
+
+plt.xlabel("Value")
+
+plt.ylabel("Probability Density")
+
+
+
+# Optionally limit x-axis range (commented out)
+
+# plt.xlim(0,30);
+
+
+
+# Show the plot
+
+plt.show()
+
+# Central Limit Theorem Demonstration
+
+
+
+# Roll a die ten times
+
+
+
+# np.random.randint(low, high=None, size=None)
+
+# Where:
+
+#   low: Lowest possible integer to be drawn from the distribution
+
+#   high: One above the highest possible integer to be drawn
+
+#   size: Number of random integers to generate
+
+
+
+# Generate 10 random integers between 1 and 6 (inclusive)
+
+# Simulates rolling a fair six-sided die 10 times
+
+rolls = np.random.randint(1, 7, 10)
+
+
+
+# Print both the individual rolls and their sum
+
+# This demonstrates the raw data and its aggregate
+
+(rolls, sum(rolls))
+
+# Generate 100,000 sums of single die rolls
+
+
+
+# np.random.randint(low, high=None, size=None)
+
+# Where:
+
+#   low: Lowest possible integer to be drawn from the distribution
+
+#   high: One above the highest possible integer to be drawn
+
+#   size: Number of random integers to generate
+
+
+
+# List comprehension to generate 100,000 sums of single die rolls
+
+sum_1 = [sum(np.random.randint(1,7,1)) for idx in range(100000)]
+
+
+
+# Create a histogram plot of the sums
+
+plt.figure(figsize = (8,4))
+
+sns.histplot(sum_1, bins=20)
+
+# Generate 100,000 sums of 10 die rolls
+
+
+
+# np.random.randint(low, high=None, size=None)
+
+# Where:
+
+#   low: Lowest possible integer to be drawn from the distribution
+
+#   high: One above the highest possible integer to be drawn
+
+#   size: Number of random integers to generate
+
+
+
+# List comprehension to generate 100,000 sums of 10 die rolls
+
+sum_10 = [sum(np.random.randint(1,7,10)) for idx in range(100_000)]
+
+
+
+# Create a histogram plot of the sums
+
+plt.figure(figsize = (8,4))
+
+sns.histplot(sum_10, bins=20)
+
+# Generate 100,000 sums of 50 die rolls
+
+
+
+# np.random.randint(low, high=None, size=None)
+
+# Where:
+
+#   low: Lowest possible integer to be drawn from the distribution
+
+#   high: One above the highest possible integer to be drawn
+
+#   size: Number of random integers to generate
+
+
+
+# List comprehension to generate 100,000 sums of 50 die rolls
+
+sum_50 = [sum(np.random.randint(1,7,50)) for idx in range(100_000)]
+
+
+
+# Create a histogram plot of the sums
+
+plt.figure(figsize = (8,4))
+
+sns.histplot(sum_50, bins=30)
+
+# Generate 100,000 sums of 250 die rolls
+
+
+
+# np.random.randint(low, high=None, size=None)
+
+# Where:
+
+#   low: Lowest possible integer to be drawn from the distribution
+
+#   high: One above the highest possible integer to be drawn
+
+#   size: Number of random integers to generate
+
+
+
+# List comprehension to generate 100,000 sums of 250 die rolls
+
+sum_250 = [sum(np.random.randint(1,7,250)) for idx in range(100_000)]
+
+
+
+# Create a histogram plot of the sums
+
+plt.figure(figsize = (8,4))
+
+sns.histplot(sum_250, bins=30)
+
+qqplot?
+ln
+# QQ Plot for Lognormal Distribution
+
+
+
+# Import necessary libraries
+
+from statsmodels.graphics.gofplots import qqplot
+
+import matplotlib.pyplot as plt
+
+
+
+# Generate lognormal data (assuming 'ln' is already defined)
+
+# If not, you can generate it like this:
+
+# ln = np.random.lognormal(mean=0, sigma=1, size=1000)
+
+
+
+# Create QQ plot
+
+qqplot(ln, line='s')
+
+
+
+# Add title and labels
+
+plt.title("QQ Plot of Lognormal Distribution")
+
+plt.xlabel("Theoretical Quantiles")
+
+plt.ylabel("Observed Quantiles")
+
+
+
+# Show the plot
+
+plt.show()
+
+# QQ Plot for Normal Distribution
+
+
+
+# Import necessary libraries
+
+from statsmodels.graphics.gofplots import qqplot
+
+import matplotlib.pyplot as plt
+
+
+
+# Assuming 'norm' is already defined as a normal distribution
+
+# If not, you can generate it like this:
+
+# norm = np.random.normal(mean=0, sigma=1, size=1000)
+
+
+
+# Create QQ plot
+
+qqplot(norm, line='s')
+
+
+
+# Add title and labels
+
+plt.title("QQ Plot of Normal Distribution")
+
+plt.xlabel("Theoretical Quantiles")
+
+plt.ylabel("Observed Quantiles")
+
+
+
+# Show the plot
+
+plt.show()
+

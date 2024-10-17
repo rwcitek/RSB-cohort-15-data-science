@@ -1,0 +1,412 @@
+# Regularization
+
+We are going to look at a dataset on baseball.
+## Imports
+## Read in Data
+## Data Cleaning
+All the NAs are in the Salary column. Since the salary column is our response, it is probably best to remove rows that contain NAs.
+NAs were successfully removed. Now we notice that some of the columns are object type. Let's take a look at those.
+## EDA
+Create a list of the most highly correlated.
+Almost the same result using a lower triangle.
+Plot the lower triangle.
+Several of the predictors are highly correlated:
+
+- CAtBat, CHits, CRuns, CRBI, CWalks
+
+- AtBat, Hits, Runs
+## Linear Regression
+
+We will first fit a multiple linear regression model. We are going to drop some of the highly correlated predictors.
+:This is showing that we have a RMSE of about $333,587.
+**NOTE**: We did not do any residual analysis in this example, although it is an important part of checking the assumptions of a linear regression model. Please refer back to the linear regression lecture for an example of how to check residuals.
+## Regularization - Ridge Regression
+Let's try looking at different values of $\alpha$.
+It looks like 20 gives us the smallest RMSE.
+## Regularization - Lasso Regression
+
+After performing regularization, we were able to reduce our RMSE from
+
+\$333,587 with linear regression to
+
+\$330,843 with Ridge regression to
+
+\$327,052 with Lasso regression. For all models, CRBI and HmRun seem to be the most important predictors of salary.
+import statsmodels.api as sm
+
+import matplotlib.pyplot as plt
+
+import pandas as pd
+
+import numpy as np
+
+import seaborn as sns
+
+from sklearn.linear_model import LinearRegression
+
+from sklearn.model_selection import train_test_split
+
+from sklearn.model_selection import cross_val_score
+
+from sklearn.metrics import mean_squared_error
+
+from sklearn.linear_model import Ridge
+
+from sklearn.linear_model import Lasso
+
+from sklearn.preprocessing import StandardScaler
+
+# from google.colab import drive
+
+# drive.mount('/content/drive')
+url = "http://ddc-datascience.s3-website-us-west-1.amazonaws.com/Hitters.csv"
+
+hits = pd.read_csv( url )
+
+hits.head()
+hits.shape
+hits.info()
+hits.describe().transpose()
+# Check for NAs
+
+hits_clean = hits.copy()
+
+hits_clean.isnull().sum()*10
+agoobi = hits_clean.isnull().sum()
+
+agoobi
+filter = agoobi > 0
+
+filter
+agoobi[ filter ]/(hits_clean.shape[0])*100
+# Remove rows with NAs
+
+hits_clean.dropna(axis = 0, inplace = True, subset = "Salary")
+pd.DataFrame.dropna?
+# Confirm they were removed
+
+hits_clean.info()
+hits_clean.isnull().sum()*10
+agoobi = hits_clean.isnull().sum()
+
+filter = agoobi > 0
+
+agoobi[ filter ]/(hits_clean.shape[0])*100
+hits_clean.dtypes.value_counts()
+hits_clean.dtypes.sort_values()
+# League column
+
+hits_clean['League'].value_counts()
+# Since it only has two values, we can label encode
+
+hits_clean['League'] = hits_clean['League'].replace({'A': 1, 'N': 0})
+hits_clean['League'].value_counts()
+# Division column
+
+hits_clean['Division'].value_counts()
+# Since it only has two values, we can label encode
+
+hits_clean['Division'] = hits_clean['Division'].replace({'W': 1, 'E': 0})
+hits_clean['Division'].value_counts()
+# New League column
+
+hits_clean['NewLeague'].value_counts()
+# Since it only has two values, we can label encode
+
+hits_clean['NewLeague'] = hits_clean['NewLeague'].replace({'A': 1, 'N': 0})
+hits_clean['NewLeague'].value_counts()
+hits_clean.head()
+hits_clean.info()
+hits_clean.dtypes.sort_values()
+# Let's take a look at a correlation plot
+
+plt.figure(figsize=(15,15))
+
+correlation_matrix = hits_clean.corr().round(2)
+
+sns.heatmap(data=correlation_matrix, annot=True) ;
+corr_series = correlation_matrix.abs().unstack()
+
+lt_df = (
+
+  corr_series[ ( 0.92 < corr_series ) & ( corr_series < 1 )]
+
+    .sort_values( ascending=False)
+
+    .drop_duplicates()
+
+    .to_frame()
+
+    .rename( columns={0:"A"} )
+
+    .sort_values( by = "A", ascending=False )
+
+    .reset_index()
+
+)
+
+high_corrs = pd.concat([lt_df["level_0"], lt_df["level_1"]]).value_counts().index
+
+high_corrs
+
+lower_triangle = np.tril(abs(correlation_matrix)+1.1, k=-1)-1.1
+
+lower_triangle_df  = pd.DataFrame(lower_triangle, index=correlation_matrix.index, columns=correlation_matrix.columns)
+
+lt_df = (
+
+  lower_triangle_df
+
+    .unstack()
+
+    .to_frame()
+
+    .rename( columns={0:"A"} )
+
+    .query( "A > 0.92")
+
+    .sort_values( by = "A", ascending=False )
+
+    .reset_index()
+
+)
+
+high_corrs = pd.concat([lt_df["level_0"], lt_df["level_1"]]).value_counts().index
+
+high_corrs
+
+# plt.figure(figsize=(15,15))
+
+sns.heatmap(data=lower_triangle_df, annot=False) ;
+# Let's look at the distribution of salaries
+
+plt.hist(hits_clean['Salary'])
+
+plt.xlabel('Salary in Thousands')
+
+plt.ylabel("Count")
+
+plt.savefig('test.png')
+# Let's look at a scatterplot of CRBI and Salary
+
+hits_clean.plot('CRBI', 'Salary', kind = 'scatter') ;
+# Let's look at a scatterplot of hits and salary
+
+hits_clean.plot('Hits', 'Salary', kind = 'scatter') ;
+# First we will break up our data into training and testing sets
+
+X = hits_clean.drop(['CRuns', 'CHmRun', 'CHits', 'CAtBat', 'CWalks', 'Runs', 'AtBat','Salary'], axis = 1).copy()
+
+y = hits_clean['Salary']
+
+
+
+# normalize the features
+
+scaler = StandardScaler()
+
+scaler.fit_transform(X)
+
+X.columns
+X_scaled = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
+
+
+
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size = 0.2, random_state=5)
+X.head()
+X_scaled.head()
+# Fit a linear model using Sklearn
+
+model = LinearRegression()
+
+my_fit_lr = model.fit(X_train, y_train)
+# Create a data frame with the results from the linear regression models
+
+model_results = pd.DataFrame()
+
+model_results['Predictor'] = X_train.columns
+
+model_results['Linear'] = my_fit_lr.coef_
+
+model_results.sort_values(by=['Linear'],inplace=True, ascending=False)
+
+model_results
+
+# We can even plot the coefficients if we want to!
+
+model_results.plot(x = 'Predictor', y = 'Linear', kind = 'bar')
+
+plt.grid()
+
+# Calculate CV RMSE
+
+results = cross_val_score(
+
+    model,
+
+    X_scaled,
+
+    y,
+
+    scoring='neg_root_mean_squared_error',
+
+    cv = 10
+
+    )
+
+rmse = abs(results.mean())
+
+print(f"CV RMSE: {rmse}")
+# Train the model
+
+my_fit_rr = Ridge(alpha = 1) # Arbitrarily choosing alpha = 1
+
+my_fit_rr.fit(X_train, y_train) ;
+# Calculate RMSE
+
+y_pred = my_fit_rr.predict(X_test)
+
+rmse = np.sqrt(np.mean(np.square(y_test - y_pred)))
+
+print(f"RMSE: {rmse}")
+# Specify values of alpha we want to try
+
+alph = [1e-15, 1e-10, 1e-8, 1e-4, 1e-3, 1e-2, 1e-1, 1, 2, 3, 4, 5, 10, 20, 30, 50]
+
+
+
+# Create empty list to hold results
+
+results_alpha = []
+
+
+
+for i in alph:
+
+  # Train the model
+
+  my_fit_rr = Ridge(alpha = i) # Looping through alpha
+
+  my_fit_rr.fit(X_train, y_train)
+
+
+
+  # Calculate CV RMSE
+
+  results = cross_val_score(
+
+      my_fit_rr,
+
+      X_scaled,
+
+      y,
+
+      scoring='neg_root_mean_squared_error',
+
+      cv = 10
+
+      )
+
+  rmse = abs(results.mean())
+
+  results_alpha.append(rmse)
+
+
+
+results_df = pd.DataFrame({'Alpha': alph, 'RMSE': results_alpha})
+
+print(results_df.sort_values(by=['RMSE']))
+# Retrain the model w/ alpha = 20
+
+my_fit_rr = Ridge(alpha = 20)
+
+my_fit_rr.fit(X_train, y_train)
+
+
+
+# Calculate CV RMSE
+
+results = cross_val_score(my_fit_rr, X_scaled, y, scoring='neg_root_mean_squared_error', cv = 10)
+
+rmse = abs(results.mean())
+
+print(f"CV RMSE: {rmse}")
+# Add ridge regression results to data frame we created earlier
+
+model_results['Ridge'] = my_fit_rr.coef_
+model_results
+# Specify values of alpha we want to try
+
+alph = [1e-15, 1e-10, 1e-8, 1e-4, 1e-3, 1e-2, 1e-1, 1, 2, 3, 4, 5, 10, 20, 30, 50]
+
+
+
+# Create empty list to hold results
+
+results_alpha = []
+
+
+
+for i in alph:
+
+  # Train the model
+
+  my_fit_lasso = Lasso(alpha = i, tol = .01, max_iter=100_000) # Looping through alpha
+
+  my_fit_lasso.fit(X_train, y_train)
+
+
+
+  # Calculate CV RMSE
+
+  results = cross_val_score(
+
+      my_fit_lasso,
+
+      X_scaled,
+
+      y,
+
+      scoring='neg_root_mean_squared_error',
+
+      cv = 10
+
+  )
+
+  rmse = abs(results.mean())
+
+  results_alpha.append(rmse)
+
+
+
+results_df = pd.DataFrame({'Alpha': alph, 'RMSE': results_alpha})
+
+print(results_df.sort_values(by=['RMSE']))
+# Train the model
+
+my_fit_lasso = Lasso(alpha = 20, tol = .01, max_iter=1000000)
+
+my_fit_lasso.fit(X_train, y_train)
+
+
+
+# Calculate CV RMSE
+
+results = cross_val_score(my_fit_lasso, X_scaled, y, scoring='neg_root_mean_squared_error', cv = 10)
+
+rmse = abs(results.mean())
+
+print(f"CV RMSE: {rmse}")
+# Add Lasso results to the data frame we created before
+
+model_results['Lasso'] = my_fit_lasso.coef_
+model_results
+# Plot results
+
+fig, ax = plt.subplots(1,1, figsize = (10,7))
+
+model_results.plot(x = 'Predictor', kind = 'bar', ax = ax)
+
+ax.set_ylabel('Coefficient')
+
+plt.grid()
