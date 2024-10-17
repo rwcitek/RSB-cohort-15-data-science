@@ -1,0 +1,258 @@
+Load Pandas, plotting and [Sklearn](https://scikit-learn.org/stable/) packages.
+## Naive Bayes by hand
+
+### Copy the data from the lecture example
+### Build a data frame starting from an empty data frame
+### Weather probabilities
+### Play probabilities
+### Conditional probabilities
+### Bayes theorem
+$ P(\text{Yes} \mid \text{Overcast}) = \frac{P(\text{Overcast} \mid \text{Yes}) \cdot P(\text{Yes})}{P(\text{Overcast})} $
+
+### Integer and Floating point precision ( side bar )
+## Gaussian Naive Bayes
+import pandas as pd
+
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+import seaborn as sns
+
+
+
+from sklearn import datasets
+
+from sklearn import metrics
+
+from sklearn.naive_bayes import GaussianNB
+
+from sklearn import preprocessing
+foobar = '''
+
+ Weather
+
+Play
+
+Rainy
+
+No
+
+Sunny
+
+Yes
+
+Overcast
+
+Yes
+
+Overcast
+
+No
+
+Sunny
+
+Yes
+
+Rainy
+
+No
+
+Rainy
+
+No
+
+Sunny
+
+Yes
+
+Overcast
+
+Yes
+
+Overcast
+
+Yes
+
+Rainy
+
+No
+
+Rainy
+
+Yes
+
+
+
+'''
+
+print(foobar)
+mixed = """
+
+Weather
+
+Play
+
+Rainy
+
+No
+
+Sunny
+
+Yes
+
+Overcast
+
+Yes
+
+Overcast
+
+No
+
+Sunny
+
+Yes
+
+Rainy
+
+No
+
+Rainy
+
+No
+
+Sunny
+
+Yes
+
+Overcast
+
+Yes
+
+Overcast
+
+Yes
+
+Rainy
+
+No
+
+Rainy
+
+Yes
+
+
+
+""".split()
+
+mixed
+
+weather = mixed[2::2]
+
+play = mixed[3::2]
+
+print( weather )
+
+print( play )
+# Create empty data frame
+
+tennis_df = pd.DataFrame()
+
+tennis_df
+# Append Weather column
+
+tennis_df["Weather"] = weather
+
+tennis_df
+# Append Play column
+
+tennis_df["Play"] = play
+
+tennis_df
+weather_counts = tennis_df["Weather"].value_counts()
+
+weather_counts
+# weather_total = len(tennis_df["Weather"])
+
+weather_total = weather_counts.sum()
+
+weather_total
+
+p_weather = weather_counts / weather_total
+
+p_weather
+play_counts = tennis_df["Play"].value_counts().sort_index()
+
+play_counts
+play_total = play_counts.sum()
+
+play_total
+p_play = play_counts/play_total
+
+p_play
+cond_counts = tennis_df.value_counts()
+
+cond_counts
+type(cond_counts)
+cond_counts["Overcast", "Yes"]
+p_overcast_yes = cond_counts["Overcast", "Yes"]/play_counts["Yes"]
+
+p_overcast_yes
+p_yes = p_play["Yes"]
+
+p_yes
+p_overcast = p_weather["Overcast"]
+
+p_overcast
+p_yes_overcast = p_overcast_yes * p_yes / p_overcast
+
+p_yes_overcast
+109823740981723407891230948701239874012398734098127304987213098470912837409872134897012987340897123400000+1
+float(109823740981723407891230948701239874012398734098127304987213098470912837409872134897012987340897123400000)
+float(109823740981723407891230948701239874012398734098127304987213098470912837409872134897012987340897123400000)+1
+
+int(float(109823740981723407891230948701239874012398734098127304987213098470912837409872134897012987340897123400000))-109823740981723407891230948701239874012398734098127304987213098470912837409872134897012987340897123400000
+# Separarate target and features
+
+features = tennis_df.drop(columns = "Play")
+
+target = tennis_df["Play"]
+target, features
+# Create labelEncoder
+
+le = preprocessing.LabelEncoder()
+
+
+
+# Convert string labels into numbers. Note: this isn't the best way to encode
+
+# weather but we will talk about other encoding methods later on
+
+weather_encoded = le.fit_transform(features["Weather"])
+
+print('Weather:', weather_encoded)
+
+label_encoded = le.fit_transform(target)
+
+print('Label:', label_encoded)
+#Create a Multinomial Naive Bayes Classifier
+
+model = GaussianNB()
+
+
+
+# Train the model using the training sets
+
+model.fit(weather_encoded.reshape(-1,1), label_encoded)
+
+
+
+#Predict Output
+
+predicted = model.predict( [[0]] )     # 0: Overcast
+
+print( "Predicted Value:", predicted ) # 0: No    1: Yes
+
+model.predict_proba([[0]])
+weather_encoded.reshape(-1,1)
+weather_encoded.reshape(-1,1).shape

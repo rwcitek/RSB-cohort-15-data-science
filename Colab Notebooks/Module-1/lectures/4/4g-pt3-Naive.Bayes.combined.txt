@@ -1,0 +1,213 @@
+# Gaussian Naive Bayes
+Load Pandas, plotting and [Sklearn](https://scikit-learn.org/stable/) packages.
+## Tennis Example
+## Iris Example
+Use dataset "Iris" from the Sklearn package.
+Examine data from dataset "Iris".
+Plot histograms of predictors
+Plot scatter plots of certain predictors
+Create a correlation plot of predictors
+Note that petal many of the predictors are correlated. GNB assumes the predictors are uncorrelated, but it is generally robust even if they are correlated. Let's see how it performs.
+### Gaussian Naive Bayes
+
+Define a Gaussian Naive Bayes model and use the data to train it.
+### Predictions for the same training set
+### Confusion matrix for the results.
+Calculate the classification accuracy.
+### Split the training data into training set and testing set.
+### Verify
+
+Verify the training and test data sizes are consistent with the original training data set.
+### Cross-validation
+import pandas as pd
+
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+import seaborn as sns
+
+
+
+from sklearn import datasets
+
+from sklearn import metrics
+
+from sklearn.naive_bayes import GaussianNB
+
+from sklearn.naive_bayes import MultinomialNB
+
+from sklearn import preprocessing
+temp =  [ 54, 63, 81, 72, 68, 59, 83, 99, 66, 42, 103, 98, 80 ]
+
+humidity = [ 40, 42, 60, 28, 70, 40, 43, 67, 20, 35, 70, 75, 30 ]
+
+play = [ 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1 ]
+#Combine weather and temp into data frame
+
+my_dict = {'Temp': temp,
+
+           'Humidity': humidity,
+
+           'Play': play,
+
+           }
+
+features = pd.DataFrame(my_dict)
+
+features
+features[ ["Humidity"] ]
+features[["Humidity","Temp"]]
+# Initialize a GNB model
+
+model = GaussianNB()
+
+# Fit the model
+
+predictors = features[["Humidity","Temp"]]  # <= data frame
+
+target = features["Play"]  # <= data series
+
+
+
+model.fit(predictors, target) ;
+
+# Predict
+
+predicted = model.predict([[70,100]]) #70% humidity, 100 degress
+
+print("Predicted Value:", predicted) #1: Yes, 0: No
+# Predict
+
+predicted = model.predict([[35,80]]) #70% humidity, 100 degress
+
+print("Predicted Value:", predicted) #1: Yes, 0: No
+dataset = datasets.load_iris()
+# Look at features
+
+iris_data = pd.DataFrame(dataset.data, columns=dataset.feature_names)
+
+iris_data.head()
+iris_data.shape
+# Look at response
+
+y = dataset.target
+
+print(y)
+
+print(dataset.target_names)
+fig, axs = plt.subplots(nrows = 2, ncols = 2, figsize = (8,10))
+
+colors = ['red', 'green', 'yellow', 'blue']
+
+n = 0
+
+for i in range(2):
+
+  for j in range(2):
+
+    column = dataset.feature_names[n]
+
+    axs[i,j].hist(iris_data[column], color = colors[n], bins=30)
+
+    axs[i,j].set_xlabel(column)
+
+    n += 1
+sns.scatterplot(x = iris_data['sepal length (cm)'], y = iris_data['sepal width (cm)'], hue = y, size = y)
+
+plt.xlabel(dataset.feature_names[0])
+
+plt.ylabel(dataset.feature_names[1])
+sns.scatterplot(x = iris_data['petal length (cm)'], y = iris_data['petal width (cm)'], hue = y, size = y)
+
+plt.xlabel(dataset.feature_names[2])
+
+plt.ylabel(dataset.feature_names[3])
+column_correlations = iris_data.corr()
+
+plt.figure(figsize=(8,8))
+
+sns.heatmap(column_correlations, annot=True, cmap='BuPu', xticklabels = dataset.feature_names, yticklabels = dataset.feature_names);
+# Initialize a GNB model
+
+model = GaussianNB()
+# Fit the model
+
+model.fit(iris_data,y) ;
+predicted_y = model.predict(iris_data)
+predicted_y
+y
+(predicted_y - y) * 100
+(len(y)-6)/len(y)*100
+ np.array([1, 2, 3]) - np.array([1, 2, 3, 4])
+plt.figure(figsize=(8,8))
+
+mat = metrics.confusion_matrix(y,predicted_y)
+
+sns.heatmap(mat.T,
+
+            square=True,
+
+            annot=True,
+
+            fmt='d',
+
+            cbar=False,
+
+            xticklabels=dataset.target_names,
+
+            yticklabels=dataset.target_names
+
+            )
+
+plt.xlabel('true label')
+
+plt.ylabel('predicted label');
+metrics.accuracy_score(y,predicted_y)
+
+import sklearn.model_selection as model_selection
+
+
+
+X_train, X_test, y_train, y_test = model_selection.train_test_split(iris_data,y,test_size=0.25)
+X_train.shape
+y_train.shape
+X_test.shape
+y_test.shape
+# One way
+
+n = 5000
+
+results = np.zeros(n)
+
+results
+
+
+
+for idx in range(n):
+
+  X_train, X_test, y_train, y_test = model_selection.train_test_split(iris_data,y,test_size=0.25)
+
+  model = GaussianNB()
+
+  model.fit(X_train,y_train)
+
+  y_pred = model.predict(X_test)
+
+  results[idx] = metrics.accuracy_score(y_test,y_pred)
+
+
+
+print(results.mean())
+
+results.min(), results.max()
+results
+# Easier way
+
+from sklearn.model_selection import cross_val_score
+
+results = cross_val_score(model, iris_data, y, scoring='accuracy', cv = 10)
+
+acc = results.mean()
+
+acc

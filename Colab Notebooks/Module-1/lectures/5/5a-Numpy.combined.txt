@@ -1,0 +1,660 @@
+#Numpy
+## What is [Numpy]( https://en.wikipedia.org/wiki/NumPy )?
+- A Python library written in Python and C
+
+- Used for arrays and matrices
+
+- More effecient than lists because every element is the **same data type**
+
+- Some math functions - trig functions, random numbers, Boolean logic, etc.
+
+- The basis for other data science libraries like Pandas
+
+## Creating arrays
+### Your Turn
+
+Create a numpy array of the numbers 1 - 8 using:
+
+1. A list
+
+2. The `range()` function
+## Create Special Types of Arrays
+### Your Turn
+
+1. Create an array of the numbers 0 to 20 incremented by 2s. Save it to a variable called `evens`. Print out `evens`.
+
+2. Create the following array `array([0., 0.33333, 0.6666, 1.])`.
+## Two Dimensional Arrays
+### Your Turn
+
+1. Create a 2x2 array filled with the word "HI".
+
+2. Create the a 3x3 array with 1's in the first row, 2's in the second row, and 3's in the third row.
+## Generating Random Numbers
+### Your Turn
+
+Generate 10 random numbers from the **lognormal** distribution with a mean 0 and standard deviation of 1.
+## dtypes
+All elements of the array must be the same data type.  
+It will 'upcast' if needed.  
+
+- In this example since we have one float, the integers are upcast to floats too
+We can also specify the datatype.
+### Your Turn
+
+Create an array of the numbers 0 - 10. Save it to a variable called `my_array`. Then change the 1 in your array to be equal to 1.4. Print out `my_array`.
+## Array Attrributes
+What are attributes?
+
+- values associated with an object
+
+- accessed by object.attribute (like methods but without the ())
+
+- lots of objects have attributes
+### Your Turn
+
+1. What does the size attribute do?
+
+2. Find the size of `arr1` and `arr2`.
+1. Solution
+
+
+
+## Array Indexing
+One dimensional arrays - square brackets, starting at 0 (just like lists)
+Two dimensional arrays - square brackets, starting at 0, comma-separated tuple of indices
+### Your Turn
+
+1. Create an array of 11 equally spaced points from 1 to 5. Save it to a variable called `one_to_five_array`.
+
+2. Use indexing to pull out the `3`.
+## Slicing Arrays
+Note: Default is to return views and not copies
+
+One dimensional
+### Your Turn
+
+1. Create an 10-element array full of zeros. Assign it to a variable called `zero_array`.
+
+2. Make a copy of `zero_array` and save it as `zero_array_copy`.
+
+3. Use slicing to pull out the first 3 elements of `zero_array_copy`.
+Two dimensional
+### Your Turn
+
+1. Create a 3x3 array filled with random numbers from a normal distribution with mean 0 and standard deviation 1. Save it to a variable called `normal_array`.
+
+2. Pull out the first row of `normal_array`.
+## Reshaping of Arrays
+
+### Your Turn
+
+1. Create a 3x3 array full of ones. Assign it to a variable called `ones_matrix`.
+
+2. Flatten the array. Assign it to a variable called `ones_array`. Print out `ones_array`.
+##Joining and Splitting Arrays
+### Your Turn
+
+1. Create a 2x2 array filled with ones. Save it as `ones_array`.
+
+2. Create a 2x2 array filled with zeros. Save it as `zeros_array`.
+
+3. Concatenate `ones_array` and `zeros_array` along the first axis (adding more rows).
+## Ufuncs
+
+Ufunc is a function that operates on ndarrays in an element-by-element manner.
+
+
+
+U is for:
+
+
+
+- Universal
+
+## Aggregate Functions
+### Your Turn
+
+1. Create a 100-element array filled with random numbers from a normal distribution with mean 10 and standard deviation 1. Save it as `random_array`.
+
+2. Find the min, max, mean, and standard deviation of your array.
+## Boolean Arrays
+Boolean Masks - Boolean Indexing
+For logical AND and OR, use `&` or `|` (NOT and, or)
+Logical XOR
+Logical NOT
+### Your Turn
+
+1. Create an 20 element array with random integers from 0 to 20. Assign it to a variable called `my_array`.
+
+2. Use boolean indexing to return the values of the array that are greater than 10.
+
+3. Use boolean indexing to return the values of the array that are less than 3 or greater than 15.
+
+
+
+Feel free to use either filtering, masking, or both.
+import numpy as np
+# Create an array using a list
+
+np.array([1,2,3,4,5])
+arr = np.array([1,2,3,4,5])
+
+type(arr)
+# Create an array using range()
+
+np.array(range(10))
+# Solution
+
+np.array([1, 2, 3, 4, 5, 6, 7, 8])
+# Solution
+
+np.array(range(1,9))
+# Create an array of zeros
+
+np.zeros(15)
+# Create an array of ones
+
+np.ones(5)
+np.ones(5)*7
+# Create an array (of length 10) full of 7's
+
+np.full(10, 7)
+np.full(10, 1.0)
+# Create an array from 0 to 29 incremented by 3s
+
+np.arange(0,30,3)
+# Create an array of 5 equally spaced numbers from 0 to 1
+
+np.linspace(0,1,5)
+# Solution
+
+evens = np.arange(0,21,2)
+
+evens
+# Solution
+
+np.linspace(0,1,4)
+
+# Create an array using a list of lists
+
+np.array([[1,2,3], [4,5,6], [7,8,9]])
+# Create an array using a for loop
+
+np.array([ range(i, i+3) for i in [2,4,6]] )
+# Create a 2-dimensional array of ones
+
+np.ones((4,5))
+# Create a 2-dimensional array filled with 7's
+
+np.full((4,5), 7)
+np.ones((4,5))*7
+# Solution
+
+np.full((2,2), "HI")
+# Solution
+
+np.array([[1,1,1],[2,2,2],[3,3,3]])
+np.array([[i]* 3 for i in [1,2,3]])
+np.array([ np.full(3,i) for i in [1, 2, 3]])
+# Generate 10 random numbers from 0 to 1
+
+np.random.random(10)
+# Generate 10 random numbers from a normal distribution with mean 0 and
+
+# standard deviation of 1
+
+np.random.normal(0,1,10)
+# Generate a 3x3 matrix of random numbers from a normal distribution with
+
+# mean 0 and standard deviation 1
+
+np.random.normal(0, 1, (3,3))
+# Generate a 3x3 matrix of random integers from 0 to 9
+
+np.random.randint(0, 10, (3,3))
+# Setting the seed for repeatability
+
+np.random.seed(42)
+
+np.random.randint(0, 10, 3)
+# Solution
+
+np.random.seed(42)
+
+np.random.lognormal(0, 1, 10)
+arr = np.random.randint(0, 10, (3,3))
+
+print(arr.dtype)
+
+print(arr)
+arr[0,0] = 2.2
+
+print(arr)
+arr = np.array([1,2,3,4,5,6.2])
+
+print(arr.dtype, arr)
+arr = np.array([1,2,3,4,5], dtype='float16')
+
+arr.dtype
+arr
+arr = np.array([1,2,3,4,5], dtype='float')
+
+arr.dtype
+# Solution
+
+my_array = np.arange(0,11)
+
+my_array
+my_array[1] = 1.4
+
+my_array
+arr1 = np.random.randint( 10, size = 9 )
+
+arr2 = np.random.randint( 10, size = (5,7) )
+
+
+
+print(arr1)
+
+print(arr2)
+
+#data type
+
+print(arr1.dtype)
+
+print(arr2.dtype)
+
+#number of dimensions
+
+print(arr1.ndim)
+
+print(arr2.ndim)
+
+#shape (the size of each dimension)
+
+print(arr1.shape)
+
+print(arr2.shape)
+# Solution
+
+np.size?
+# Solution
+
+arr1.size
+arr2.size
+arr = np.random.randint(10, size = 9)
+
+print(arr)
+
+print(arr[0])
+
+print(arr[8])
+arr[-1]
+arr = np.random.randint(10, size = (5,4))
+
+
+
+print(arr)
+
+print(arr[2,3]) #[row, column]
+# Solution
+
+one_to_five_array = np.linspace( 1, 5, 11 )
+
+one_to_five_array
+# Solution
+
+one_to_five_array[5]
+a=5
+
+b=a
+
+c=5
+
+
+
+print(a, b, c)
+
+a=7
+
+print(a, b, c)
+
+# Using lists to demonstrate "view" and "copy" concept
+
+a=np.array([1,2,3,4,5])
+
+b=a
+
+c=a.copy()
+
+print("Before ...")
+
+print(f"a: {a}")
+
+print(f"b: {b}")
+
+print(f"c: {c}")
+
+a[1]=8
+
+print("After ...")
+
+print(f"a: {a}")
+
+print(f"b: {b}")
+
+print(f"c: {c}")
+
+b[3]=23
+
+print(a)
+
+print(b)
+
+print(c)
+arr = np.random.randint(10, size = 9)
+
+print(arr)
+# What happens if we don't copy?
+
+arr2 = arr
+
+arr3 = arr.copy()
+
+print(f"arr: {arr}")
+
+print(f"arr2: {arr2}")
+
+print(f"arr3: {arr3}")
+
+arr[0] = 10
+
+print(f"arr (updated): {arr}")
+
+print(f"arr2 (without copying): {arr2}")
+
+print(f"arr3 (with copying): {arr3}")
+arr
+print(arr[:7]) #[start:stop:increment]
+
+print(arr[4:])
+
+print(arr[4:7])
+
+print(arr[4:7:2])
+
+print(arr[4:1:-1])
+
+print(arr[-5:1:-1])
+# Solution
+
+zero_array = np.zeros( 10 )
+
+zero_array
+# Solution
+
+zero_array_copy = zero_array.copy()
+
+zero_array_copy
+# Solution
+
+zero_array_copy[:3]
+arr = np.random.randint(10, size = (5,4))
+
+print(arr, '\n')
+
+print(arr[2:4, 0:3]) #[row, column]
+
+print(arr)
+arr
+# pull first two columns of an array
+
+print(arr[:,0:2])
+arr[0,:]
+# Solution
+
+normal_array = np.random.normal( 0, 1, (3, 3) )
+
+normal_array
+# Solution
+
+normal_array[0]
+# Solution
+
+normal_array[0,:]
+# Solution - not really
+
+normal_array[0:1,:]
+normal_array
+np.arange?
+arr = np.arange(9)
+
+arr
+
+arr.shape
+arr = arr.reshape((3,3))
+
+print(arr)
+
+print(arr.reshape(9))
+arr
+arr.flatten()
+np.arange(3*3*3).reshape((3,3,3)).flatten()
+# Solution
+
+ones_matrix = np.ones((3,3))
+
+ones_matrix
+# Solution
+
+ones_array = ones_matrix.flatten()
+
+ones_array
+arr1 = np.array([[1,1,1],[2,2,2]])
+
+arr2 = np.array([[3,3,3],[4,4,4]])
+
+print(arr1)
+
+print('')
+
+print(arr2)
+#default is to concatenate along the first axis (axis=0) - add rows
+
+arr3 = np.concatenate([arr1, arr2])
+
+print(arr3)
+
+#can specify to concatenate alond second axis (0 indexing) - add columns
+
+arr4 = np.concatenate([arr1,arr2], axis=1)
+
+print(arr4)
+
+arr1[:,0:2]
+arr1[:,0:2].transpose()
+arr1[:,2:]
+arr2
+np.concatenate([arr1[:,0:2].transpose(),
+
+                arr2,
+
+                arr1[:,2:],
+
+                arr2],
+
+    axis=1)
+# Solution
+
+ones_array = np.ones((2,2))
+
+ones_array
+# Solution
+
+zeros_array = np.zeros((2,2))
+
+zeros_array
+# Solution
+
+np.concatenate([ones_array, zeros_array])
+arr = np.arange(9).reshape((3,3))
+
+print(arr)
+arr
+print(arr+5)
+print(arr/5)
+print(3**arr)
+print(arr**3)
+# Sum across all elements
+
+print(arr)
+
+print(np.sum(arr))  # function
+
+print(arr.sum())   # method
+
+print(8*(8+1)//2)  # n(n+1)/2 = sum of a seres of number from 0
+# Find the minimum
+
+np.min(arr)  # function
+
+arr.min()    # method
+# Find the maximum
+
+np.max(arr)  # function
+
+arr.max()    # method
+# Calculate the mean
+
+np.mean(arr)  # function
+
+arr.mean()    # method
+# Find the median
+
+np.median(arr)  # function
+
+# arr.median()    # method
+# use a list as an argument
+
+mylist = [1,2,3]
+
+np.mean(mylist)
+# arr.a
+# Solution
+
+np.random.seed(42)
+
+random_array = np.random.normal( 10, 1, 100_000_000 )
+
+random_array[:10]
+# Solution
+
+(
+
+  random_array.min(),
+
+  random_array.max(),
+
+  random_array.mean(),
+
+  random_array.std( ddof = 1 ),
+
+  random_array.std( ddof = 0 ),
+
+  np.std(random_array, ddof = 0 ),
+
+)
+np.random.seed(42)
+
+arr = np.random.randint(10, size=(4,5))
+
+print(arr)
+
+print("\n")
+
+print(arr < 3)
+# filtering
+
+arr[arr<3]
+(arr<3)*1
+(arr<3)+0
+# count of elements that meet a condition
+
+np.count_nonzero(arr<3)
+
+# count of elements that meet a condition
+
+np.sum(arr<3)
+(arr<3).sum()
+# proportion that meets a conditions
+
+(arr < 3).mean()
+
+mask = (arr < 3)
+
+print(arr)
+
+print("")
+
+print(mask)
+
+print("")
+
+arr*mask
+arr*(arr < 4)
+arr*((arr % 2 == 0) & (arr >= 6))
+mask = np.logical_and((arr % 2 == 0),(arr >= 6))
+
+arr*mask
+mask = (arr % 2 == 0) | (arr >= 6)
+
+print((arr*mask)*100)
+
+print("")
+
+filter = mask
+
+print((arr[filter])*100)
+
+arr*((arr % 2 == 0) | (arr >= 6))
+mask = np.logical_or((arr % 2 == 0), (arr >= 6))
+
+arr*mask
+# np.logical
+arr*((arr % 2 == 0) ^ (arr >= 6))
+arr*np.logical_xor((arr % 2 == 0), (arr >= 6))
+arr
+arr >= 6
+arr*(arr >= 6)
+
+np.logical_not(arr >= 6)
+
+np.set_printoptions(linewidth=200)  # Adjust the value as needed
+# Solution
+
+my_array = np.random.randint( 0, 20, (4,5) )
+
+my_array
+# Solution
+
+filter = my_array  > 10
+
+filter.flatten()
+my_array[ filter ]
+(my_array*filter ).flatten()
+# Solution
+
+filter1 = my_array < 3
+
+print(filter1.flatten())
+
+filter2 = my_array > 15
+
+print(filter2.flatten())
+
+filter3 = np.logical_or( filter1, filter2)
+
+print(filter3.flatten())
+(my_array*filter3).flatten()
+my_array*filter3

@@ -1,0 +1,87 @@
+# Summary Stats from Scratch using Python
+## Plain Vanilla Python
+### Creating a list of numbers
+
+### Mean
+### Standard Deviation
+## Using numpy in Python
+### The fast way
+### From scratch
+
+import random
+
+size = 1000
+
+values = list( range( 1, size + 1 ) )
+
+random.seed(42)
+
+random.shuffle(values)
+
+values[:5]
+
+total = sum(values)
+
+f"{total:_}"
+count = len(values)
+
+count
+
+# mean
+
+mean = total/count
+
+mean
+
+delta = [ x - mean for x in values ]
+
+delta[:5]
+delta_squared = [ x**2 for x in delta ]
+
+delta_squared[:5]
+sum_delta_squared = sum( delta_squared )
+
+sum_delta_squared
+sample_variance = sum_delta_squared/( count - 1)
+
+sample_variance
+stdev = sample_variance ** 0.5
+
+stdev
+import numpy as np
+size = 100_000_000
+
+values = np.arange( 1, size + 1 )
+
+np.random.seed(42)
+
+np.random.shuffle(values)
+
+values[:5]
+
+values.mean()
+values.std()
+total = values.sum()
+
+total
+count = len( values )
+
+count
+mean = total / count
+
+mean
+delta = values - mean
+
+delta[:5]
+delta_squared = delta**2
+
+delta_squared[:5]
+sum_delta_squared = delta_squared.sum()
+
+sum_delta_squared
+sample_variance = sum_delta_squared / ( count - 1 )
+
+sample_variance
+stdev = sample_variance**0.5
+
+stdev

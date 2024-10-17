@@ -1,0 +1,57 @@
+From https://stackoverflow.com/a/69604744
+Create a data frame with two columns, the seconds of which has nested lists, sometimes with duplicated entries.
+
+
+
+Notice that "apple" appears twice in the second column of the first row.
+# Using .get_dummies() with a delimeter
+Expand column categories into individual columns with binary values.
+Join original data frame with get_dummies.
+Drop "fruit" - version 1.
+Drop "fruit" - version 2.
+# Using .explode()
+# Using .crosstab()
+import pandas as pd
+
+# import markdown
+
+data = pd.DataFrame()
+
+data['id'] = ["ab3e3", "psdds2", "pas13", "ccdf2", "dsda1"]
+
+data['fruit'] = ["apple, orange, apple", "others", "dragon fruit, orange", "watermelon", "others"]
+
+
+
+df = pd.DataFrame(data)
+
+df
+
+df['fruit'].str.get_dummies(', ')
+
+df['fruit'].str.get_dummies(', ').sum()
+
+df.join(df['fruit'].str.get_dummies(', '))
+
+df.join(df['fruit'].str.get_dummies(', ')).drop('fruit', axis = 1 )
+
+df.drop('fruit', axis=1).join(df['fruit'].str.get_dummies(', '))
+
+df["fruit"].str.split(", ")
+
+df.assign(fruit=df["fruit"].str.split(", "))
+
+df.assign(fruit=df["fruit"].str.split(", ")).explode("fruit")
+
+ct = df.assign(fruit=df.fruit.str.split(", ")).explode("fruit").drop(columns=["id"])
+
+ct
+ct.value_counts()
+pd.crosstab(ct.index, ct["fruit"])
+
+pd.crosstab(ct.index, ct["fruit"]).rename_axis(None, axis=1)
+
+pd.crosstab(ct.index, ct["fruit"]).rename_axis(None, axis=1).rename_axis(None, axis=0)
+
+df.join(pd.crosstab(ct.index, ct["fruit"]).rename_axis(None, axis=1).rename_axis(None, axis=0))
+

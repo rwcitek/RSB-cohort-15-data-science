@@ -1,0 +1,35 @@
+## Example from stats lecture
+Sum ( add up )
+Count ( len of data set )
+Mean ( average )
+Median ( mid-point )
+Range
+samples = [85, 90, 92, 73, 95, 60, 89, 78, 99, 90]
+
+samples
+
+summation = 0
+
+for value in samples:
+
+  summation += value
+
+
+
+summation
+sum(samples)
+len(samples)
+count = len
+
+count(samples)
+summation/count(samples)
+sorted(samples)[5:7]
+
+{
+
+"min": sorted(samples)[0],
+
+"max": sorted(samples)[-1]
+
+}
+sorted(samples)[3:8]

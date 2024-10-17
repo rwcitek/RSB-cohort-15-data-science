@@ -1,0 +1,60 @@
+From https://stackoverflow.com/a/48136002
+
+# Using .stack()
+# Using .melt()
+## Sorted by "X", then "Date"
+## Sorted by "Date", then "X"
+import pandas as pd
+
+import markdown
+
+# Assign Markdown string to a variable
+
+table_md = '''|Date|A|B|C|D|E |
+
+|----|-|-|-|-|--|
+
+|2005|1|2|3|4|50|
+
+|2006|6|7|8|9|10|'''
+
+table_md
+
+# Convert Markdown to HTML to a DataFrame
+
+table_html=markdown.markdown(table_md, extensions=['markdown.extensions.tables'])
+
+table_html
+
+
+
+df = pd.read_html(table_html)[0]
+
+df
+
+df.set_index('Date')
+
+df.set_index('Date').stack()
+
+df.set_index('Date').stack().reset_index(name='Val')
+
+df_stack = df.set_index('Date').stack().reset_index(name='Val').rename(columns={'level_1':'X'})
+
+df_stack
+
+keeps = df.columns[:1]
+df_melt = df.melt(keeps, var_name='X', value_name='Val')
+
+df_melt
+
+df_melt2 = ( df
+
+            .melt(keeps, var_name='X', value_name='Val')
+
+            .sort_values(['Date','X'])
+
+            .reset_index(drop=True)
+
+)
+
+df_melt2

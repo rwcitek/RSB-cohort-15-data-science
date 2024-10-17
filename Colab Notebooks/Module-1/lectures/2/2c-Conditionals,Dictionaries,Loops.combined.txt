@@ -1,0 +1,120 @@
+# Python Exercises - Conditionals, Dictionaries, & Loops
+1. Create a dictionary to store information about a famous person. Store their first name, last name, age, and what they are famous for. You should have keys ‘first_name’, ‘last_name’, ‘age’, and ‘famous_for’. Print each piece of information stored in your dictionary. **BONUS**: Use a for loop to print the information.
+2. Add the famous person's place of birth to the dictionary you created in #1.
+3. A number raised to the second power is called a square (e.g., 3^2 is the square of 3). Use a for loop to print out the square of each integer from 1 to 15.
+4. Write a python program that will take a word and print a message stating whether that word starts with a vowel or a consonant. Test it out with several words.
+
+
+
+Example input:
+
+
+
+```
+
+popcorn
+
+```
+
+
+
+Example output:
+
+```
+
+This word starts with a consonant.
+
+```
+
+5. Write a python program that will loop through the following list:
+
+`pets = ['Muffin', 'Kiki', 'Moe', 'Daisy']`. If the length of the pet's name is less than 5 characters, print out the name.  
+## **Bonus** (only if you have time)
+
+
+
+1. Create the following two lists of numbers:
+
+
+
+```
+
+list_1 = [1,2,3,4,5,6,7,8]
+
+list_2 = [9,10,11,12,13,14]
+
+```
+
+
+
+Write a program to create a new list such that the new list should contain odd numbers from the first list and even numbers from the second list.
+2. Write a program that will check to see if a user's password contains at least one of the following:
+
+
+
+*   A number
+
+*   A letter
+
+*   A symbol ($, %, ! or ?)
+
+
+
+It should print out 'Good password' if it meets the above requirements and 'Bad password' otherwise.
+
+
+
+Example input: 'Hello5?'
+
+
+
+Example output: 'Good password'
+
+
+
+Hint: `import string` and then use `list(string.ascii_lowercase)` to get a list of all lowercase letters
+
+famous_person = {'first name': 'Harrison', 'last name': 'Ford', 'famous_for': 'Star Wars'}
+
+for _ in famous_person.items():
+
+  print(_)
+famous_person.update({"somewhere": "out there"})
+
+for _ in famous_person.items():
+
+  print(_)
+for _ in range(0,15):
+
+  print(_ ** 2)
+word = 'aop'
+
+vowels = ('a', 'e', 'i', 'o', 'u')
+
+
+
+for letter in vowels:
+
+  if word.startswith(vowels):
+
+   print(f"{word} begins with a vowel")
+
+   break
+
+  else :
+
+   print(f"{word} starts with a consonant")
+
+   break
+pets = ['Muffin', 'Kiki', 'Moe', 'Daisy']
+
+
+
+for name in pets:
+
+  if len(name) < 5:
+
+   print(f'{name}')
+list_1 = [1,2,3,4,5,6,7,8]
+
+list_2 = [9,10,11,12,13,14]

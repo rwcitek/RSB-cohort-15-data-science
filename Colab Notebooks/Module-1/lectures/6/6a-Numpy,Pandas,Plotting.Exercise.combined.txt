@@ -1,0 +1,221 @@
+# Python Exercises - Numpy, Pandas & Plotting
+## Setup: import libraries
+## Problem 1
+
+Create a pandas dataframe that contains the following columns:
+
+
+
+Column Name | Values
+
+--- | ---
+
+A | 500 random numbers drawn from a normal distribution with mean 15 and standard deviation 5
+
+B | 500 equally spaced numbers between 1 and 50 (inclusive)
+
+C | 500 random integers drawn between 10 and 30 (inclusive)
+
+
+
+## Problem 2
+
+Calculate the mean of column A.
+## Problem 3
+
+Plot a histogram of column A.
+
+
+
+Plot a vertical line at the mean. Make the figure size (10,5). Make sure to add axis labels and a legend for the mean.
+
+
+
+
+
+## Problem 4
+
+Create a line plot of the first 100 values in column C.
+
+
+
+Make sure to add axis labels.
+## Problem 5
+
+Create a new column, `D`, that contains 3 times the values in column `B` plus some random noise (`np.random.normal(0,10,500`).
+## Problem 6
+
+Create a scatter plot with column `B` on the x-axis and column `D` on the y-axis.
+
+
+
+Make sure to add axis labels.
+## **BONUS** (only if you have time)
+
+
+
+Create a new column, `E`, that that contains 3 times the values in column `B` plus some random noise with a smaller standard deviation (`np.random.normal(0,3,500`).
+
+
+
+Add the points you generated for column `E` to the scatterplot you created in #5. Use a different color and marker for these points and add a legend.
+
+import numpy as np
+
+import pandas as pd
+
+import matplotlib.pyplot as plt
+# Create the DataFrame
+
+df = pd.DataFrame({
+
+    'A': np.random.normal(loc=15, scale=5, size=500),
+
+    'B': np.linspace(1, 50, 500),
+
+    'C': np.random.randint(low=10, high=31, size=500)
+
+})
+
+mean_A = A.mean()
+plt.figure(figsize=(10, 5))
+
+plt.hist(A, bins=30, alpha=0.7, label='Distribution')
+
+
+
+# Add a vertical line at the mean
+
+plt.axvline(mean_A, color='r', linestyle='dashed', linewidth=2, label=f'Mean ({mean_A:.2f})')
+
+
+
+# Customize the plot
+
+plt.title('Histogram of Column A')
+
+plt.xlabel('Value')
+
+plt.ylabel('Frequency')
+
+plt.legend()
+
+
+
+# Show the plot
+
+plt.tight_layout()
+
+plt.show()
+
+# Select the first 100 values from column C
+
+C_first_100 = C[:100]
+
+
+
+# Create the line plot
+
+plt.figure(figsize=(10, 5))
+
+plt.plot(C_first_100)
+
+
+
+# Customize the plot
+
+plt.title('First 100 Values of Column C')
+
+plt.xlabel('Index')
+
+plt.ylabel('Value')
+
+
+
+# Show the plot
+
+plt.tight_layout()
+
+plt.show()
+
+# Create column D
+
+df['D'] = 3 * df['B'] + np.random.normal(0, 10, 500)
+
+
+
+# Display the first few rows of the updated DataFrame
+
+print(df.head())
+
+
+
+# Display summary statistics
+
+print("\nSummary Statistics:")
+
+print(df.describe())
+# Create the scatter plot
+
+plt.figure(figsize=(10, 5))
+
+plt.scatter(df['B'], df['D'])
+
+
+
+# Customize the plot
+
+plt.title('Scatter Plot of Columns B and D')
+
+plt.xlabel('Column B')
+
+plt.ylabel('Column D')
+
+
+
+# Show the plot
+
+plt.tight_layout()
+
+plt.show()
+# Create column E
+
+df['E'] = 3 * df['B'] + np.random.normal(0, 3, 500)
+
+
+
+# Create the scatter plot
+
+plt.figure(figsize=(10, 5))
+
+
+
+# Plot points for column D
+
+plt.scatter(df['B'], df['D'], color='blue', marker='o', label='Column D')
+
+
+
+# Plot points for column E
+
+plt.scatter(df['B'], df['E'], color='red', marker='x', label='Column E')
+
+
+
+# Customize the plot
+
+plt.title('Scatter Plot of Columns B, D, and E')
+
+plt.xlabel('Column B')
+
+plt.ylabel('Values')
+
+plt.legend()
+
+
+
+# Show the plot
+
+plt.tight_layout()
+
+plt.show()

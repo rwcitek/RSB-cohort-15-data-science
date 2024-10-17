@@ -1,0 +1,350 @@
+## Why we need functions
+
+- Define code that only runs when you call the function
+
+- Allow you to run the same code multiple times without rewriting it
+
+- Help with DRY- Don't Repeat Yourself
+
+- Can create a 'black box' - you only have to know what arguments a function expects and what it gives back
+
+### Template
+
+
+
+```python
+
+def func_name ( arg1, arg2, ...):
+
+  ''' doc_string '''
+
+  return variable
+
+```
+## Naming conventions
+
+Function and argument names:
+
+- all lowercase
+
+- words shoud be seperated by underscores when needed to increase readablity  
+
+- describe what the function does or what the argument is
+
+- avoid abbreviations that would not be obvious to somebody else who knew nothing about your code
+
+
+
+**Examples:**    
+
+Function names: add_two_numbers, count_by_two  
+
+Arguments: integer1, integer2, person_name, data_frame, column_name
+
+
+
+## Basic Function Syntax
+A simple function with no arguments and no return
+A function that takes an argument
+A function that takes multiple arguments and returns something
+### Your Turn
+
+Write a function called `celsius_to_fahrenheit` that takes one argument - `celsius`. Return the temperature in fahrenheit.
+
+
+
+Note: $F = \frac{9}{5} \times C + 32$
+## Doc blocks or docstrings and function help
+## Argument options
+### Positional Arguments
+### Optional Parameters (Arguments)
+### Your Turn
+
+1. Write a function called `play_tennis` that takes the following arguments:
+
+- `sunny` (required)
+
+-  `weekend` (required)
+
+-  `friend` (optional - give a default value of `True`)
+
+
+
+Return `True` if `sunny`, `weekend`, and `friend` are all `True`. Return `False` otherwise. Make sure to include a docstring.
+
+
+
+2. Test your code by running the following:
+
+- `play_tennis(False, False, True)` (should return `False`)
+
+- `play_tennis(True, True)` (should return `True`)
+
+
+
+## Return options
+ - `return` exits the function
+
+ - `return` also optionally returns a value or list, etc. (any type of object)
+
+ - `return` can also be used to exit the function early if certain conditions are met
+
+ - you can have multiple returns in a function (only the first one executed will be hit because `return` exits the function)
+
+ - `return` will return `None` if nothing else is specified
+### return early
+## Examples
+### Pig Latin
+pig latin translator
+
+sentence -> pig latin
+
+
+
+first letter -> end of word add ay
+
+unless it's a vowel -> add way
+# This defines the function
+
+def hello_world1():
+
+  """Prints Hello world!"""
+
+  print("Hello world!")
+
+
+
+hello_world1
+# This actually calls the code and runs the function
+
+hello_world1()
+
+hello_world1?
+help(hello_world1)
+# This function takes the argument - name
+
+def hello_person(name):
+
+  """ Prints Hello name """
+
+  print("Hello ", name)
+
+
+
+hello_person
+# Calling this function requires passing in a name argument
+
+hello_person('Nicole')
+
+hello_person('Marty')
+
+hello_person(name = 'Dameon')
+hello_person?
+# this function takes two arguments - number1 and number2
+
+def add_two_numbers(number1, number2):
+
+  """ Adds two numbers"""
+
+  #then it returns the sum
+
+  return number1+number2
+
+
+
+add_two_numbers?
+my_sum = add_two_numbers(4, 3)
+
+print(my_sum)
+my_sum = add_two_numbers(4, number2 = 3)
+
+print(my_sum)
+# Solution
+
+def celsius_to_fahrenheit( celsius ):
+
+  """
+
+
+
+  Args:
+
+    celsius: temperature in Celsius
+
+
+
+  Returns:
+
+    The temperature in Fahrenheit
+
+
+
+  """
+
+  fahrenheit = 9/5 * celsius + 32
+
+  return( fahrenheit )
+
+# Solution
+
+celsius_to_fahrenheit?
+celsius_to_fahrenheit( celsius = -40 )
+def do_nothing():
+
+  # The three double quotes denote that this is the function doc block
+
+  """This function does nothing"""
+#Calling the help function on our function will return the doc block
+
+help(do_nothing)
+# Opens help for jupyter lab
+
+do_nothing?
+def print_inputs(input1, input2):
+
+  print("input1 = " , input1)
+
+  print("input2 = " , input2)
+
+
+
+# Here it matches up the arguments passed by position
+
+# The first argument will be assigned to input1
+
+# The second argument will be assigned to input2
+
+print_inputs(8,9)
+print_inputs(input1 = 8, input2 = 9)
+print_inputs(input2 = 9, input1 = 8 )
+print_inputs("Bye","Hi")
+# Optional parameters have default values
+
+# that will be used if no values is given
+
+def greet_person(name, greeting="hi", day="Monday"):
+
+  """
+
+  Args:
+
+    name:   Someone's name
+
+    greeting: A salutation, by default "hi"
+
+    day:     The day, by default "Monday"
+
+  """
+
+  print(greeting, name,  "it's", day)
+greet_person("Joe")
+greet_person("Lewis", day="Tuesday", greeting='hola')
+greet_person('Bob', 'bye', 'Wednesday')
+greet_person(day="Tuesday", greeting='hola', name = "Lewis" )
+# Solution
+
+def play_tennis(sunny, weekend, friend = True):
+
+  """
+
+
+
+  Args:
+
+    sunny:   is it sunny?
+
+    weekend: is it the weekend?
+
+    friend:  do you have friends?
+
+
+
+  Returns:
+
+    Returns True if sunny, weekend, and friend are all True. Returns False otherwise.
+
+  """
+
+  return( all([sunny, weekend, friend]))
+
+help(play_tennis)
+# Solution
+
+play_tennis(False, False, True)
+
+play_tennis(True, True)
+play_tennis(True, True, False)
+def add_two_integers(number1, number2):
+
+  #check if the inputs are integers
+
+  if not ( isinstance(number1, int) and isinstance(number2, int) ):
+
+    #return from the function if they are not integers
+
+    return "Not a number"
+
+  #otherwise return the sum of the integers
+
+  return number1 + number2
+print(add_two_integers("a",5))
+
+print(add_two_integers(4,5))
+
+
+
+results = add_two_integers(6,7)
+
+print(results)
+input1 = input("Enter an integer: ")
+
+input2 = input("Enter an integer, again: ")
+
+print("Combined: " , add_two_integers(input1, input2))
+
+type(input1), input1
+input1= input("Enter an integer: ")
+
+input2 = input("Enter an integer, again: ")
+
+if input1.isdecimal() and input2.isdecimal():
+
+  print("Combined: " , add_two_integers(int(input1), int(input2)))
+
+else:
+
+  print("Enter only integers")
+def pig_latin(sentence):
+
+  """Takes a sentence and translates it to pig latin"""
+
+  if not isinstance(sentence, str):
+
+    return "not a string"
+
+  words = sentence.lower().split()
+
+  new_sentence = ""
+
+  vowels = ["a", "e", "i", "o", "u"]
+
+  for word in words:
+
+    if word[0] in vowels:
+
+      new_sentence += word + 'way '
+
+    else:
+
+      new_sentence += word[1:] + word[0] + 'ay '
+
+  return new_sentence
+sentence1 = "Today is Friday"
+
+print(pig_latin(sentence1))
+
+
+
+print(pig_latin("Fridays are the very best day of the week"))
+
+print(pig_latin("No Saturdays are"))

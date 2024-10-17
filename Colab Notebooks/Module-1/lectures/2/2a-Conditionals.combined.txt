@@ -1,0 +1,538 @@
+#Conditionals
+
+## Why conditionals are important
+Conditionals let us run code only under specific circumstances.  
+
+
+
+- For example, a website may want to show you certain content **if** you are logged in.  
+
+
+
+- As a data scientist, you may want to find the mean for a column of data **if** the column is filled with all numbers.  
+
+
+
+## Vocabulary
+
+
+- **Conditions**: the thing we want to check before running the code
+
+- **If statement**: tell a program to execute different code depending if a condition is true.
+
+##  True and False
+An if statement will run code if a particular condition is `True`.  So what is `True`?
+Certain statements can be evaluated as `True` or `False`.  
+
+For example, `2 < 5` is `True`.  
+
+But ` 2 > 5` is `False`.  
+
+
+
+-  Statements of equality or inequality can be evaluated as True or False.  
+
+-  Variables can be set to equal True or False.
+
+-  Functions and methods can return values of True or False.  
+
+- 0 is False
+
+- "" is False
+
+- [] is False
+
+
+
+### Your Turn
+
+Check to see if the following statements will return `True` or `False`:
+
+1. `10 >= 5`
+
+2. `10 >= 10`
+
+3. `'dog' in ['cat', 'mouse', 'rabbit']`
+## If statements
+If statements execute code *if* a condition is true.  
+
+
+
+```python
+
+# The format is
+
+if condition:
+
+  code to run
+
+```
+### Your Turn
+
+1. Create a variable called `num_1` and assign it a value of 10. Create a variable called `num_2` and assign it a value of 20.
+
+2. Write an if statement that will print out "Number 2 is larger" if `num_2` is greater than `num_1`. Run this code.
+
+3. Create a list with 4 of your favorite foods and save it as `fave_foods`. Write an if statement that will print out `pizza` if it is in `fave_foods`.
+##  Indentation matters!
+Lines of code under an if statement will be run as part of the if statement *if* they are indented.  
+
+
+
+The first line of code that is NOT indented will NOT be included in the if statement.  
+
+## If else
+Sometimes we want to do one thing if a condtional is true and another thing if it's false.  
+
+### Your Turn
+
+Write an if else statement that will print out `I love pizza` if `pizza` is in your `fave_foods` list; otherwise it will print out `I do not love pizza`.
+## Elif
+elif - short for else if
+
+
+
+Used if we have multiple scenarios
+
+
+
+This example uses one elif, but you could have more than one
+### Your Turn
+
+1. Create a variable called `num_pets` that is equal to the number of pets you have.
+
+2. Write an if-elif-else statement that does the following:
+
+- Prints out "I have a ton of pets!" if `num_pets` is larger than 5.
+
+- Prints out "I have a few pets" if `num_pets` is greater than 0 but less than or equal to 5.
+
+- Prints out "I have no pets" if `num_pets` is zero.
+
+Run your code using different values for `num_pets` to make sure it works as expected.
+## Shorthand
+If your if statement only has one line of code, you can put everything on one line.
+
+
+
+The same as a one-liner.
+if else statements can also go on one line
+The same as a one-liner.  Notice the placement of the code block of the "if" portion.  Also, notice there are no colons.
+### Your Turn
+
+Write a one-line if statement of your choice.
+## Using a one-liner as a ternary operator
+
+
+
+```
+
+foo = ("Sunny") ? 5 : 2
+
+```
+
+## `And` and `Or`
+Conditions can be combined using `and` and `or`.  
+
+
+
+- For example, maybe a webpage wants to display certain content if you are a paying member and you're logged in.  
+
+
+
+- Or as a data scientist you want to classify a response as positive if it is 'good' or 'great'
+A condition using `and` is true only if both sides are true.  
+
+A condition using `or` is true if at least one side is true or both sides are true.
+### Your Turn
+
+1. Create a variable called `cook` and set it equal to `True` if you like to cook and `False` if you do not. Create a variable called `clean` and set it equal to `True` if you like to clean dishes and `False` if you do not.
+
+2. Write an if-elif-else statement that will do the following:
+
+- Print out "I like to cook & clean dishes!" if `cook` and `clean` are both `True`.
+
+- Print out "I like to cook!" if `cook` is `True` and `clean` is `False`.
+
+- Print out "I like to do dishes!" if `cook` is `False` and `clean` is `True`.
+
+- Print out "I'd rather order takeout." if `cook` is `False` and `clean` is `False`.
+
+Test out your code with different values for `cook` and `clean` to make sure it works as expected.
+
+## Functions any() and all()
+`any()`: Applies OR to a list of elements.  Only one element needs to evaluate to `True`.
+
+
+
+`all()`: Applies AND to a list of elements. All elements need to evaluate to `True`.
+# DeMorgan's law
+[DeMorgan's Law]( https://en.wikipedia.org/wiki/De_Morgan%27s_laws )
+
+
+
+- not ( A and B ) <=> not A or not B
+
+- not ( A or B ) <=> not A and not B
+## Boolean Algebra and Truth Tables
+[Boolean Algebra]( https://en.wikipedia.org/wiki/Boolean_algebra#Operations )
+
+
+
+[Truth Tables]( https://en.wikipedia.org/wiki/Truth_table )
+# Statements of equality / comaprison
+
+print(2 < 5)
+
+
+
+# To compare if two values are equal we use == instead of =.  (= assigns a variable)
+
+print(2 == 5)
+
+
+
+# ! negates a statement.  "Two is not equal to five."
+
+print(2 != 5)
+x = 4
+
+print(x<7)
+x = True
+
+print(x)
+y = False
+
+print(y)
+mylist = ['a', 'b', 'c', 'd']
+
+print('a' in mylist)
+
+print('e' in mylist)
+# Solution 1
+
+10 >= 5
+# Solution 2
+
+10 >= 10
+# Solution 3
+
+'dog' in ['cat', 'mouse', 'rabbit']
+x = 2
+
+y = 1
+
+if x < y:
+
+  print('x is less than y')
+x = 4
+
+y = 5
+
+if x < y:
+
+  print('x is less than y')
+mypets = ['cat', 'rat', 'bat']
+
+if 'cat' in mypets:
+
+  print('I have a cat')
+if 'goldfish' not in mypets:
+
+  mypets.append('goldfish')
+
+
+
+print(mypets)
+x = [ 1 , 2, 3, 4 ]
+
+2 in x
+# Solution 1
+
+num_1 = 10
+
+num_2 = 20
+
+num_1, num_2
+# Solution 2
+
+if num_2 > num_1:
+
+  print("Number 2 is larger")
+# Solution 3
+
+fave_foods = "apple, banana, pizza, chorizo".split(", ")
+
+if "pizza" in fave_foods:
+
+  print("pizza")
+fave_foods
+mypets
+# This will print mypets no matter what
+
+if 'goldfish' not in mypets:
+
+  mypets.append('goldfish')
+
+print(mypets)
+# This will print mypets only if 'goldfish' not in mypets
+
+if ( 'goldfish' not in mypets ):
+
+  mypets.append('goldfish')
+
+  print(mypets)
+
+x = 4
+
+y = 2
+
+
+
+if x < y:
+
+  print('x is less than y')
+
+else:
+
+  print('x is not less than y')
+fave_foods
+# Solution
+
+if "pizza" in fave_foods:
+
+  print("I love pizza.")
+
+else:
+
+  print("I do not love pizza.")
+x = 6
+
+y = 8
+
+
+
+if x < y:
+
+  print('x is less than y')
+
+elif x == y:
+
+  print('x equals y')
+
+else:
+
+  print('x is not less than y')
+# Solution 1
+
+num_pets = 6
+
+num_pets
+# Solution 2
+
+if num_pets > 5:
+
+  print("I have a ton of pets!")
+
+elif num_pets > 0 <= 10:
+
+  print("I have a few pets.")
+
+elif num_pets == 0:
+
+  print("I have no pets.")
+
+else:
+
+  print("Well, how did I get here?  Letting the days go by ....")
+# Solution 2
+
+person = 2
+
+if person < 3:
+
+  print('Person is a toddler!')
+person = 2
+
+if person < 3: print('Person is a toddler!')
+person = 4
+
+if person < 3 :
+
+  print('Person is a toddler!')
+
+else:
+
+  print('Person is not a toddler!')
+person = 4
+
+print('Person is a toddler!') if person < 3 else print('Person is not a toddler!')
+# Solution
+
+if "sunny":
+
+  print("It's play time!")
+
+else:
+
+  print("What a bummer")
+
+# Solution
+
+print("It's play time!") if "sunny" else print("What a bummer")
+
+foo = 5 if "Sunny" else 2
+
+foo
+if a = 5:
+
+  print("hello")
+member = False
+
+logged_in = False
+
+
+
+if member and logged_in:
+
+  print("Welcome member!")
+
+else:
+
+  print("Go Away!")
+response = 'good'
+
+if (response == 'good') or (response == 'great'):
+
+  print('response was positive!')
+
+else:
+
+  print("Hmmm.  Bummer")
+member = True
+
+logged_in = True
+
+
+
+if member and logged_in:
+
+  print("Welcome member!")
+
+else:
+
+  print("Go Away!")
+# Solution 1
+
+cook = True
+
+clean = True
+
+cook, clean
+cook and clean == True
+# Solution 2
+
+if cook == True and clean == True:
+
+  print("I like to cook & clean dishes!")
+
+elif cook == True and clean == False:
+
+  print("I like to cook!")
+
+elif cook == False and clean == True:
+
+  print("I like to do dishes!")
+
+elif cook == False and clean == False:
+
+  print("I'd rather order takeout.")
+
+else:
+
+  print("Uh, what are you doing?")
+
+# Solution 2
+
+if cook and clean:
+
+  print("I like to cook & clean dishes!")
+
+elif cook and not clean:
+
+  print("I like to cook!")
+
+elif not cook and clean:
+
+  print("I like to do dishes!")
+
+elif not cook and not clean:
+
+  print("I'd rather order takeout.")
+
+else:
+
+  print("Uh, what are you doing?")
+
+# Solution 2
+
+if cook and clean:
+
+  print("I like to cook & clean dishes!")
+
+elif cook and not clean:
+
+  print("I like to cook!")
+
+elif not cook and clean:
+
+  print("I like to do dishes!")
+
+elif not (cook or clean):
+
+  print("I'd rather order takeout.")
+
+else:
+
+  print("Uh, what are you doing?")
+
+values = [ True, False, False ]
+
+any(values)
+
+values = [ True, False, False ]
+
+all(values)
+
+cook = False
+
+clean = True
+
+print(cook,clean)
+
+conditions = [ cook, clean]
+
+
+
+# Example from previous exercise
+
+if all(conditions):
+
+  print("I like to cook & clean dishes!")
+
+elif all([(cook), (not clean)]):
+
+  print("I like to cook!")
+
+elif (not cook) and (clean):
+
+  print("I like to do dishes!")
+
+elif not any([cook,clean]):
+
+  print("I'd rather order takeout.")
+
+else:
+
+  print("And you may ask yourself, 'Well, how did I get here?'.")
+

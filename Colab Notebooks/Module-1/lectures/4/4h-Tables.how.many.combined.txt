@@ -1,0 +1,62 @@
+
+
+Given a table of data, how many ... ?
+
+
+
+```yaml
+
+columns:
+
+  identifier columns:
+
+  feature columns:
+
+    rows with nulls in each:
+
+  target columns:
+
+    rows with nulls in each:
+
+  categorical columns:
+
+    nominal columns:
+
+      rows with nulls in each:
+
+      categories in each:
+
+    ordinal columns:
+
+      rows with nulls in each:
+
+      categories in each:
+
+  numerical columns:
+
+    discreet columns:
+
+      rows with nulls in each:
+
+    continuous columns:
+
+      rows with nulls in each:
+
+  nested columns:
+
+rows:
+
+  rows with nulls:
+
+  duplicate rows:
+
+  missing rows:
+
+```
+
+
+
+
+
+
+

@@ -1,0 +1,393 @@
+# Pandas Data Frames
+## Building a data frame
+### Your Turn
+
+Create a data frame that looks like the table below. Name this data frame `movies`. Use the `Movie` column as your index.
+
+
+
+Movie | Lead Actor | Times Watched
+
+------|------------|--------------
+
+Titanic|Leo DiCaprio|3
+
+Die Hard|Bruce Willis|5
+
+Back to the Future | Michael J. Fox | 15
+
+Forrest Gump | Tom Hanks | NaN
+
+
+
+Note: to add a `NaN` to your dataframe, you will need to do the following:
+
+1. Run `import numpy as np`
+
+2. Use `np.NaN` in your dataframe.
+## Creating a data frame by reading in a CSV
+## Viewing/Understanding Data
+## Start Here
+### Your Turn
+
+1. Use the `info()` and `describe()` methods on `movies` data frame.
+
+2. Find another method that can be used on dataframes. Look at the help documentation for that method. Write a brief description of what that method does.
+   movies.transpose() flips rows and columns.
+## Cleaning Data
+### Your Turn
+
+Make a copy of your `movies` data frame. Save it as `movies_clean`.
+
+Drop the **row** that contains a NaN.
+## Imputation
+
+Let's say we didn't want to just drop the LotFrontage and column as it only had 259 NaNs.
+### Your Turn
+
+Make another copy of your original `movies` data frame and save it as `movies_impute`. Replace the NaN with a 0.
+## Indexing by Column
+### Your Turn
+
+Index the `Lead Actor` column of your `movies_impute` data frame. Save it to a variable called `actors`. Print out `actors`.
+## Indexing by Row
+
+We can index rows in two ways:
+
+
+
+- .loc - locates by name
+
+- .iloc- locates by numerical index
+### Your Turn
+
+1. Index the row for `Back to the Future` using .loc and iloc.
+
+2. Use a slice to index the rows for `Back to the Future` and `Forrest Gump`.
+## Conditional Selections
+### Your Turn
+
+Use a conditional statement to return the following from your `movies_impute` data frame:
+
+1. Movies with Bruce Willis as the lead actor
+
+2. Movies that have been watched more than 4 times
+## Adding a Column
+# Adding a Row
+### Your Turn
+
+1. Add a column named `Rating` to your `movies_impute` data frame that gives your rating of the movie on a scale from 1-10 (where 10 is the best).
+
+2. Add a row to your `movies_impute` data frame with the information for another movie.
+## A Quick Intro to Plotting Using Pandas
+### Your Turn
+
+Create a scatter plot of your `rating` column versus your `Times Watched` column.
+import pandas as pd
+# We can build a data frame using a dictionary
+
+my_dict = {'dogs' : [1,0,4,3,2],
+
+           'cats' : [3,2,0,1,1]}
+
+my_dict
+
+animals = pd.DataFrame(my_dict)
+
+print(animals)
+type(animals)
+# fetch second row
+
+animals.iloc[1]
+type(animals.iloc[1])
+animals.iloc[1].iloc[0]
+# Change the index
+
+animals = pd.DataFrame(my_dict, index = ['Joe', 'Mary', 'Roger', 'David', 'Mikey'])
+
+print(animals)
+animals.iloc[-1]
+animals.loc["Mikey"]
+# Solution
+
+import numpy as np
+
+movies_dict =  {
+
+  'Lead Actor' : "Leo DiCaprio, Bruce Willis, Michael J. Fox, Tom Hanks".split(', '),
+
+  'Times Watched' : [3, 5, 15, np.NaN],
+
+}
+
+movies_dict
+movies = pd.DataFrame(movies_dict, index = "Titanic, Die Hard, Back to the Future, Forrest Gump".split(', ') )
+
+movies
+# Solution alt
+
+import numpy as np
+
+movies_dict =  {
+
+  'Movie':  "Titanic, Die Hard, Back to the Future, Forrest Gump".split(', '),
+
+  'Lead Actor' : "Leo DiCaprio, Bruce Willis, Michael J. Fox, Tom Hanks".split(', '),
+
+  'Times Watched' : [3, 5, 15, np.NaN],
+
+}
+
+movies_dict
+movies = pd.DataFrame(movies_dict)
+
+movies
+movies.index = movies["Movie"]
+
+movies
+movies.drop(columns=["Movie"], inplace = True)
+
+movies
+# Solution alt 2
+
+import numpy as np
+
+movies = pd.DataFrame(index =  "Titanic, Die Hard, Back to the Future, Forrest Gump".split(', '))
+
+movies['Lead Actor'] = "Leo DiCaprio, Bruce Willis, Michael J. Fox, Tom Hanks".split(', ')
+
+movies['Times Watched'] = [3, 5, 15, np.NaN]
+
+movies
+# Read in CSV
+
+url = "http://ddc-datascience.s3-website-us-west-1.amazonaws.com/Home_Data.csv"
+
+home_data = pd.read_csv(url, usecols=range(9))
+
+# Look at first 5 rows
+
+home_data.head()
+# View the first 5 rows
+
+home_data.head()
+home_data.tail()
+# See the dimension of your data frame
+
+home_data.shape
+# See the information about each column in your data frame
+
+home_data.info()
+# Get summary statistics about your data frame
+
+home_data.describe(include = "all" )
+# See the names of the columns
+
+home_data.columns
+
+movies.head()
+# Solution
+
+movies.info()
+# Solution
+
+movies.describe()
+movies.describe?
+type(movies.describe())
+movies.describe(include = "all").transpose()
+movies.drop
+home_data.head()
+# Dealing with Missing Values
+
+home_data.isnull().head()
+home_data.isnull().sum()
+# Let's drop the columns with NaNs.
+
+# First, we need to create a copy of our data frame
+
+home_data_clean = home_data.copy()
+
+home_data_clean.head()
+# axis = 1 tells the function to drop a column instead of a row
+
+# in place tells the function to alter home_data_clean instead of returning a new data frame
+
+home_data_clean.dropna(axis = 1, inplace=True)
+
+home_data_clean.head()
+home_data.head()
+# Solution
+
+movies_clean = movies.copy()
+
+movies_clean
+movies_clean.isna().sum(axis = 1)
+movies_clean.dropna?
+# Solution
+
+movies_clean.dropna( axis = "index", inplace=True)
+
+movies_clean
+movies
+# Make a copy
+
+home_data_impute = home_data.copy()
+
+home_data_impute.head()
+# Remove only the Alley column
+
+home_data_impute.drop(labels ='Alley', axis = 1, inplace = True)
+
+home_data_impute.head()
+# Check to see our NaNs
+
+home_data_impute.isnull().sum()
+# Replace the NaNs in LotFrontage with the mean lot frontage amount
+
+lot_frontage_mean = home_data_impute['LotFrontage'].mean()
+
+lot_frontage_mean
+home_data_impute.fillna(lot_frontage_mean, inplace = True)
+
+home_data_impute.isnull().sum()
+home_data_impute.describe()
+# Solution
+
+movies_impute = movies.copy()
+
+movies_impute
+movies_impute.fillna(0, inplace=True)
+
+movies_impute
+# We can index a column using square brackets and the column name
+
+street_col = home_data_impute['Street']
+
+street_col.head()
+type(street_col)
+# We can index multiple columns using a list of column names
+
+multiple_cols = home_data_impute[['Street', 'LotShape']]
+
+multiple_cols.head()
+type(multiple_cols)
+street_col = home_data_impute[['Street']]
+
+street_col.head()
+type(street_col)
+# Solution
+
+actors = movies_impute['Lead Actor']
+
+actors
+actors["Titanic"]
+# Let's take a look at the animals data frame we created earlier
+
+animals
+# Index using loc
+
+animals.loc['Roger']
+# Index using iloc
+
+animals.iloc[2]
+# We can also slice!
+
+animals.loc['Roger':'Mikey'] # Note - the stop point in .loc is inclusive
+animals.iloc[2:4] # The stop point in .iloc is not inclusive
+animals.iloc[2:4]['dogs']
+( animals.iloc[2:4] )['dogs']
+animals['dogs'].iloc[2:4]
+pd.DataFrame(animals['dogs'].iloc[2:4])
+animals[['dogs']].iloc[2:4]
+movies
+# Solution
+
+movies.loc["Back to the Future"]
+movies.iloc[2]
+movies.iloc[-2]
+# Solution
+
+movies.iloc[2:]
+movies.iloc[-2:]
+movies.loc["Back to the Future":]
+animals
+# We can use conditional statements to return booleans
+
+animals['dogs'] == 4
+# We can then use those booleans to index our data frame
+
+filter = ( animals['dogs'] == 4 )
+
+animals[ filter ]
+
+# Another example
+
+animals[animals['cats'] > 1]
+# A third example!
+
+# Two things to note - we have to put parenthesis around each conditional statement
+
+# and we have to use the '&' symbol instead of the word 'and'
+
+animals[(animals['cats'] > 1) & (animals['dogs'] < 1)]
+filter1 = (animals['cats'] > 1)
+
+filter1
+
+filter2 = (animals['dogs'] < 1)
+
+filter2
+
+filter3 = filter1 & filter2
+
+filter3
+
+animals[filter3]
+movies_impute
+# Solution
+
+filter = (movies_impute["Lead Actor"] == "Bruce Willis")
+
+filter
+
+movies_impute[ filter ]
+# Solution
+
+filter = (movies_impute["Times Watched"] > 4)
+
+filter
+
+movies_impute[ filter ]
+animals
+# We can easily add a column to our data frame
+
+animals['chickens'] = [1,0,0,4,5]
+
+animals
+animals['ducks'] = 20
+
+animals
+# Similarly, we can add a row to our data frame
+
+animals.loc['Nevin'] = [1,0,0,4]
+
+animals
+movies_impute.iloc[:-1]
+# Solution
+
+movies_impute["Rating"] = [ 6, 8, 9, 10 ]
+
+movies_impute
+# Solution
+
+movies_impute.loc["This is Spinal Tap"] = ["Christopher Guest", 1_000_000, 11]
+
+movies_impute
+movies_impute
+home_data.plot(kind = 'scatter', x = 'LotArea', y = 'LotFrontage') ;
+home_data['LotFrontage'].plot(kind = 'hist', title = 'Lot Frontage') ;
+home_data['LotFrontage'].plot(kind = 'box', title = 'Lot Frontage') ;
+movies_impute
+# Solution
+
+movies_impute.plot(kind = "scatter", y = "Rating", x = "Times Watched" ) ;

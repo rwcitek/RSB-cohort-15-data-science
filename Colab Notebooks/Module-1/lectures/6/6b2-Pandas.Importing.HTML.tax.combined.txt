@@ -1,0 +1,167 @@
+# Importing HTML Data with Pandas
+Pandas is capable of reading and writing data in a variety of file formats, including HTML. A list of all data formats that pandas supports is located [here](https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html).
+
+## HTML
+
+
+
+Reading in html can be useful if there is a table of data on a website that you want to parse. We'll use the [2023 1040 Intructions]( https://www.irs.gov/instructions/i1040gi ) from the IRS.
+From [Marginal Tax Rates 2023]( https://www.irs.gov/newsroom/irs-provides-tax-inflation-adjustments-for-tax-year-2023#:~:text=Marginal%20Rates%3A%20For%20tax%20year%202023 )
+
+
+
+- 37% for incomes over \$578,125 (\$693,750 for married couples filing jointly);
+
+- 35% for incomes over \$231,250 (\$462,500 for married couples filing jointly);
+
+- 32% for incomes over \$182,100 (\$364,200 for married couples filing jointly);
+
+- 24% for incomes over \$95,375 (\$190,750 for married couples filing jointly);
+
+- 22% for incomes over \$44,725 (\$89,450 for married couples filing jointly);
+
+- 12% for incomes over \$11,000 (\$22,000 for married couples filing jointly).
+
+- 10% for incomes over \$0 (\$0 for married couples filing jointly).
+
+import pandas as pd
+url = "https://www.irs.gov/instructions/i1040gi"
+
+tax_tables = pd.read_html(url)
+
+len(tax_tables) # tax_tables contains all of the tables on this webpage
+for index, table in enumerate(tax_tables):
+
+    print(f"== {index}")
+
+    print(table.columns)
+
+    print()
+tax_tables[172]
+tax_tables[174]
+tax_table = tax_tables[172]
+
+tax_table
+tax_table.columns = "Low High Single Married MFJ HoH".split()
+tax_table
+segments = ( tax_table['High'] == tax_table["MFJ"] )
+
+drop_indexes = tax_table[segments].index
+
+tax_table_clean = tax_table.drop( drop_indexes ).dropna(axis = "rows")
+
+tax_table_clean
+
+for col in tax_table_clean.columns:
+
+  tax_table_clean[col] = tax_table_clean[col].astype(int)
+
+df = tax_table_clean
+
+df
+# Create the plot
+
+ax = df.plot(x='High', y='Single', kind='line')
+
+
+
+# Add title and labels
+
+ax.set_title('Tax vs Income')
+
+ax.set_xlabel('Income')
+
+ax.set_ylabel('Tax')
+
+;
+df["midpoint"] = ( df["High"] + df["Low"] ) / 2
+
+df
+df["pct"] = ( 100* df["Single"] )/ df["midpoint"]
+
+df
+df["pct_delta"] = df["pct"].diff()
+
+df
+df["pct_delta_delta"] = df["pct_delta"].diff() * 10_000
+
+df
+# n = 200
+
+# df[n:n+50]
+
+low = ( df["High"] > 10_400 )
+
+high = ( df["High"] < 11_400 )
+
+
+
+df[ low & high ]
+
+filter = ( df["pct_delta_delta"] > 1 ) & ( df["Low"] > 3000 )
+
+df[ filter ]
+import matplotlib.pyplot as plt
+
+
+
+foobar = df.plot(
+
+    x = "High",
+
+    y = "pct",
+
+    kind = "line",
+
+    # ylim = [9.5, 10.4],
+
+    # xlim = [10500, 12000],
+
+)
+
+x_positions = [
+
+    0,
+
+    11_000,
+
+    44_725,
+
+    95_375,
+
+]
+
+for x in x_positions:
+
+  plt.axvline(x=x, color='r', linestyle='--', linewidth=1)
+
+
+
+y_positions = [
+
+    0,
+
+    10,
+
+    12,
+
+    22,
+
+    24,
+
+]
+
+for y in y_positions:
+
+  plt.axhline(y=y, color='r', linestyle='--', linewidth=1)
+
+
+
+
+
+
+
+pass ;
+
+
+

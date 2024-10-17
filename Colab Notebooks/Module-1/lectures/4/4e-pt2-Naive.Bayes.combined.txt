@@ -1,0 +1,199 @@
+Load Pandas and [Sklearn](https://scikit-learn.org/stable/) packages.
+## Gaussian Naive Bayes
+
+### Tennis example (multiple predictors)
+Show encoding.
+import pandas as pd
+
+import numpy as np
+
+
+
+from sklearn.naive_bayes import GaussianNB
+
+from sklearn import preprocessing
+multi_mixed = """
+
+  Weather
+
+  Temp
+
+  Play
+
+  Sunny
+
+  Hot
+
+  No
+
+  Sunny
+
+  Hot
+
+  No
+
+  Overcast
+
+  Hot
+
+  Yes
+
+  Rainy
+
+  Mild
+
+  Yes
+
+  Rainy
+
+  Cool
+
+  Yes
+
+  Rainy
+
+  Cool
+
+  No
+
+  Overcast
+
+  Cool
+
+  Yes
+
+  Sunny
+
+  Mild
+
+  No
+
+  Sunny
+
+  Cool
+
+  Yes
+
+  Rainy
+
+  Mild
+
+  Yes
+
+  Sunny
+
+  Mild
+
+  Yes
+
+  Rainy
+
+  Mild
+
+  No
+
+  Overcast
+
+  Hot
+
+  Yes
+
+
+
+""".split()
+
+print(multi_mixed)
+
+weather = multi_mixed[0::3]
+
+temp =  multi_mixed[1::3]
+
+play =  multi_mixed[2::3]
+
+
+
+print(weather)
+
+print(temp)
+
+print(play)
+
+import pprint
+
+pp = pprint.PrettyPrinter(depth=2, compact=True, width=150)
+
+
+
+table = { weather.pop(0): weather,
+
+          temp.pop(0): temp,
+
+          play.pop(0): play
+
+}
+
+pp.pprint(table)
+
+# Create labelEncoder
+
+le = preprocessing.LabelEncoder()
+
+
+
+# Convert string labels into numbers. Note: this isn't the best way to encode
+
+# weather but we will talk about other encoding methods later on
+
+weather_encoded = le.fit_transform(weather)
+
+temp_encoded = le.fit_transform(temp)
+
+label_encoded = le.fit_transform(play)
+
+
+
+print('Label:', label_encoded)
+
+print('Temp:', temp_encoded)
+
+print('Weather:', weather_encoded)
+
+print(sorted(set(zip(weather_encoded, weather))))
+
+print(sorted(set(zip(temp_encoded, temp))))
+
+print(sorted(set(zip(label_encoded, play))))
+
+#Combine weather and temp into data frame
+
+my_dict = {'Weather': weather_encoded, 'Temp': temp_encoded}
+
+features = pd.DataFrame(my_dict)
+
+features
+features.iloc[0].to_dict()
+#Create a Gaussian Naive Bayes Classifier
+
+model = GaussianNB()
+
+
+
+# Train the model using the training sets
+
+model.fit(features,label_encoded) ;
+
+# Predict Output
+
+# predicted = model.predict( pd.Series({'Weather': 1, 'Temp': 2}) )   # 1: Rainy 2: Mild
+
+predicted = model.predict( [[1,2]] )   # 1: Rainy 2: Mild
+
+
+
+print( "Predicted Value:", predicted ) # 0: No    1: Yes
+model.predict_proba( [[1,2]] )
+result = dict(zip(label_encoded, play))
+
+result
+result[predicted[0]]
+

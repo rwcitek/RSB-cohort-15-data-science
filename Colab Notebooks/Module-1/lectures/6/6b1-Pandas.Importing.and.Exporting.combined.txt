@@ -1,0 +1,161 @@
+# Importing & Exporting Data with Pandas
+Pandas is capable of reading and writing data in a variety of file formats including CSV, JSON, Excel, and Pickle. A list of all data formats that pandas supports is located [here](https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html).
+
+
+
+Pandas has  Reader and  Writer functions. The Reader function allows you to read in data, while the Writer function enables you to save data.
+
+## CSV
+### Your Turn
+
+1. Read in the `Wholesale_Data.csv` file from AWS at http://ddc-datascience.s3-website-us-west-1.amazonaws.com/Wholesale_Data.csv . Save it to a variable called `wholesale`.
+
+1. Look at the first five rows of `wholesale`. Use the `describe()` method on your data frame. Create a histogram of the `Grocery` column of your data.
+
+
+
+Extra: calculate the [Coefficient of variation]( https://en.wikipedia.org/wiki/Coefficient_of_variation ).
+## Excel
+In Excel, a file consists of a single workbook.  Within a workbook there can be one or more sheets ( sometimes called tabs. )
+### Your Turn
+
+1. Read in Sheet 3 from the `animals.xlsx` file. Save it to a variable called `animals_info`.
+
+2. Look at `animals_info`.
+
+3. Add a column to `animals_info` called `Weight` that gives the weight for each animal.
+
+4. Save your updated `animals_info` data frame as `animals_updated.xlsx`.
+## HTML
+
+Reading in html can be useful if there is a table of data on a website that you want to parse.
+import pandas as pd
+
+import matplotlib.pyplot as plt
+dat_file = 'http://ddc-datascience.s3-website-us-west-1.amazonaws.com/Home_Data.csv'
+
+home_dat = pd.read_csv(dat_file)
+
+home_dat.head()
+home_dat.shape
+# Writing (saving) data
+
+home_dat.to_csv('home_dat2.csv') # Click file icon on left, click three dots and download.
+
+home_dat.to_csv('/content/home_dat2.csv')
+ls
+
+home_dat.info()
+# Solution
+
+wholesale = "http://ddc-datascience.s3-website-us-west-1.amazonaws.com/Wholesale_Data.csv"
+# Solution
+
+df = pd.read_csv(wholesale)
+df.describe()
+df.hist(column = 'Grocery')
+# Location of Excel file
+
+dat_file_url = 'http://ddc-datascience.s3-website-us-west-1.amazonaws.com/animals.xlsx'
+
+dat_file_url
+# Reading in one sheet from a workbook
+
+animal_dat = pd.read_excel( dat_file_url, sheet_name = "Sheet1")
+
+animal_dat
+# Reading in multiple sheets from a workbook
+
+workbook = pd.ExcelFile( dat_file_url )
+
+
+
+# listing the worksheets
+
+workbook.sheet_names
+
+# Reading in a few sheets from a workbook
+
+animals_dat1 = pd.read_excel( workbook, "Sheet1")
+
+animals_dat2 = pd.read_excel( workbook, "Sheet2")
+
+print(animals_dat1)
+
+print()
+
+print(animals_dat2)
+# Can also read in multiple sheets from a workbook using a loop
+
+with pd.ExcelFile(dat_file_url) as workbook:
+
+  data = {
+
+    sheet_name: pd.read_excel( workbook, sheet_name)
+
+      for sheet_name in workbook.sheet_names
+
+  }
+
+
+
+data.keys()
+
+data["Sheet1"]
+data['Sheet2']
+data['Sheet3']
+# Solution
+
+animals_info = data['Sheet3']
+
+animals_info
+# Solution
+
+animals_info['Weight'] = [12, 53, 62, 12]
+
+animals_info
+# Solution
+
+animals_info.to_excel('animals_updated.xlsx')
+
+
+
+from google.colab import files
+
+
+
+animals_info.to_excel('animals_updated.xlsx')
+
+files.download('animals_updated.xlsx')
+
+# url = "https://en.wikipedia.org/wiki/New_Mexico"
+
+url = "https://en.wikipedia.org/w/index.php?title=New_Mexico&oldid=1250070720"
+
+nm_tables = pd.read_html(url)
+
+len(nm_tables) # nm_table contains all of the tables on this webpage
+nm_tables[5]
+my_df = nm_tables[5].iloc[0:10,1:5].copy()
+
+my_df
+for i, table in enumerate(nm_tables):
+
+  print(f"Table index: {i}")
+
+  print(table.columns)
+
+  print()
+# To only get one table, use the match argument
+
+nm_lang_tables = pd.read_html(url, match = 'English only')
+
+len(nm_lang_tables)
+nm_lang_tables
+nm_lang_df = nm_lang_tables[0]
+
+nm_lang_df.shape
+
+nm_lang_df
+nm_lang_df.info()
+

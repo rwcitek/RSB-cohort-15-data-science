@@ -1,0 +1,108 @@
+# Common Distributions
+## Bernoulli & Binomial Distributions
+## Poisson Distribution
+## Normal
+## Lognormal
+# Central Limit Theorem
+Roll a die ten times.
+Roll a die once, many times
+Roll a die 10 times, many times
+## QQ Plots
+Try "s", "r", "45", "q" for line=.
+
+
+
+Try dist= functions/methods from sklearn.
+import numpy as np
+
+from matplotlib import pyplot as plt
+
+import seaborn as sns
+# Bernoulli
+
+bern1 = np.random.binomial(1, .25, 100_000)
+
+bern2 = np.random.binomial(1, .5, 100_000)
+
+bern3 = np.random.binomial(1, .90, 100_000)
+
+bern4 = np.random.binomial(1, .1, 100_000)
+
+
+
+bern1
+
+np.random.binomial?
+plt.figure(figsize = (10,5))
+
+# sns.histplot(bern1, stat = 'density');
+
+# sns.histplot(bern2, stat = 'density');
+
+# sns.histplot(bern3, stat = 'density');
+
+sns.histplot(bern4, stat = 'density');
+
+
+
+# Binomial - how many times will six tosses come up all heads? or three of a kind.
+
+binom = np.random.binomial(6, .50, 10_000)
+
+binom = np.random.binomial(10_000, .50, 6)
+
+plt.figure(figsize = (8,4))
+
+sns.histplot(binom, stat = 'density');
+# mean number of children per family: 1.94
+
+# mean number of car accidents per day in ABQ: 32
+
+pois = np.random.poisson( 1.94, 100_000 )
+
+# pois = np.random.poisson( 10, 100_000 )
+
+pois = np.random.poisson( 32, 1_000 )
+
+plt.figure(figsize = (10,5))
+
+sns.histplot(pois, stat = 'density');
+norm = np.random.normal(30,1,1_000)
+
+plt.figure(figsize = (8,4))
+
+sns.histplot(norm, stat = 'density');
+ln = np.random.lognormal(10,1,1_000)
+
+plt.figure(figsize = (8,4))
+
+sns.histplot(ln, stat = 'density') ;
+
+# plt.xlim(0,30);
+rolls = np.random.randint(1,7,10)
+
+( rolls, sum(rolls) )
+sum_1 = [sum(np.random.randint(1,7,1)) for idx in range(100_000)]
+
+plt.hist(sum_1,bins=20);
+sum_10 = [sum(np.random.randint(1,7,10)) for idx in range(100_000)]
+
+plt.hist(sum_10,bins=20);
+sum_50 = [sum(np.random.randint(1,7,50)) for idx in range(100_000)]
+
+plt.hist(sum_50,bins=30);
+sum_250 = [sum(np.random.randint(1,7,250)) for idx in range(100_000)]
+
+plt.hist(sum_250,bins=30);
+qqplot?
+ln
+# QQ Plot
+
+from statsmodels.graphics.gofplots import qqplot
+
+# Lognormal
+
+qqplot(ln, line='s');
+# Normal
+
+qqplot(norm, line='s');

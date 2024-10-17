@@ -1,0 +1,40 @@
+# Initial Data Analysis ( IDA ) and triage
+"While EDA is a hypothesis-generating activity, IDA primarily ensures transparency and integrity of preconditions to conduct appropriate statistical analyses in a responsible manner to answer predefined research questions. For this purpose, IDA provides data ready for analysis including reliable information on the data properties." -  [Ten simple rules for initial data analysis](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1009819) from PLOS Computational Biology.
+Initial Data Analysis ( IDA ) is a means to quickly assess the data you are working with before loading it into a Jupyter notebook.  It mainly involes five quick tasks:
+
+
+
+- determining the location of the data collection, often a file
+
+- determining the size of the data collection
+
+- determining the type of the data collection
+
+- getting some quick info about the data in the data collection, e.g the schema
+
+- looking at the first/last few entries in a data collection
+
+
+
+All of this is done at the command line, usually bash.
+
+## Using GitHub CodeSpaces
+GitHub CodeSpaces, aka [dev containers]( https://docs.github.com/en/codespaces/setting-up-your-project-for-codespaces/adding-a-dev-container-configuration/introduction-to-dev-containers ), is a virtual environment running Docker.  The environment stops after a certain amount of idle time, but can be restarted.  You can push any changes back to your GitHub repository.  When you are finished, you can delete the CodeSpaces environment.  Any changes not pushed to GitHub or downloaded will be lost.
+
+
+
+You can start a CodeSpace by visiting the [main repository page]( https://github.com/rwcitek/MyBinder.demo ), clicking on the green Code button, clicking on the CodeSpaces tab, and clicking the green "Create codespace on Main" button.  A codespace will start with a VSCode interface.  You can type the commands from the ["Files & Filesystem as data structures"]( https://github.com/rwcitek/MyBinder.demo/blob/main/Initial.Data.Analysis/data-structures.files.folders.ipynb ) notebook into the terminal pane.
+
+
+
+## Using Binder
+> **Note**: the last time I tried this, Binder did not work.
+
+
+
+Binder is ephemeral environment in which to run a notebook.
+
+
+
+Launch the ["Files & Filesystem as data structures"]( https://mybinder.org/v2/gh/rwcitek/MyBinder.demo/main?labpath=%2FInitial.Data.Analysis%2Fdata-structures.files.folders.ipynb ) notebook in Binder.  This often takes a minute or so for Binder to fully customize and launch the environment.  Unlike GitHub CodeSpaces, the environment is deleted after a certain idle time and, therefore, all work is lost.  Also unlike GitHub CodeSpaces, the only way to save a notebook is to download it to your local system.  There is no easy way to push changes to GitHub.
+

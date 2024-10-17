@@ -1,0 +1,417 @@
+# Python Loops
+## Python
+"The Python for statement iterates over the members of a sequence in order, executing the block each time." - python documentation
+### Terminology
+
+
+- loop over: perform the same code on each element in a list, range, string, etc.
+
+- iterate over: the same thing as loop over
+
+- for loop: this is the code that actually loops over something.  An example of what this looks like is <br>
+
+`for i in range(1,5): print(i)`
+
+- iterable: any object that can be iterated over.  For example, a list or range.
+### Uses: Why for loops are important
+
+For loops are one of the most basic programming concepts.  They are extremely useful for repeating code multiple times for different values of a variable.  
+
+
+
+A data scientist might use a for loop to perform an operation on each entry in a data set.  For example, checking to see if the entry matches certain requirements or replacing inconsistent abbreviations with something consistent.  
+### Iterating a set number of times with range
+**Using range**  
+
+range will return an iterable object.  
+
+`range(11)` returns the numbers 0 to 10  
+
+`range(5, 11)` returns the numbers 5 to 10  
+
+`range(10, 22, 2)` returns the even numbers between 10 and 20  
+
+`range(10, 0, -1)` returns the numbers from 10 to 1 (counts down through them)
+#### Your Turn
+
+Use a for loop to print out the following numbers: 1,3,5,7,9,11,13
+### Iterating over a list
+In Python, you can loop over a list directly instead of having to use its index.
+
+### Iterating backwards over a list
+#### Your Turn
+
+1. Create a list called `colors` that contains 5 different colors.
+
+2. Use a for loop to print out the colors in alphabetical order.
+### Indexes in a for loop
+`enumerate` will return the indexes and elements of a list
+
+#### Your Turn
+
+
+
+1. Create a list of everyone's name in the cohort and assign it to a variable called `students`.
+
+2. Print out the index and name of each student in `students`.
+### Replicate elements
+### Nested loops
+You can put loops inside of loops.  For example, to print out a multiplication table.
+
+### Iterating over a string
+#### Your Turn
+
+1. Create a counter variable `num_y` and set it equal to 0.
+
+2. Create a for loop to loop through the letters in `happy birthday`. If the letter is a `y`, add `1` to your counter variable `num_y`.
+
+3. Print out `num_y`.
+### Looping And Updating a List
+#### Your Turn
+
+
+
+1. Create an empty list called `main_words`.
+
+2. Create a second list called `small_words` that contains the words `'of', 'is', 'the', 'it' and 'a'`.
+
+3. Create a variable called `sentence` and set it equal to the following string: `Data science is the best!`.
+
+4. Loop through the *words* in your `sentence`. Note: you'll need to use the `split()` string method to loop through words instead of letters. If the word is **not in** `small_words` add it to your `main_words` list.
+### A Few More Examples
+Count down from 10 to 1 and then Blast Off!!
+Rocket Launch Method 2
+## Calculating sum
+## List comprehension
+List comprehension is a compact form of using for loops to create lists.
+List comprehension is only used for generating lists.  Other operations, such as printing results, are generally not done with list comprehension.
+Lest comprehension can also include conditionals.
+One can also enumerate within a list comprehension.
+print(range(11))
+type(range(11))
+# range(1,6) -> 1,2,3,4,5
+
+for i in range(1,6):
+
+ print(i)
+
+  # print(i * 3)
+# Solution
+
+for i in range(1,14,2):
+
+  print(i)
+for i in range(0,7):
+
+  print(i*2+1)
+for i in range(0,27,4):
+
+  print(i//2+1)
+mylist = ['a', 'b', 'c', 'd']
+
+for letter in mylist:
+
+  print(letter)
+for letter in reversed(mylist):
+
+  print(letter)
+mylist
+mylist.reverse()
+
+for letter in mylist:
+
+  print(letter)
+letter = mylist
+for letter in reversed(letter):
+
+  print(letter)
+for letter in mylist[::-1]:
+
+  print(letter)
+# Solution 1
+
+colors = "red orange yellow blue indigo".split()
+
+type(colors), len(colors), colors
+# Solution 2
+
+for color in sorted(colors):
+
+  print(color)
+colors
+# Solution 2
+
+colors.sort()
+
+for color in colors:
+
+  print(color)
+alpha = ["a", "b", "c", "d"]
+
+for index, element in enumerate(alpha):
+
+  print(index)
+
+  print(alpha[index])
+
+  print(element)
+
+  print()
+
+alpha = ["a", "b", "c", "d"]
+
+for index, element in enumerate(alpha):
+
+  print(index, element)
+alphas = ["a", "b", "c", "d"]
+
+for alpha in enumerate(alphas):
+
+  print(alpha[0], alpha[1])
+list(enumerate(alphas))
+# Solution 1
+
+students = "Anna James Mel Mohamed Wil Minerva Joe Sam Robert Zac Mohamed_Cloud".split()
+
+type(students), len(students), students
+# Solution 2
+
+for i, v in enumerate(students):
+
+  print(i, v)
+5 * 10
+5.0 * 10
+"a" * 10
+[1] * 10
+even = ["even"] * 5
+
+odd = ["odd"] * 5
+
+( even, odd )
+["odd", "even"] * 5
+odd_even = ["odd"] * 10
+
+odd_even
+even
+odd_even[1::2] = even
+
+odd_even
+
+( a, b, c ) = ( 1, 2, 3 )
+
+( a, b, c )
+my_list = [ 1, 2, 3 ]
+
+my_list
+
+my_list[0::2]
+( my_list[0::2] ) =  ( 10, 20 )
+
+my_list
+even = ["even"] * 6
+
+odd_even[1::2] = even
+
+odd_even
+
+for x in range(1, 6):
+
+    for y in range(1, 6):
+
+        print(f'{x} * {y} = {x*y}')
+cheer = "CNM Divers"
+
+for letter in cheer:
+
+  if letter != " ":
+
+    print(f"Give me a '{letter}'")
+letter
+# Solution 1
+
+num_y = 0
+
+type(num_y), num_y
+# Solution 2
+
+text = "happy birthday"
+
+for _ in text:
+
+  if _ == "y" :
+
+    num_y = num_y + 1
+# Solution 3
+
+print(num_y)
+text.count("y")
+results = [] # Initialize the list
+
+for i in range(11):
+
+  results.append(i*2)
+
+results
+words = ['dog', 'cat', 'hello', 'wow!']
+
+for index, word in enumerate(words):
+
+  words[index] = word*2
+
+words
+# Does not work - need to preassign
+
+words = ['dog', 'cat', 'hello', 'wow!']
+
+words_doubled = []
+
+for index, word in enumerate(words):
+
+  words_doubled[index] = word*2
+
+# Does work - need to preassign
+
+words = ['dog', 'cat', 'hello', 'wow!']
+
+words_doubled = [None] * len(words)
+
+words_doubled
+
+for index, word in enumerate(words):
+
+  words_doubled[index] = word*2
+
+
+
+words_doubled
+# Solution 1
+
+main_words = []
+
+_ = main_words
+
+type(_), len(_), _
+# Solution 2
+
+small_words = ['of', 'is', 'the', 'it', 'a']
+
+_ = small_words
+
+type(_), len(_), _
+# Solution 3
+
+sentence = "Data science is the best!"
+
+words = sentence.split()
+
+_ = words
+
+type(_), len(_), _
+# Solution 4
+
+for word in words:
+
+  if word not in small_words:
+
+    main_words.append(word)
+
+_ = main_words
+
+type(_), len(_), _
+for i in range(10, 0, -1):
+
+  print(i)
+
+
+
+print('BLAST OFF!!')
+# Rocket Launch!!
+
+# Count down from 10
+
+for i in range(10,-4, -1):
+
+  if i > 0: print(i)
+
+  else: print('BLAST OFF!!!')
+numbers = list(range(1,102))
+
+( numbers[:5], numbers[-5:] )
+sum = 0
+
+for i in numbers:
+
+  sum += i
+
+
+
+sum
+# mean ( average )
+
+sum / len(numbers)
+
+# median
+
+range(1,102)[50]
+
+letters = '''
+
+          a
+
+          b
+
+          c
+
+          d
+
+          e
+
+          f
+
+          g
+
+          '''.split()
+
+letters
+# for loop format to generate a list of double letters
+
+doubles = []
+
+for letter in letters:
+
+  doubles.append(letter*2)
+
+doubles
+
+# list comprehension format to generate a list of double letters
+
+doubles = [ letter*2 for letter in letters ]
+
+doubles
+
+for letter in letters:
+
+  print("hello world: ", letter)
+[ print("hello world: ", letter) for letter in letters ]
+
+# for loop format
+
+beginning = []
+
+for letter in letters:
+
+  if letter in letters[:3]:
+
+    beginning.append(letter)
+
+beginning
+# list comprehension format
+
+beginning = [ letter for letter in letters if letter in letters[:3] ]
+
+beginning
+
+beginning = [ x for i, x in enumerate(letters) if x in letters[:3] ]
+
+beginning
+

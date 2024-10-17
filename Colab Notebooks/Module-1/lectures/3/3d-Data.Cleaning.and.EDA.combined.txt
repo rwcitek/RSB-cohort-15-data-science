@@ -1,0 +1,170 @@
+# Example 1
+## Load the Data
+## Understand the Data
+Notice that there is one null vlaue for pH and residual sugar.
+## Clean the Data
+We saw above that there are two columns that have nulls/NAs. Let's drop the rows that have NAs.
+Let's say we don't want to include the density or sulphate columns in our data, so we will drop them.
+Finally, residual sugar is currently in g but I want it in mg. So I am going to multiply each value in the residual sugar column by 1000.
+## Generate Summary Statistics
+## Plot the data (univariate)
+What's going on here? It looks like there might be a large outlier. Let's take a look.
+The citric acid in this row is 100. All the other citric acid values are much smaller. We talked to the person who put together this dataset and they confirmed this is a mistake. Let's replace this value with the mean citric acid value.
+## Impute outlier
+## Plot the data (bivariate)
+import pandas as pd
+
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+import seaborn as sns
+url = "http://ddc-datascience.s3-website-us-west-1.amazonaws.com/winequality-red.csv"
+
+wine_data = pd.read_csv(url)
+wine_data.shape
+# Look at the first five rows
+
+wine_data.head()
+# Get info about each column
+
+wine_data.info()
+wine_data.isnull().sum()*100
+# Get summary statistics about each column
+
+wine_data.describe()
+type(wine_data.describe())
+wine_data.describe().transpose()
+# See the unique values in the quality column
+
+wine_data['quality'].unique()
+# See how many observations there are for each unique value in the quality column
+
+wine_data['quality'].value_counts()
+# Before doing any cleaning, let's make a copy of our data frame
+
+wine_clean = wine_data.copy()
+# Drop the rows with NAs
+
+wine_clean.dropna(inplace = True)
+# Alternate, doing both steps in one
+
+# wine_clean = wine_data.dropna()
+# Verify they NAs were dropped
+
+wine_clean.isnull().sum()*10
+# Drop the density and sulphate column
+
+wine_clean.drop(columns = ['density', 'sulphates'], inplace = True)
+# Verify it was dropped
+
+wine_clean.columns
+
+wine_clean.isnull().sum()*10
+wine_clean['residual sugar'].head()
+# Multiply each value by 1000
+
+wine_clean['residual sugar'] = wine_clean['residual sugar']*1000
+# Confirm it worked
+
+wine_clean['residual sugar'].head()
+# Get summary statistics for each column
+
+wine_clean.describe()
+wine_clean.describe().transpose()
+# Calculate the mean of a single column
+
+wine_clean['alcohol'].mean()
+wine_clean['alcohol'].hist()
+
+plt.xlabel('% Alcohol')
+
+plt.ylabel('Count') ;
+wine_clean['alcohol'].hist(bins = 100)
+
+plt.xlabel('% Alcohol')
+
+plt.ylabel('Count') ;
+sns.histplot(x = wine_clean['alcohol'], kde = True) ;
+wine_clean.boxplot(column = 'citric acid') ;
+# Find the outlier
+
+ca_max = wine_clean['citric acid'].max()
+
+ca_max
+filter = ( wine_clean['citric acid'] == ca_max )
+
+filter
+
+wine_clean[filter]
+# Look at other rows to get a feel for "normal"
+
+wine_clean.head()
+wine_clean_drop = wine_clean.copy()
+
+wine_clean_drop.head()
+wine_clean_drop[filter][['citric acid']]
+
+# Calculate mean, std with outlier
+
+( wine_clean_drop['citric acid'].mean(), wine_clean_drop['citric acid'].std() )
+
+# Change max value to NaN
+
+wine_clean_drop.loc[filter, 'citric acid'] = np.NaN
+
+wine_clean_drop[filter][['citric acid']]
+
+# Calculate the mean, std of citric acid
+
+ca_mean, _ = wine_clean_drop['citric acid'].mean(), wine_clean_drop['citric acid'].std()
+
+ca_mean, _
+
+# Replace null with mean
+
+wine_clean_drop.loc[filter, 'citric acid'] = ca_mean
+
+wine_clean_drop[filter][['citric acid']]
+
+# Calculate mean, std with imputed value
+
+( wine_clean_drop['citric acid'].mean(), wine_clean_drop['citric acid'].std(), )
+sns.histplot( x=wine_clean_drop["citric acid"]) ;
+# Correlation Plot
+
+column_correlations = wine_clean_drop.corr()
+
+#column_correlations
+
+plt.figure(figsize=(12,10))
+
+sns.heatmap(column_correlations, annot=True, cmap='RdYlGn') ;
+# Get most highly correlated varliables with alcohol
+
+alc_correlations = wine_clean_drop.corr()['alcohol']
+
+alc_correlations
+correlated_vars = abs(alc_correlations).sort_values(ascending=False)
+
+correlated_vars
+# Scatter plot
+
+wine_clean_drop.plot(x='fixed acidity', y='pH', kind='scatter',  title='pH vs Fixed Acidity') ;
+# Scatter plot with different colors based on quality
+
+sns.scatterplot(
+
+    x = wine_clean_drop['alcohol'],
+
+    y = wine_clean_drop['pH'],
+
+    hue = wine_clean_drop['quality'],
+
+    size=wine_clean_drop['quality']
+
+) ;
+# Pairplot
+
+sns.pairplot(wine_clean_drop) ;
+wine_clean_drop.hist() ;

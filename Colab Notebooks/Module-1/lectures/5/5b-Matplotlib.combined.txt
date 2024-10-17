@@ -1,0 +1,733 @@
+# Matplotlib
+
+
+
+Matplotlib is a classic plotting library for Python.  Later in the class we'll touch on some other plotting options.  Since matplotlib is a historical standard and many other DS libraries integrate its functionality, we will cover it first.  
+
+
+
+This notebook is intended to be something of a reference for matplotlib - the goal isn't to memorize what is in here, but to be familiar with what is possible and know where to look when you need it.
+## Import
+## Setting Styles
+
+All styles can be found [here](https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html).
+## Plotting a Function
+### Your Turn
+
+Create a plot of the tangent of x (`np.tan(x)`) using a dashed line.
+## Saving Plots
+Click on folder icon to the left to see image.  Right click and download.
+## Line Colors
+
+Named colors in python are located [here](https://matplotlib.org/stable/gallery/color/named_colors.html).
+### Your Turn
+
+Create a plot of the tangent of x using 4 colors. Try to use a few different colors than the ones used in the example above.
+## Line Styles
+### Your Turn
+
+1. Create a variable called `time`. Set it equal to a numpy array of 20 equally spaced points between 0 and 1.
+
+2. Create a second variable called `population` and set it equal to the following
+
+`population = np.exp(time)`
+
+3. Plot `population` versus `time` using a dashdot blue line.  
+## Axes Settings
+## Labeling Plots/ Text Size
+### Your Turn
+
+Create a plot of population versus time using a solid green line. Add x- and y-axis labels. Add a title to your plot. Change the y-axis limits to be from 0 to 3.
+## Scatter Plots
+
+## Symbol types
+### Your Turn
+
+1. Create a scatter plot of population versus time. Use the marker of your choice. Set the color of your marker to 'slateblue'. Change the markersize to 10.
+
+2. Create a second plot of population versus time that has both a line and points. Use a red dashed line with linewidth 3. Use black diamond shaped points with markersize 12.
+## plt.scatter - more powerful scatter plots
+plt.scatter - change the marker type dynamically based on the data - good to use the marker type to portray more information.
+
+
+
+Downside is it takes longer to make the display - bad for really large datasets.
+### Your Turn
+
+Use `plt.scatter()` to create a scatterplot of petal width versus petal length. Set the size and color of the points equal to the species. Add x and y axis labels.
+## Histograms
+
+### Your Turn
+
+1. Create a variable called `weight` and set it equal to 1000 numbers generated from a normal distribution with mean 150 and standard deviation 10.
+
+2. Create a histogram of `weight` with 5 bins.
+
+3. Create a separate histogram of `weight` with 30 bins.
+## Legends
+### Your Turn
+
+1. Create a variable called `weight_kids` that is 100 values generated from a normal distribution with mean 50 and standard deviation 5.
+
+2. Create a variable called `weight_adults` that is 100 values generaated from a normal distribution with mean 170 and standard deviation 20.
+
+3. Plot histograms of `weight_kids` and `weight_adults` on the same plot. Include a legend for your two histograms.
+## Dictionaries to set styles
+## More Styles
+##  Seaborn
+
+Seaborn is another commonly used plotting package in Python.
+
+- Built on top of matplotlib
+
+- Sets some better default settings
+
+- Has additional plotting options
+### Your Turn
+Create a seaborn violin plot using the `x` variable that was created in the previous example.
+## Pandas
+Use the plot() method on the dataframe directly
+Explicitly pass columns to matplotlib as values to plot
+## Subplots
+### Your Turn
+
+Create a 2x2 subplot of boxplots for each column in the `df` data frame.
+## References
+Some parts of this notebook from the [Data Science Handbook](https://learning.oreilly.com/library/view/python-data-science/9781098121211/) on [GitHub](https://github.com/jakevdp/PythonDataScienceHandbook/tree/master/notebooks).  This is a good resource if you want to dive in more.  
+
+
+
+Also, the [matplotlib documentation](https://pandas.pydata.org/pandas-docs/stable/user_guide/visualization.html#plotting-directly-with-matplotlib)
+
+
+
+[Matplotlib gallery - 100s of examples](https://matplotlib.org/gallery.html)
+##Homework
+
+
+
+Take some time to make the plots in your project look good.  Make sure they have legends when applicable, axis labels and titles.
+import matplotlib.pyplot as plt
+
+import numpy as np
+plt.style.use('seaborn-v0_8-whitegrid') ;
+#figure is a container with axes, graphics, text, labels
+
+fig = plt.figure()
+
+x = np.linspace(0, 10, 100)
+
+plt.plot(x, np.sin(x), '-');
+
+plt.plot(x, np.cos(x), '--');
+x[:10]
+# Solution
+
+fig = plt.figure()
+
+x = np.linspace(0, 10, 100)
+
+plt.plot(x, np.tan(x), '--');
+fig.savefig('sine_cosine.png')
+fig.savefig('sine_cosine.svg')
+ls
+from IPython.display import Image
+
+Image('sine_cosine.png')
+plt.plot(x, np.sin(x - 0), color='blue')        # specify color by name
+
+plt.plot(x, np.sin(x - 1), color='g')           # short color code (rgbcmyk)
+
+plt.plot(x, np.sin(x - 2), color='0.75')        # Grayscale between 0 and 1
+
+plt.plot(x, np.sin(x - 3), color='#FFDD44')     # Hex code (RRGGBB from 00 to FF)
+
+plt.plot(x, np.sin(x - 4), color=(1.0,0.2,0.3)) # RGB tuple, values 0 to 1
+
+plt.plot(x, np.sin(x - 5), color='chartreuse'); # all HTML color names supported
+# Solution
+
+fig = plt.figure()
+
+x = np.linspace(0, 10, 100)
+
+plt.plot(x, np.tan(x+0), '-', color = (.4, .1, .5))
+
+plt.plot(x, np.tan(x+1), '-', color = (.3, .2, .4))
+
+plt.plot(x, np.tan(x+2), '-', color = (.6, .3, .3))
+
+plt.plot(
+
+    x,
+
+    np.tan(x+3),
+
+    '-',
+
+    color = (.8, .4, .2),
+
+    )
+
+;
+
+plt.plot(x, x + 0, linestyle='solid')
+
+plt.plot(x, x + 1, linestyle='dashed')
+
+plt.plot(x, x + 2, linestyle='dashdot')
+
+plt.plot(x, x + 3, linestyle='dotted');
+
+
+
+# For short, you can use the following codes:
+
+plt.plot(x, x + 4, linestyle='-')  # solid
+
+plt.plot(x, x + 5, linestyle='--') # dashed
+
+plt.plot(x, x + 6, linestyle='-.') # dashdot
+
+plt.plot(x, x + 7, linestyle=':');  # dotted
+# Combining styles and colors
+
+plt.plot(x, x + 0, 'g-')  # solid green
+
+plt.plot(x, x + 1, '--c') # dashed cyan
+
+plt.plot(x, x + 2, '-.k') # dashdot black
+
+plt.plot(x, x + 3, ':r')  # dotted red
+
+
+
+# explicit is preferred
+
+plt.plot(
+
+    x,
+
+    x + 4,
+
+    linestyle = "solid",
+
+    color = "green",
+
+) ;  # solid green
+
+# Solution
+
+time = np.linspace( 0, 1, 20 )
+
+time
+# Solution
+
+population = np.exp( time )
+
+population
+# Solution
+
+plt.plot(
+
+    time,
+
+    population,
+
+    linestyle = "dashdot",
+
+    color = "blue",
+
+) ;
+
+plt.plot(x, np.sin(x))
+
+
+
+# Set them individually
+
+plt.xlim(-1, 11)
+
+plt.ylim(-1.5, 1.5)
+plt.plot(x, np.sin(x))
+
+# set them together [xmin, xmax, ymin, ymax]
+
+plt.axis([-1, 11, -1.5, 1.5]);
+# make a square plot
+
+plt.plot(x, np.sin(x))
+
+plt.axis('square');
+help(plt.axis)
+plt.plot(x, np.sin(x))
+
+plt.title("A Sine Curve", size=40, bbox=dict(facecolor='blue', alpha=0.1))
+
+plt.xlabel("x", size=20)
+
+plt.ylabel("sin(x)");
+
+help(plt.xlabel)
+help(plt.text)
+# Solution
+
+# Sam
+x = np.linspace(0, 10, 30)
+
+y = np.sin(x)
+
+#changing the symbol from '-' to 'o' is all it takes to change
+
+#from a line plot to a scatter plot
+
+plt.plot(x, y, 'o', color='blue');
+plt.scatter(x,y, color = 'black') ; # or you can use plt.scatter
+rng = np.random.RandomState(0)
+
+plt.figure(figsize = (10,5))
+
+i = 0
+
+for marker in ['o', '.', 'p', 'x', '+', 'v', '^', '<', '>', 's', 'd']:
+
+    plt.plot(i, i, marker, label=f"marker='{marker}'", markersize = 12)
+
+    i += 1
+
+plt.legend(loc = 'upper left', numpoints=2)
+
+plt.xlim([-1,11])
+
+plt.ylim([-1,16]) ;
+rng = np.random.RandomState(0)
+
+plt.figure(figsize = (10,5))
+
+for i, marker in enumerate( ['o', '.', 'p', 'x', '+', 'v', '^', '<', '>', 's', 'd'] ):
+
+    plt.plot(i, i, marker, label=f"marker='{marker}'", markersize = 12)
+
+plt.legend(loc = 'upper left')
+
+plt.xlim([-1,11])
+
+plt.ylim([-1,16]) ;
+plt.plot(time, population, 's') ;
+plt.plot(x, y, '--', ) ;
+# Lines and points
+
+plt.plot(x, y,
+
+         '-p',
+
+         color='black',
+
+         linewidth=4,
+
+         markersize=15,
+
+         markerfacecolor='white',
+
+         markeredgecolor='blue',
+
+         markeredgewidth=2,
+
+         )
+
+plt.ylim(-1.2, 1.2);
+# Solution
+
+# Solution
+
+n = 100
+
+x = np.random.random(n)
+
+y = np.random.random(n)
+
+colors = np.random.random(n)
+
+sizes = 1000 * np.random.random(n)
+
+
+
+plt.scatter(x, y, c=colors, s=sizes, alpha=0.3, cmap='viridis')
+
+plt.colorbar() ;  # show color scale
+( x, y, colors, sizes )
+# Iris data set
+
+from sklearn.datasets import load_iris
+
+import pandas as pd
+
+iris = load_iris()
+
+features = pd.DataFrame(iris.data, columns = iris.feature_names)
+
+features.head()
+features.shape
+iris.target
+(iris.target+1)
+(iris.target+1)*50
+plt.scatter?
+plt.scatter(features['sepal length (cm)'],
+
+            features['sepal width (cm)'],
+
+            alpha=0.3,
+
+            s = (iris.target+1)*50,
+
+            c = iris.target,
+
+            cmap='viridis'
+
+          )
+
+plt.xlabel(iris.feature_names[0])
+
+plt.ylabel(iris.feature_names[1]);
+np.random.seed(100)
+
+x1 = np.random.normal(0, 0.8, 1000)
+
+x2 = np.random.normal(-2, 1, 1000)
+
+x3 = np.random.normal(3, 2, 1000)
+
+
+
+plt.hist(x1, alpha=0.6, bins=200, color='black')
+
+plt.hist(x2, alpha=0.3, bins=20)
+
+plt.hist(x3, alpha=0.3, bins=20);
+((x3>=6) & (x3 < 7)).sum()
+# Solution
+
+# Solution
+
+# Solution
+
+x = np.linspace(0, 10, 100)
+
+plt.plot(
+
+    x,
+
+    np.sin(x),
+
+    '-',
+
+    label='sine',
+
+    )
+
+plt.plot(
+
+    x,
+
+    np.cos(x),
+
+    '--r',
+
+    label='cosine',
+
+    )
+
+# the legend will include the lines with labels
+
+plt.legend();
+
+plt.plot(x, np.sin(x), '-', label='sine')
+
+plt.plot(x, np.cos(x), '--r', label='cosine')
+
+
+
+#frame alpha determines transparency
+
+plt.legend(
+
+    loc='upper right',
+
+    frameon=True,
+
+    framealpha=0.3,
+
+    );
+
+plt.plot(
+
+    x,
+
+    np.sin(x),
+
+    '-',
+
+    label='sine',
+
+    )
+
+plt.plot(
+
+    x,
+
+    np.cos(x),
+
+    '--r',
+
+    label='cosine',
+
+    )
+
+plt.legend(
+
+    ncol=2,
+
+    frameon=True,
+
+    framealpha=0.8,
+
+    bbox_to_anchor=(0.70, -.05),
+
+    ); # Put legend outside of plot
+# Solution
+
+# Solution
+
+# Solution
+
+import numpy as np
+
+
+
+# Set the font dictionaries (for plot title and axis titles)
+
+title_font = {
+
+    'size':'16',
+
+    'color':'red',
+
+    'weight':'normal',
+
+    'verticalalignment':'bottom',
+
+    } # Bottom vertical alignment for more space
+
+axis_font = {
+
+    'color':'blue',
+
+    'size':'12',
+
+    'size':'10',
+
+   }
+
+plt.plot(x, np.sin(x))
+
+plt.title("A Sine Curve", **title_font)
+
+plt.xlabel("x", **axis_font)
+
+plt.ylabel("sin(x)", **axis_font) ;
+
+# reset everything to classic
+
+# otherwise some settings may not be overridden when setting a new style
+
+plt.style.use('classic')
+
+#set the style for the whole session
+
+plt.style.use('fivethirtyeight')
+
+fig = plt.figure()
+
+x = np.linspace(0, 10, 100)
+
+plt.plot(x, np.sin(x), '-')
+
+plt.plot(x, np.cos(x), '--');
+
+# plt.style.use('classic')
+
+# temporarily set a style
+
+with plt.style.context('classic'):
+
+  with plt.style.context('seaborn-pastel'):
+
+    plt.plot(x, np.sin(x), '-')
+
+    plt.plot(x, np.cos(x), '--')
+
+plt.plot(x, np.sin(x), '-')
+
+plt.plot(x, np.cos(x), '--') ;
+
+plt.style.use('classic') # reset everything back to classic
+
+plt.plot(x, np.sin(x), '-')
+
+plt.plot(x, np.cos(x), '--') ;
+
+import seaborn as sns
+
+sns.set()
+
+plt.plot(x, np.sin(x), '-')
+
+plt.plot(x, np.cos(x), '--');
+# Seaborn dist plot
+
+x = np.random.normal(0,1,1000)
+
+sns.displot(
+
+    x,
+
+    color='green',
+
+    kde = True,
+
+    ) ;
+# Solution
+
+import pandas as pd
+
+df = pd.DataFrame(
+
+    np.random.randn(100, 4),
+
+    index=pd.date_range('1/1/2000', periods=100),
+
+    columns=list('ABCD'),
+
+    )
+
+
+
+df.head()
+df.shape
+
+# Plot all columns vs. index - just call plot()
+
+df.plot();
+plt.plot(df.index, df['A'])
+
+plt.plot(df.index, df['B']) ;
+df.plot(
+
+    x = 'A',
+
+    y = 'B',
+
+    kind='scatter',
+
+)
+
+plt.title('A and B') ;
+df2 = pd.DataFrame(np.random.rand(10, 4), columns=['a', 'b', 'c', 'd'])
+
+df2.plot(kind='bar') ;
+df2
+# Some example data to display
+
+x = np.linspace(0, 2 * np.pi, 400)
+
+y = np.sin(x ** 2)
+
+
+
+# Create subplot
+
+fig, axs = plt.subplots(2)
+
+axs[0].plot(x, y*2)
+
+axs[1].plot(x, -y) ;
+type(axs[0])
+# 2 x 2 subplots
+
+fig, axs = plt.subplots(2, 2)
+
+axs[0, 0].plot(x, y)
+
+axs[0, 1].plot(x, y, 'purple')
+
+axs[1, 0].plot(x, -y, 'green')
+
+axs[1, 1].plot(x, -y, 'red') ;
+# adding labels and legends to subplots
+
+fig, axs = plt.subplots(2, 2, figsize = (12,8))
+
+cols = ['blue', 'purple', 'green', 'red']
+
+labels = ['plot 1', 'plot 2', 'plot 3', 'plot 4']
+
+n = 0
+
+for i in range(2):
+
+  for j in range(2):
+
+    axs[i,j].plot(x, y, cols[n], label = labels[n])
+
+    axs[i,j].legend()
+
+    axs[i,j].set_xlabel('x')
+
+    axs[i,j].set_ylabel('y')
+
+    n += 1
+(axs).shape
+# adding labels and legends to subplots
+
+fig, axs = plt.subplots(2, 2, figsize = (12,8))
+
+cols = ['blue', 'purple', 'green', 'red']
+
+labels = ['plot 1', 'plot 2', 'plot 3', 'plot 4']
+
+
+
+subplots = axs.flatten()
+
+for n, sp in enumerate(subplots):
+
+  sp.plot(x, y, cols[n], label = labels[n])
+
+  sp.legend()
+
+  sp.set_xlabel('x')
+
+  sp.set_ylabel('y')
+
+# Subplot with pandas data frame
+
+fig, axs = plt.subplots(4, figsize = (8,8))
+
+for i in range(4):
+
+  axs[i].hist(df[df.columns[i]], label = labels[i])
+
+  axs[i].legend()
+
+# Subplot with pandas data frame
+
+fig, axs = plt.subplots(4, figsize = (8,8))
+
+for i, sp in enumerate(axs.flatten()):
+
+  sp.hist(df[df.columns[i]], label = labels[i])
+
+  sp.legend()
+
+# Solution
+
