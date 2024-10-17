@@ -1,0 +1,254 @@
+# Intro to Python
+This notebook covers some Python fundamentals including:
+
+- Math operations with Python (-,+,*,/, etc.)
+
+- Assigning variables
+
+- Variable naming conventions
+
+- Data types
+
+- Integers & floats
+
+- The print function
+
+- The type function
+
+- Strings & string methods
+## Python as a calculator
+Addition, subtraction, multiplication, division, exponents
+The modulo operator gives the remainder for a division operator.  
+
+### Your Turn
+
+What is $12.2 * 4^3$?
+## Assigning Variables
+`a = 5` assigns the value 5 to a
+### Naming conventions for variables
+
+- **Use descriptive, concise names for your variables**  
+
+- All lowercase
+
+- Separate words with underscores
+
+
+
+|Bad Variable Names|Good Variable Names|
+
+|---|---|
+
+|a|height|
+
+|UserName|user_name|
+
+|mystring|product_description|
+
+|f|fahrenheit|
+
+### Your Turn
+
+1. Create a variable called `fahrenheit` and assign it a value of `97`.
+
+2. Create a variable called `celsius` and set it equal to `(fahrenheit - 32)*(5/9)`.
+
+3. Print out `celsius`.   
+## Common Data Types
+Below is a list of the most commonly used data types in Python.
+
+
+
+Data Type | Notation    | Example
+
+----------|-------------|--------
+
+String    | ```str```   | ```'dog'```
+
+Integer   |```int```    | ```4```
+
+Float     |```float```  |```3.14```
+## Strings
+## Print Statements
+### Your Turn
+
+1. Create a variable called `my_name` and assign it to a string containing your name.
+
+2. Create a variable called `my_class` and assign it to the string `Data Science`.
+
+3. Use an f-string to print out a statement that includes `my_name` and `my_class`.
+## Integers and Floats
+##Type()
+## Conversions
+We can convert between different data types. Be careful because sometimes a conversion may not produce the intended result!
+## Methods in Python
+
+Methods are functions that only run on objects of a certain type. Different object types have different methods. For example, strings have certain methods (such as `.upper()` and `.lower()` - see below) that can only be used on strings. Other object types in Python (such as lists, data frames, etc.) have their own corresponding methods.
+
+
+
+The format to call a method is `object_name.method_name()`. Arguments to the method are passed in the parentheses. The method acts on the object itself, and therefore, some methods do not take any additional arguments (such as `.upper()`).
+## String Methods
+
+**Tab Completion**
+
+We can explore the string methods by using tab completion and the help documentation.  
+
+
+
+Tip: Tools- Settings - Editor - Uncheck Automatically Trigger Code Completion.  
+
+This will make it so that when you hit 'Tab' it offers code completion suggestions or displays a method's or function's doc string.  
+Putting your cursor inside the parenthesies and hitting Tab will give you information about what upper does.
+### Your Turn
+
+Try out the `.capitalize()` method on the `how_sweet` string. What does it do?
+
+
+
+```
+
+how_sweet = pam + " <3 " + jim
+
+how_sweet
+
+```
+## Help
+### Your Turn
+
+1. Look up the documentation for the `.lstrip` method.
+
+2. Use `.lstrip` to remove the first letter of the `how_sweet` string. *Hint*: You'll need to specify the `chars` argument in the `.lstrip` method.
+2+5
+
+168-97
+5*5
+10/2
+5**2
+5 % 2
+# Solution
+
+12.2 * (4**3)
+a = 5
+
+print(a)
+b = 10
+
+a + b
+# Solution 1
+
+fahrenheit = 97
+
+fahrenheit
+# Solution 2
+
+celsius = ( fahrenheit -32) * ( 5/9 )
+
+celsius
+# Solution 3
+
+print( celsius )
+# We can use single or double quotes when creating a string
+
+pam = 'Pamela Beesly'
+
+jim = "Jim Halpert"
+
+
+
+# Composing messages can be done in multiple ways
+
+how_sweet = pam + " <3 " + jim
+
+print(how_sweet)
+
+how_sweet2 = f"{pam} <3 {jim}" # this is called an f-string
+
+how_sweet2
+print(how_sweet)
+
+print(how_sweet2)
+# Solution 1
+
+my_name = "Robert Citek"
+
+my_name
+# Solution 2
+
+my_class = "Data Science"
+
+my_class
+# Solution 3
+
+foobar = f"{my_name} is talking about {my_class}"
+
+print(foobar)
+# Arithmetic using two floats will return a float
+
+2.0 + 5.0
+# Arithmetic using one float and one integer will return a float
+
+2.0 + 5
+# Division of two integers will return a float (even if the division results in a whole number)
+
+6/3
+#
+
+6//3
+6.0//3.0
+type(how_sweet)
+type(5)
+type(5.5)
+type(5.0)
+whatis = type
+
+whatis(5.0)
+int(5.3)
+int(5.7)
+float(10)
+str(10.2)
+float(str(10.2) + str(5))
+int(-5.7)
+print(how_sweet)
+# swapcase method
+
+how_sweet.swapcase()
+how_sweet.count?
+how_sweet.count("e")
+how_sweet.upper()
+how_sweet.lower()
+how_sweet.
+# Solution
+
+how_sweet.capitalize()
+foobar = "abc ad asdf as. asdflj asf aljdf a. asldfasdlf "
+
+foobar
+foobar.capitalize()
+# The help() function will print out the documentation for a function
+
+help(len)
+len(pam)
+# You can also put a question mark after the function name
+
+len?
+# Question marks can also be used after a method to see the method's documentation
+
+pam.find?
+pam
+pam.find(8)
+pam
+foo = "PamelaBeesly"
+
+print(foo)
+
+foo.find("Bea")
+
+how_sweet
+# Solution 1
+
+how_sweet.lstrip?
+help(how_sweet.lstrip)
+# Solution 2
+
+how_sweet.lstrip("lemaPBs y")

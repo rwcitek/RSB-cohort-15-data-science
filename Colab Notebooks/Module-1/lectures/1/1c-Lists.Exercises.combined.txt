@@ -1,0 +1,30 @@
+# Lists
+## Creating lists
+Create a list of numbers with at least 10 numbers and give it a good name
+Create a list of mixed types (integers, floats, strings, lists, etc.)and give it a good name
+## Indexing and Slicing
+Access the second item in your mixed types list
+
+Access the 4th-7th items in your list of numbers
+Access the last 4 items in your mixed types list
+## Exploring
+Try a different list method out on each of your lists
+list_1 = [1,23,56,21,68,32,15,8,4,32,9,100,175]
+
+list_1
+mixed_list = [483,5.346,89,"thrifty cat", 1, 23, ["houseplant", "milk", 65, 217, 43, 1003]]
+
+mixed_list
+mixed_list[1]
+mixed_list[:]
+mixed_list[-1:-4:-1]
+# list method on numbers list
+
+list_1.append(100)
+
+list_1
+# list method on mixed type list
+
+mixed_list.insert(4, "updated word")
+
+mixed_list

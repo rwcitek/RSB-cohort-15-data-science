@@ -1,0 +1,130 @@
+# Markdown
+## Why we care
+Markdown is a lightweight markup language for creating formatted text using a plain-text editor.
+
+
+
+**In this class, we will see Markdown in use in the following places:**
+
+- Formatting text cells in Colab/Jupyter notebooks.
+
+- READMEs on Github
+
+- Messages in Slack
+**Hint**: When viewing this notebook you can double click on any cell to switch to editing mode and view the original markdown entry instead of the formatted text.
+## Headings (#)
+Headings in Colab automatically create the Table of Contents on the left (Click on the icon with the three lines to view the TOC.)
+
+
+
+ - \# first level heading
+
+ - \## second level heading
+
+ - more \# on down the line
+## Lists
+- this is my first entry
+
+- this is my second entry
+
+* this is a list entry with a \*
+
+
+
+1. this is a list item
+
+2. that is in order
+Or you can use all 1s
+
+
+
+1. cat
+
+1. dog
+
+1. penguin
+
+
+
+## Bold /Italics/ Lines
+
+
+
+*This will be all slanty*
+
+
+
+**This will be fat**
+
+
+
+---
+
+
+
+
+
+
+
+
+
+## Tables
+Column 1| Column 2| Column 3|
+
+ - | - | -
+
+Cell 9 | Cell 2 | Cell 3
+
+a new row| with entries| for fun
+
+foo | bar | baz
+
+
+
+## Math
+
+You can use LaTeX math notation by using the \$ symbol. Examples:
+
+
+
+$ frac{1}{2}$
+
+
+
+$\hat{y} = \hat{\beta}_0 + \hat{\beta}_1X_1$
+## Indented Blocks / Code
+
+
+This is not indented
+
+
+
+> Indented block
+
+
+
+```python
+
+# This is formatted as code
+
+print("Hello, world")
+
+```
+
+## Images / Links
+Let's add a link to something like [Deep Dive.]( https://www.deepdivecoding.com )
+
+Next, we'll add in an image:
+
+<br>
+
+<br>
+
+<br>
+
+![Deep Dive powered by CNM Ingenuity](https://deepdivecoding.com/wp-content/uploads/2024/04/231002-DEEP_DIVE_STOCK_PHOTOGRAPHY_JS_1443-scaled-e1716233865343-2048x1366.jpg "Deep Dive powered by CNM Ingenuity")
+## Further Resources
+- Colab's Markdown Guide:  File > Open Notebook > Examples > Markdown Guide  (Or https://colab.research.google.com/notebooks/markdown_guide.ipynb)
+
+- Colab's Welcome to Colab: https://colab.research.google.com/notebooks/intro.ipynb
+

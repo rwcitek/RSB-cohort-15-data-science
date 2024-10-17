@@ -1,0 +1,332 @@
+**Python Data Structures**
+
+Python has several built-in data structures including:
+
+- lists
+
+- tuples
+
+- dictionaries
+
+- sets
+
+
+
+These are different structures for storing collections of data. We'll start by talking about lists.
+
+[CRUD]( https://en.wikipedia.org/wiki/Create,_read,_update_and_delete ) operations.  Wikipedia asserts that these are for persistent storage, but they are actually applicable to any kind of storage, including Python variables, especially collections.
+## Lists
+Lists in Python are ordered, mutable collections of objects.
+
+
+
+A list is created using ```[]``` and commas between the objects.  
+
+
+
+You could have a list of
+
+- numbers
+
+- strings
+
+- numbers and strings
+
+- lists
+
+- other objects
+
+## Example lists
+Here is a list of integers.
+Here is a list of strings.
+Here is a list of numbers and strings.
+We can also have lists of lists.
+### Your Turn
+
+1. Create a list called `students` that has the first names of the other students in your cohort. Print out `students`.
+
+2. Create a list of 3 integers called `my_ints`. Create a list of 3 floats called `my_floats`.
+
+3. Create a nested list called `ints_and_floats` that contains your `my_ints` and `my_floats` lists. Print out `ints_and_floats`.
+## Indexes and slices
+You can access items in a list by specifying the position, or index, of the item you want to access. Lists in Python use zero indexing - that is the first element is refered to as element 0.
+Refering to one element in a list:
+List slices:
+
+beginning number is inclusive, ending number is exclusive (not included). Note that the notation is `my_list[start:stop]`
+Create a list with every second item from ``` prime_numbers```. Note that the notation is `my_list[start:stop:increment]`.
+
+Create a list the numbers reversed
+Get the last n items
+### Your Turn
+
+1. Create a list called `tens` that contains the following integers: 10, 20, 30, 40, 50, 60, 70, 80, 90
+
+2. Use indexing to access `30` from your list.
+
+3. Use indexing to access `90` from your list.
+
+4. Use indexing to access the numbers `30` through `60` from your list.
+
+5. Use indexing to access every third item from your list.
+## List Methods
+### Adding elements to a list
+Add an element to the end of a list
+
+Insert an element into a list
+#### Your Turn
+
+1. Add 100 to the end of your `tens` list.
+
+2. Add 0 to the beginning of your `tens` list.
+
+
+
+```
+
+tens = [ 10, 20, 30, 40, 50, 60, 70, 80, 90, ]
+
+tens
+
+```
+### Removing elements from a list
+Delete an element based on its index
+Remove an element based on its value
+Remove the last element from a list and use it after removing it
+#### Your Turn
+
+1. Remove the 0 from your `tens` list.
+
+2. Remove the 100 from your `tens` list and save it to a variable called `removed_number`.
+
+3. Use an f-string to write a message that says "I just removed `removed_number`", where `removed_number` is the 100 you removed from your `tens` list. Print our your f-string.
+
+
+
+```
+
+tens = [ 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, ]
+
+tens
+
+```
+## Changing a List
+## Organizing a List
+## Inplace as a Parameter in Python
+Many methods in Python have a parameter called `inplace`. This parameter determines whether or not you will overwrite the existing object. If `inplace = True`, the existing object will be overwritten. If `inplace = False`, the existing object will not be overwritten, and instead, a new updated object will be returned.  
+### Your Turn
+
+Sort your `tens` list in descending order.
+```python
+
+tens = [ 10, 20, 30, 40, 50, 60, 70, 80, 90, ]
+
+tens
+
+```
+some_integers = [5,7,2,2,5,7,9,114059]
+
+print(some_integers)
+
+print(type(some_integers))
+lyrics = [
+
+          "Happy birthday to you.  ",
+
+          "Happy birthday to you.  ",
+
+          "Happy birthday dear Suzy",
+
+          "Happy birthday to you."
+
+          ]
+
+print(lyrics)
+print(type(lyrics))
+numbers_and_strings = [5.5, "Life is good.", 63, 7, "I like Python!"]
+
+numbers_and_strings
+nested_list = [[4,5,6],[5,44,5],[34,7,88]]
+
+print(nested_list)
+# Solution 1
+
+students = [
+
+  "Mel",
+
+  "Anna",
+
+  "James",
+
+  "Robert",
+
+  "Wil",
+
+  "Mohamed",
+
+  "Minerva",
+
+  "Wil",
+
+  "Mohamed",
+
+  "Minerva",
+
+
+
+]
+
+students
+# Solution 2
+
+my_ints = [ 1, 3, 5]
+
+my_ints
+my_floats = [ 3.14, 5.646, 10.334]
+
+my_floats
+# Solution 3
+
+ints_and_floats = [ my_ints, my_floats ]
+
+ints_and_floats
+prime_numbers = [1,2,3,5,7,9]
+
+prime_numbers[0]
+prime_numbers[3]
+prime_numbers[4]
+prime_numbers[-1]
+prime_numbers[-2]
+prime_numbers
+prime_numbers[1:3]
+prime_numbers[3:4]
+prime_numbers[:3]
+prime_numbers[2:]
+prime_numbers[:]
+prime_numbers
+prime_numbers[0:5:2]
+prime_numbers[5::-1]
+prime_numbers[::-1]
+prime_numbers[-1::-1]
+n = -3
+
+prime_numbers[n:]
+# Solution 1
+
+tens = [ 10, 20, 30, 40, 50, 60, 70, 80, 90, ]
+
+tens
+# Solution 2
+
+tens[2]
+# Solution 3
+
+tens[-1]
+tens[-2:][-2]
+# Solution 4
+
+tens[2:6]
+# Solution 5
+
+tens[::3]
+tens[0:256:3]
+tens[256]
+prime_numbers
+prime_numbers.append(11)
+
+print(prime_numbers)
+prime_numbers.insert(1,5)
+
+print(prime_numbers)
+tens = [ 10, 20, 30, 40, 50, 60, 70, 80, 90, ]
+
+tens
+# Solution 1
+
+tens.append(100)
+
+tens
+# Solution 2
+
+tens.insert(0,0)
+tens
+tens.insert(-1, 200)
+tens
+prime_numbers
+del(prime_numbers[1])
+
+print(prime_numbers)
+prime_numbers.remove(9)
+
+print(prime_numbers)
+last_prime = prime_numbers.pop()
+
+print(last_prime)
+
+print(prime_numbers)
+prime_numbers.pop(0)
+
+print(prime_numbers)
+tens = [ 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, ]
+
+tens
+# Solution 1
+
+tens.pop(0)
+tens
+tens.pop?
+# Solution 2
+
+removed_number = tens.pop()
+
+tens
+# Solution 3
+
+print(f"I just removed {removed_number}.")
+# You can alter an element in a list using indexing
+
+animals = ['dog', 'cat', 'rabbit', 'mouse']
+
+animals
+
+animals[0] = 'cow'
+
+print(animals)
+animals[2] = 'gerbil'
+
+animals
+animals[10] = "bird"
+
+animals
+animals = ['dog', 'cat', 'rabbit', 'mouse']
+
+animals.sort() # The sort method changes the list
+
+print(animals)
+animals.sort(reverse = True) # Setting reverse = True will sort the in descending order
+
+print(animals)
+animals = ['dog', 'cat', 'mouse', 'rabbit']
+
+print(animals)
+
+print(sorted(animals)) # The sorted() function wlil not alter the original list
+
+print(animals)
+
+tens = [ 10, 20, 30, 40, 50, 60, 70, 80, 90, ]
+
+tens
+(tens)[::-1]
+# Solution
+
+sorted(tens)[::-1]
+
+sorted(tens, reverse = True )
+
+tens
+tens.sort(reverse = True )
+
+tens
+

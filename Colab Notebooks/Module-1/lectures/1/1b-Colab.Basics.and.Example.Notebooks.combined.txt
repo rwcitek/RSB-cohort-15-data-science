@@ -1,0 +1,200 @@
+# Jupyter Notebooks Overview
+For this class, we will be using Jupyter Notebooks for most or all of our work.
+
+
+
+Jupyter Notebooks consist of:
+
+- Markdown (formatted text) cells
+
+- Code cells (Python in our case although notebooks can be run with other languages)
+
+- Output from code cells
+
+
+
+Google Colab is a Jupyter environment.  Jupyter Lab can also be installed locally on your computer and used.
+
+
+
+Jupyter notebooks are ideal for data science because we can seamlessly switch between explaining what we are doing and using code.
+
+
+
+For example, this is a text cell.
+**A big part of data science is communicating your results and explaining your process.**
+# Helpful Colab Basics
+## Keyboard Shortcuts
+
+|Key Combo|Action|
+
+---|---
+
+Shift + Enter| Run cell  
+
+Ctrl + Shift + S | Select a cell
+
+Ctrl + Shift + Enter | Run Selection
+
+Ctrl + Space | Code Completion
+
+Ctrl + M + H | Open Keyboard Shortcuts
+
+Ctrl + M + Z | Undo Last Cell Action
+## Help
+
+Using help or ? will show you the doc string for a function, method or object.
+This works on functions
+And methods
+And objects
+## Tab Completion
+'Tab Completion' really uses `Ctrl + Space`  unless you turn off auto-completion in settings.  
+
+This will show you available methods and attributes.
+
+Using tab completion when importing packages
+##  Colab as a virtual environment
+
+Colab is a Jupyter environment that runs in the cloud.
+
+
+
+Beyond just editing a Jupyter notebook, you get a runtime that it's connected to (basically a virtual machine, i.e. VM).
+
+
+
+You can do a lot of things that take advantage of this like
+
+- run shell commands
+
+- save files to the VM (these are temporary as they are lost when the notebook is closed)
+
+
+
+Running shell commands with !
+
+  - !ls
+
+  - !pip install ...
+
+
+
+In fact, you can generally run these without the `!`
+
+
+
+(For `cd` you want `%cd` instead)
+
+
+
+Read more [here](https://jakevdp.github.io/PythonDataScienceHandbook/01.05-ipython-and-shell-commands.html#Shell-Related-Magic-Commands).
+## Sharing your notebooks
+Sharing options are consistent with Google Drive in general.  
+
+
+
+Sharing Options:
+
+- Private
+
+- Public
+
+- Specific people
+
+- People with the link
+
+- If you put something in a shared folder, it will automatically be shared too
+
+## Saving your notebooks & revision history
+*   You can save your notebook by going to File -> Save.
+
+*   File -> Save and Pin Revision will pin the version so it doesn't get deleted from the revision history.
+
+*   File -> Revision History will show your notebook's revision history. This can be useful if you need to revert back to a previous version of your notebook.
+
+## Moving your notebooks
+
+- Demo how to move notebooks in Drive
+
+- Save somebody else's notebook - File -> Save a copy in Drive
+
+# Sample JupyterLab Notebooks
+
+
+
+[NBViewer](https://nbviewer.jupyter.org/)
+
+
+
+[A Gallery of Interesting Jupyter Notebooks](https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks)
+
+
+
+# More Info
+
+[Overview of Colab](https://colab.research.google.com/notebooks/basic_features_overview.ipynb)  
+
+[Python Data Science Handbook - Help and Documentation](https://github.com/jakevdp/PythonDataScienceHandbook/blob/master/notebooks/01.01-Help-And-Documentation.ipynb)
+# and this is a code cell where we'll multiply some things
+
+x = 9
+
+y = 8
+
+
+
+for i in range(x):
+
+  print(i*y)
+
+help(len)
+len?
+L = [1, 2, 3]
+
+L.insert?
+L?
+# Use ctrl + space after the .
+
+my_string = "I like Python"
+
+my_string.
+# use ctrl + space after import
+
+import matplotlib.pyplot as plt
+
+# use ctrl + space after r
+
+from numpy import recarray
+ls -la
+pwd
+%cd sample_data
+!ls
+!pwd
+
+! ps  faux
+
+!id
+cd /content/
+
+!ls -la
+
+cd sample_data/
+
+pwd
+ls -la
+
+!head README.md
+cat README.md
+!which file
+!file README.md
+!wc README.md
+%%bash
+
+
+
+wc README.md
+
+file README.md
+
+head README.md | cat -n
+

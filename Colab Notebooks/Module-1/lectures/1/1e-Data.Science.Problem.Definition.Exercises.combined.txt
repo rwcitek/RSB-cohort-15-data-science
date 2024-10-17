@@ -1,0 +1,77 @@
+# Data Science Problem Definition
+
+For each item develop a well-worded data science problem statement.  Your answer should include what type of data science problem this is ( supervised vs unsupervised ) and then whether it is a classification, regression, or clustering problem.  If it is a supervised problem, you should state what the target of the prediction is.
+1. Zillow wants you to predict real estate sales prices. They have a large
+
+database of 12 years of home features accompanied by the corresponding
+
+sales prices.
+
+
+
+##  
+
+*Statement*: This is a supervised regression data problem and the target is sales prices
+
+
+
+2. Amazon wants you to develop a code that upsells (add additional items to the
+
+customer’s order) based on what items have been viewed and bought by that
+
+customer over the past 2 years.
+
+
+
+##
+
+*Statement*: This is a supervised classification data problem and the target is bought items
+
+3. MGM wants to know what features of a movie seem to increase the movie’s
+
+box office income. They have a large database of previously released movies
+
+accompanied by the resulting box office revenue.
+
+
+
+##
+
+*Statement*: This is a supervised classification data problem and the target is revenue
+
+
+
+
+
+4. Spotify wants you to develop a method of predicting whether a customer is
+
+about to terminate their service BEFORE they terminate so that they can offer
+
+enticements to the customer to keep the service and not terminate (called
+
+‘churn’)
+
+
+
+##
+*Statement*: This is an unsupervised clustering data problem
+5. Comcast wants you to develop a chat bot (automated customer service) to
+
+take text input and respond with the appropriate help and/or service
+
+response.
+
+
+
+##
+*Statement*: This is an unsupervised clustering data problem
+
+6. Instagram wants you to analyze images and output whether the image
+
+contains people, animals, scenery, or some other subject.
+
+
+
+##
+*Statement*: This is an unsupervised clustering data problem
+
