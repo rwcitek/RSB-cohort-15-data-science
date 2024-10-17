@@ -426,7 +426,7 @@ with
 
 emp as (
 
-  select EmployeeID, FirstName, Lastname, ReportsTo
+  select EmployeeID, FirstName, Lastname, ReportsTo, Title
 
   from employees
 
@@ -438,6 +438,8 @@ reps as (
 
   from emp
 
+  where Title = "Sales Support Agent"
+
 ),
 
 supervisors as (
@@ -445,6 +447,10 @@ supervisors as (
   select EmployeeID, FirstName, Lastname
 
   from emp
+
+  where Title != "Sales Support Agent"
+
+
 
 ),
 
@@ -466,17 +472,25 @@ cust as (
 
   from customers
 
+),
+
+cust_rep_super as (
+
+  select Customer, Rep, Supervisor
+
+  from cust
+
+  join workers
+
+  where SupportRepID = EmpID
+
 )
 
 
 
-select Customer, Rep, Supervisor
+SELECT *
 
-from cust
-
-join workers
-
-where EmpID = SupportRepID
+FROM cust_rep_super
 
 limit 10
 
@@ -514,7 +528,7 @@ where albumid = 1
 
 %%script sqlite3 --column --header chinook.db
 
-select InvoiceID, Total * 100 as foo
+select InvoiceID, Total
 
 from invoices
 
@@ -538,7 +552,7 @@ with
 
 invoices_ as (
 
-  select InvoiceID, Total * 100  as Total
+  select InvoiceID, Total as Total
 
   from invoices
 
@@ -546,7 +560,7 @@ invoices_ as (
 
 line_items as (
 
-  select invoiceID, sum((unitprice *100 * quantity)) as line_total
+  select invoiceID, sum((unitprice * quantity)) as line_total
 
   from invoice_items
 
@@ -578,5 +592,132 @@ limit 10
 
 %%script sqlite3 --column --header chinook.db
 
+with track_info as (
+
+    select
+
+        name as trackname,
+
+        composer,
+
+        genreid
+
+    from
+
+        tracks
+
+)
+
+select
+
+    ti.composer,
+
+    g.name as genre,
+
+    count(*) as trackcount
+
+from
+
+    track_info ti
+
+join
+
+    genres g on ti.genreid = g.genreid
+
+where
+
+    ti.composer is not null
+
+group by
+
+    ti.composer, g.name
+
+order by
+
+    trackcount desc
+
+limit 50;
+%%script sqlite3 --column --header chinook.db
+
+SELECT
+
+    CASE
+
+        WHEN al.ArtistID IS NULL THEN 'No Artist'
+
+        ELSE 'With Artist'
+
+    END AS AlbumStatus,
+
+    COUNT(*) AS AlbumCount
+
+FROM
+
+    albums al
+
+LEFT JOIN
+
+    artists ar ON al.ArtistID = ar.ArtistID
+
+GROUP BY
+
+    CASE
+
+        WHEN al.ArtistID IS NULL THEN 'No Artist'
+
+        ELSE 'With Artist'
+
+    END;
+%%script sqlite3 --column --header chinook.db
+
+SELECT
+
+    CASE
+
+        WHEN al.ArtistID IS NULL THEN 'Without Artist'
+
+        ELSE 'With Artist'
+
+    END AS AlbumStatus,
+
+    COUNT(*) AS AlbumCount
+
+FROM
+
+    albums al
+
+LEFT JOIN
+
+    artists ar ON al.ArtistID = ar.ArtistID
+
+GROUP BY
+
+    CASE
+
+        WHEN al.ArtistID IS NULL THEN 'Without Artist'
+
+        ELSE 'With Artist'
+
+    END
+
+
+
+UNION ALL
+
+
+
+SELECT NULL, NULL
+
+
+
+UNION ALL
+
+
+
+SELECT 'Albums Without Artists', COUNT(*) AS AlbumCount
+
+FROM albums
+
+WHERE ArtistID IS NULL;
 %%script sqlite3 --column --header chinook.db
 
