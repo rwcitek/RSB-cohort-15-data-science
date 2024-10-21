@@ -1,4 +1,4 @@
-<a href="https://colab.research.google.com/github/RSBalchII/cohort-15-data-science/blob/main/Colab-Notebooks/Module-2/project-2/Project_2_Housing_Price_Prediction_v_4.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+<a href="https://colab.research.google.com/github/RSBalchII/cohort-15-data-science/blob/main/Colab-Notebooks/Module-2/project-2/Project_2_Housing_Price_Prediction_v_5.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 # Project 2: Housing Price Prediction
 
 The project should be done using Regression prediction techniques ( with feature scaling and regularization ) as covered in class.
@@ -59,8 +59,8 @@ for col in categorical_cols:
 # 5a1- Data Preparation
 ### Splitting Training and Testing sets
 ### Feature Scaling for corr_features
-# 5a- Model Creation and Eval
-# 5b- RFE Feature Selection
+# 5a- Ridge Regression Modelling
+# 5b- RFE Modelling
 
 ### Feature Scaling for RFE Selection
 # 5c- RFECV Modelling
@@ -370,7 +370,7 @@ X_test_scaled = scaler.transform(X_test)
 
 # Use Ridge regression with a small alpha value to add some regularization
 
-model = Ridge(alpha=0.9)
+model = Ridge(alpha=0.1)
 
 model.fit(X_train_scaled, y_train)
 

@@ -1,4 +1,4 @@
-<a href="https://colab.research.google.com/github/RSBalchII/cohort-15-data-science/blob/main/Colab-Notebooks/Module-2/project-2/Project_2_Housing_Price_Prediction_v_4.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+<a href="https://colab.research.google.com/github/RSBalchII/cohort-15-data-science/blob/main/Copy_of_Project_2_Housing_Price_Prediction_v_5.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 # Project 2: Housing Price Prediction
 
 The project should be done using Regression prediction techniques ( with feature scaling and regularization ) as covered in class.
@@ -25,7 +25,7 @@ The data is available on AWS S3 at https://ddc-datascience.s3.amazonaws.com/Proj
 
 # Install Nvidia cudf dependencies and package
 A data dictionary file is available at AWS S3 at [Housing Data Dictionary]( https://ddc-datascience.s3.amazonaws.com/Projects/Project.2-Housing/Housing%20-%20Data%20Documentation.pdf ).
-## 1- Imports
+# 1- Imports
 # 2- Loading the Data
 # 3- Create Data Frame
 ## Determine the "target"
@@ -60,9 +60,8 @@ for col in categorical_cols:
 ### Splitting Training and Testing sets
 ### Feature Scaling for corr_features
 # 5a- Model Creation and Eval
-# 5b- RFE Feature Selection
+# 5b- RFE Modelling
 
-### Feature Scaling for RFE Selection
 # 5c- RFECV Modelling
 # %%capture
 
@@ -81,7 +80,7 @@ for col in categorical_cols:
 
 
 # %load_ext cudf.pandas
-get_ipython().kernel.do_shutdown(restart=True)
+# get_ipython().kernel.do_shutdown(restart=True)
 import pandas as pd
 
 import numpy as np
@@ -370,7 +369,13 @@ X_test_scaled = scaler.transform(X_test)
 
 # Use Ridge regression with a small alpha value to add some regularization
 
-model = Ridge(alpha=0.9)
+model = Ridge(alpha=0.01)
+
+
+
+# Fit the model on the scaled training data
+
+model.fit(X_train_scaled, y_train)
 
 model.fit(X_train_scaled, y_train)
 
@@ -438,7 +443,7 @@ rfe.fit(X_train_scaled, y_train)
 
 # Create a new Random Forest Regressor model using only the selected features
 
-new_rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
+new_rf_model = RandomForestRegressor(n_estimators=100)
 
 
 
@@ -450,7 +455,7 @@ new_rf_model.fit(X_train_selected_scaled, y_train)
 
 
 
-# Evaluate our new model:
+# Evaluate new model:
 
 # Make predictions on the test set
 
@@ -536,7 +541,7 @@ print(f"\nOptimal number of features: {rfecv.n_features_}")
 
 
 
-# Plot the cross-validation scores
+# Ploting validation sco
 
 plt.figure(figsize=(10, 6))
 
@@ -549,9 +554,6 @@ plt.plot(range(1, len(rfecv.cv_results_['mean_test_score']) + 1), rfecv.cv_resul
 plt.title("RFECV Cross Validation Scores")
 
 plt.show()
-
-
-
 # Transform the data using the selected features
 
 X_train_selected_scaled = rfecv.transform(X_train_scaled)
