@@ -1,4 +1,4 @@
-<a href="https://colab.research.google.com/github/RSBalchII/cohort-15-data-science/blob/main/Project_2_Housing_Price_Prediction_v_3.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+<a href="https://colab.research.google.com/github/RSBalchII/cohort-15-data-science/blob/main/Project_2_Housing_Price_Prediction_v_4.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 # Project 2: Housing Price Prediction
 
 The project should be done using Regression prediction techniques ( with feature scaling and regularization ) as covered in class.
@@ -417,52 +417,43 @@ plt.title('Actual vs Predicted House Prices')
 
 plt.show()
 
-scaling_features = features_for_correlation.copy()
+# Print the shape of features and target
 
-scaling_features.head()
-X_train, X_test, y_train, y_test = train_test_split(scaling_features, target, test_size=0.2, random_state=42)
+print(f"Features shape: {corr_features.shape}")
+
+print(f"Target shape: {target.shape}")
+
+
+
+# Splitting Training and Testing sets
+
+X_train, X_test, y_train, y_test = train_test_split(corr_features, target, test_size=0.2, random_state=42)
+
+
+
+# Print the shapes of the split data
+
+print(f"X_train shape: {X_train.shape}")
+
+print(f"X_test shape: {X_test.shape}")
+
+print(f"y_train shape: {y_train.shape}")
+
+print(f"y_test shape: {y_test.shape}")
+
+
+
+# Feature Scaling
+
 scaler = StandardScaler()
 
 X_train_scaled = scaler.fit_transform(X_train)
 
 X_test_scaled = scaler.transform(X_test)
-#  Create a linear regression model
-
-model = LinearRegression()
 
 
 
-# Create an RFE object with 10 features to select
-
-rfe = RFE(model, n_features_to_select=10)
-
-
-
-# Fit the RFE object
-
-rfe.fit(X_train, y_train)
-
-
-
-# Get the selected features
-
-selected_features_rfe = X_train.columns[rfe.support_]
-
-print("Selected features by RFE:", selected_features_rfe)
-
-
-
-# Get feature rankings
-
-feature_rankings = rfe.ranking_
-
-print("\nFeature rankings:")
-
-for feature, rank in zip(X_train.columns, feature_rankings):
-
-    print(f"{feature}: {rank}")
-
-# Initialize Random Forest Regressor
+# Create a Random Forest Regressor
 
 rf_regressor = RandomForestRegressor(n_estimators=100, random_state=42)
 
@@ -474,21 +465,13 @@ rfe = RFE(estimator=rf_regressor, n_features_to_select=11)
 
 
 
-# Fit the RFE model
+# Fit the RFE model using scaled data
 
-rfe.fit(X_train, y_train)
-
-
-
-# Get the selected features
-
-selected_features = X_train.columns[rfe.support_]
-
-print("Selected Features:", selected_features)
+rfe.fit(X_train_scaled, y_train)
 
 
 
-# create a new Random Forest Regressor model using only the selected
+# Create a new Random Forest Regressor model using only the selected features
 
 new_rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
 
@@ -496,23 +479,23 @@ new_rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
 
 # Fit the new model on the selected features
 
-X_train_selected = X_train[selected_features]
+X_train_selected_scaled = X_train_scaled[:, rfe.support_]
 
-new_rf_model.fit(X_train_selected, y_train)
+new_rf_model.fit(X_train_selected_scaled, y_train)
 
 
 
-# evaluate our new model:
+# Evaluate our new model:
 
 # Make predictions on the test set
 
-X_test_selected = X_test[selected_features]
+X_test_selected_scaled = X_test_scaled[:, rfe.support_]
 
-y_pred = new_rf_model.predict(X_test_selected)
+y_pred = new_rf_model.predict(X_test_selected_scaled)
 
 
 
-# Calculate MSE
+# Calculate MSE and RMSE
 
 mse = mean_squared_error(y_test, y_pred)
 
@@ -520,7 +503,23 @@ rmse = np.sqrt(mse)
 
 
 
-print(f"RMSE of RFE-selected Random Forest Model: {rmse}")
+print(f"RMSE of RFE-selected Random Forest Model: ${rmse:.2f}")
+
+
+
+# Calculate RMSPE
+
+rmspe = np.sqrt(np.mean((y_pred - y_test) / y_test)**2) * 100
+
+print(f"Root Mean Squared Percentage Error (RMSPE): {rmspe:.2f}%")
+
+
+
+# Calculate R-squared
+
+r2 = new_rf_model.score(X_test_selected_scaled, y_test)
+
+print(f"R-squared: {r2:.4f}")
 
 
 
@@ -528,7 +527,7 @@ print(f"RMSE of RFE-selected Random Forest Model: {rmse}")
 
 plt.figure(figsize=(10, 6))
 
-plt.scatter(y_test, predictions)
+plt.scatter(y_test, y_pred)
 
 plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], 'r--')
 
@@ -540,49 +539,124 @@ plt.title('Actual vs Predicted House Prices')
 
 plt.show()
 
-# # Create a linear regression model
+# Split the data
 
-# model = LinearRegression()
-
-
-
-# # Create an RFECV object
-
-# rfecv = RFECV(estimator=model, step=1, cv=5)
+X_train, X_test, y_train, y_test = train_test_split(corr_features, target, test_size=0.2, random_state=42)
 
 
 
-# # Fit the RFECV object
+# Scale the features
 
-# rfecv.fit(X_train, y_train)
+scaler = StandardScaler()
 
+X_train_scaled = scaler.fit_transform(X_train)
 
-
-# # Get the selected features
-
-# selected_features_rfecv = X_train.columns[rfecv.support_]
-
-# print("\nSelected features by RFECV:", selected_features_rfecv)
+X_test_scaled = scaler.transform(X_test)
 
 
 
-# # Print the optimal number of features
+# Create a linear regression model
 
-# print(f"\nOptimal number of features: {rfecv.n_features_}")
+model = LinearRegression()
 
 
 
-# # Plot the cross-validation scores
+# Create an RFECV object
 
-# plt.figure(figsize=(10, 6))
+rfecv = RFECV(estimator=model, step=1, cv=5)
 
-# plt.xlabel("Number of features selected")
 
-# plt.ylabel("Cross validation score")It
 
-# plt.plot(range(1, len(rfecv.cv_results_['mean_test_score']) + 1), rfecv.cv_results_['mean_test_score'])
+# Fit the RFECV object
 
-# plt.title("RFECV Cross Validation Scores")
+rfecv.fit(X_train_scaled, y_train)
 
-# plt.show()
 
+
+# Get the selected features
+
+selected_features_rfecv = corr_features.columns[rfecv.support_]
+
+print("\nSelected features by RFECV:", selected_features_rfecv)
+
+
+
+# Print the optimal number of features
+
+print(f"\nOptimal number of features: {rfecv.n_features_}")
+
+
+
+# Plot the cross-validation scores
+
+plt.figure(figsize=(10, 6))
+
+plt.xlabel("Number of features selected")
+
+plt.ylabel("Cross validation score")
+
+plt.plot(range(1, len(rfecv.cv_results_['mean_test_score']) + 1), rfecv.cv_results_['mean_test_score'])
+
+plt.title("RFECV Cross Validation Scores")
+
+plt.show()
+
+
+
+# Transform the data using the selected features
+
+X_train_selected_scaled = rfecv.transform(X_train_scaled)
+
+X_test_selected_scaled = rfecv.transform(X_test_scaled)
+
+
+
+# Create and fit a new model using the selected features
+
+new_model = LinearRegression()
+
+new_model.fit(X_train_selected_scaled, y_train)
+
+
+
+# Evaluate the new model
+
+y_pred = new_model.predict(X_test_selected_scaled)
+
+
+
+# Calculate metrics
+
+mse = np.mean((y_pred - y_test)**2)
+
+rmse = np.sqrt(mse)
+
+rmspe = np.sqrt(np.mean((y_pred - y_test) / y_test)**2) * 100
+
+r2 = new_model.score(X_test_selected_scaled, y_test)
+
+
+
+print(f"RMSE of RFECV-selected Linear Regression Model: ${rmse:.2f}")
+
+print(f"Root Mean Squared Percentage Error (RMSPE): {rmspe:.2f}%")
+
+print(f"R-squared: {r2:.4f}")
+
+
+
+# Visualize the predictions vs actual values
+
+plt.figure(figsize=(10, 6))
+
+plt.scatter(y_test, y_pred)
+
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], 'r--')
+
+plt.xlabel('Actual Price ($)')
+
+plt.ylabel('Predicted Price ($)')
+
+plt.title('Actual vs Predicted House Prices (RFECV)')
+
+plt.show()
