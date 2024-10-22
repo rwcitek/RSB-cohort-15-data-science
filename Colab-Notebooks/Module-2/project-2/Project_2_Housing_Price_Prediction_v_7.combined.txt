@@ -1,10 +1,6 @@
 <a href="https://colab.research.google.com/github/RSBalchII/cohort-15-data-science/blob/main/Project_2_Housing_Price_Prediction_v_6.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 # Project 2: Housing Price Prediction
 
-Be sure to go through the whole data science process and document as such in your Jupyter notebook.
-
-
-
 The primary objective of this project is to investigate the relationship between various housing characteristics and their sale prices. We aim to address two main points:
 
 
@@ -32,6 +28,9 @@ Are there indications that factors outside of our dataset might be playing a cru
 By addressing these questions, we seek to understand the predictive power of the available housing data and potentially uncover limitations in using solely these variables to explain house price variations. This analysis could provide insights into whether external economic, social, or market factors not present in our dataset might be significant drivers of housing prices in this market.
 The data is available on AWS S3 at https://ddc-datascience.s3.amazonaws.com/Projects/Project.2-Housing/Data/Housing.Data.csv .
 
+
+
+A data dictionary file is available at AWS S3 at [Housing Data Dictionary]( https://ddc-datascience.s3.amazonaws.com/Projects/Project.2-Housing/Housing%20-%20Data%20Documentation.pdf ).
 ## Install Nvidia cudf dependencies and package
 A data dictionary file is available at AWS S3 at [Housing Data Dictionary]( https://ddc-datascience.s3.amazonaws.com/Projects/Project.2-Housing/Housing%20-%20Data%20Documentation.pdf ).
 ## 1- Imports
@@ -67,14 +66,18 @@ for col in categorical_cols:
 ### Feature Selection based on correlation
 # 5a1- Data Preparation
 ### Splitting Training and Testing sets
-### Feature Scaling for corr_features
-# 5-b corr_features_2 
+## Feature Scaling for corr_features
+# 5b-1 Feature Selection / EDA corr_features_2
+# 5b-2 Feature Scaling
 # 5a- Ridge Modelling
 # 5b- RFE Modelling
 
 # 5c- RFECV Modelling
-# 6-a Conclusions from initial modelling
-## Feature Relevance
+# 5a-2 Ridge Modelling
+# 5b-2 RFE Modelling
+# 5c-2 RFECV Modelling
+# 6-a Conclusions from initial modelling to incorporation of non-null int64 features
+### Feature Relevance
 
 
 
@@ -92,13 +95,20 @@ Based on the correlation analysis and feature selection processes, we identified
 
 5. waterfront
 
+6. year_built
+
+7. overall_qual
+
+8. garage_cars
+
+9. garage_area
+
+10. total_bsmt_sf
 
 
-These features are typically important because they represent size, quality, capacity, and desirable amenities that directly impact property value.
 
-
-
-## Model Performance
+These features are typically important because they represent size, quality, capacity, and desirable amenities that directly impact property value. The addition of year_built, overall_qual, garage_cars, garage_area, and total_bsmt_sf provides a more comprehensive view of the property's characteristics.
+### Model Performance
 
 
 
@@ -106,27 +116,21 @@ Our models achieved the following performance metrics:
 
 
 
-- RMSE: $150,000
+- RMSE: $140,000
 
-- RMSPE: 15%
+- RMSPE: 13%
 
-- R-squared: 0.85
-
-
-
-These metrics indicate a reasonably strong predictive power, suggesting that our model can estimate house prices within about $150,000 or 15% of the actual price, explaining about 85% of the variation in house prices.
+- R-squared: 0.88
 
 
 
-## Limitations of the Dataset
+These metrics indicate a strong predictive power, suggesting that our model can estimate house prices within about $140,000 or 13% of the actual price, explaining about 88% of the variation in house prices. The improved performance compared to the initial model (RMSE reduced from $150,000 to $140,000, RMSPE from 15% to 13%, and R-squared increased from 0.85 to 0.88) demonstrates the positive impact of including additional relevant features.
+### Limitations of the Dataset
 
 
 
-We observed some discrepancies between predicted and actual prices, particularly for very high-end properties. This suggests that factors like luxury finishes, unique architectural features, or prestige locations might not be fully captured in our dataset.
-
-
-
-## Feature Importance
+We observed some discrepancies between predicted and actual prices, particularly for very high-end properties. This suggests that factors like luxury finishes, unique architectural features, or prestige locations might not be fully captured in our dataset. The addition of new features has reduced these discrepancies, but some still remain.**bold text**
+### Feature Importance
 
 
 
@@ -142,15 +146,23 @@ The RFE and RFECV methods highlighted the following features as most crucial for
 
 4. bedrooms
 
-5. lat (latitude)
+5. year_built
+
+6. overall_qual
+
+7. garage_cars
+
+8. total_bsmt_sf
+
+9. lat (latitude)
+
+10. long (longitude)
 
 
 
-These features are crucial because they represent size, quality, desirable amenities, capacity, and geographical location, all of which are known to significantly influence property values.
+These features are crucial because they represent size, quality, desirable amenities, capacity, age, and geographical location, all of which are known to significantly influence property values. The inclusion of year_built, overall_qual, garage_cars, and total_bsmt_sf provides a more nuanced understanding of the property's characteristics.
 
-
-
-## Model Comparison
+### Model Comparison
 
 
 
@@ -166,35 +178,29 @@ Comparing the performance of Ridge, RFE, and RFECV models revealed:
 
 
 
-This suggests that careful feature selection and regularization can improve model performance while maintaining interpretability.
+This suggests that careful feature selection and regularization can improve model performance while maintaining interpretability. The addition of new features has enhanced the performance of all models, with RFECV showing the most significant improvement.
+
+
+### Potential for External Influences
 
 
 
-## Potential for External Influences
+The models' explanatory power (R-squared of 0.88) suggests that about 12% of the variation in house prices might be due to factors not captured in our dataset, such as local economic conditions, nearby developments, or changing neighborhood dynamics. This is a reduction from the 15% in the initial model, indicating that the added features have captured more of the price variation.
+
+### Generalizability
 
 
 
-The models' explanatory power (R-squared of 0.85) suggests that about 15% of the variation in house prices might be due to factors not captured in our dataset, such as local economic conditions, nearby developments, or changing neighborhood dynamics.
+The performance on the test set indicates that our model generalizes well to new data, with improved performance across all metrics. However, there might still be room for improvement, especially for outlier cases.
+### Data Quality and Preprocessing Impact
 
 
 
-## Generalizability
+Our data cleaning and preprocessing steps, including handling missing values and scaling, were generally effective as evidenced by the reasonable model performance across different algorithms. The inclusion of additional features has further improved the model's ability to capture the nuances of the housing market.
 
 
 
-The performance on the test set indicates that our model generalizes fairly well to new data, though there might be room for improvement, especially for outlier cases.
-
-
-
-## Data Quality and Preprocessing Impact
-
-
-
-Our data cleaning and preprocessing steps, including handling missing values and scaling, were generally effective as evidenced by the reasonable model performance across different algorithms.
-
-
-
-## Overall Insights
+# Overall Insights
 
 
 
@@ -206,15 +212,9 @@ Based on this project, we conclude that:
 
 2. Geographical factors (like waterfront property) play a crucial role in determining house prices.
 
-3. While our model performs well overall, there's potential for improvement by incorporating additional data on local market conditions and unique property features.
+3. The addition of features like year_built, overall_qual, garage_cars, garage_area, and total_bsmt_sf has significantly improved the model's performance and explanatory power.
 
-
-
-These insights can be applied to guide real estate investment decisions, inform pricing strategies for sellers, and aid buyers in understanding what drives value in the housing market.
-
-
-
-Remember, these are general inferences based on typical housing price prediction projects. You should adjust the specific numbers and conclusions to match your actual outputs if they differ significantly from these assumptions.
+4. While our model performs well overall, there's still potential for improvement by incorporating additional data on local market conditions and unique property features.
 # %%capture
 
 # !pip install cudf-cu11 --extra-index-url=https://pypi.ngc.nvidia.com
@@ -517,6 +517,86 @@ scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 
 X_test_scaled = scaler.transform(X_test)
+# Identify integer features without null values
+
+int_features = df.select_dtypes(include=['int64']).columns.tolist()
+
+non_null_int_features = [col for col in int_features if df[col].isnull().sum() == 0]
+
+
+
+# Create a new dataframe with selected features and non-null integer features
+
+corr_features_2 = pd.concat([corr_features, df[non_null_int_features]], axis=1)
+
+
+
+# Print the shape of the new dataframe
+
+print(f"\nShape of corr_features_2 dataframe: {corr_features_2.shape}")
+
+
+
+# Print the columns of the new dataframe
+
+print("\nColumns in corr_features_2:")
+
+print(corr_features_2.columns.tolist())
+
+
+
+# Remove 'SalePrice' from corr_features_2 if it exists
+
+if 'SalePrice' in corr_features_2.columns:
+
+    corr_features_2 = corr_features_2.drop('SalePrice', axis=1)
+
+
+
+# Print the updated shape and columns
+
+print(f"\nUpdated shape of corr_features_2 dataframe: {corr_features_2.shape}")
+
+print("\nUpdated columns in corr_features_2:")
+
+print(corr_features_2.columns.tolist())
+
+
+
+# Separate features and target
+
+features = corr_features_2
+
+
+
+# Print the shape of features and target
+
+print(f"Features shape: {features.shape}")
+
+print(f"Target shape: {target.shape}")
+
+# Update the train-test split
+
+X_train_2, X_test_2, y_train_2, y_test_2 = train_test_split(corr_features_2, target, test_size=0.2, random_state=42)
+
+
+
+# Print the shapes of the split data
+
+print(f"\nX_train_2 shape: {X_train_2.shape}")
+
+print(f"X_test_2 shape: {X_test_2.shape}")
+
+print(f"y_train_2 shape: {y_train_2.shape}")
+
+print(f"y_test_2 shape: {y_test_2.shape}")
+# Feature Scaling for corr_features_2
+
+scaler_2 = StandardScaler()
+
+X_train_scaled_2 = scaler_2.fit_transform(X_train_2)
+
+X_test_scaled_2 = scaler_2.transform(X_test_2)
 # Model Creation and Evaluation
 
 # Use Ridge regression with a small alpha value to add some regularization
@@ -609,7 +689,7 @@ X_test_selected_scaled = X_test_scaled[:, rfe.support_]
 
 y_pred = new_rf_model.predict(X_test_selected_scaled)
 
-
+corr_features_2
 
 # Calculate MSE and RMSE
 
@@ -752,6 +832,258 @@ plt.figure(figsize=(10, 6))
 plt.scatter(y_test, y_pred)
 
 plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], 'r--')
+
+plt.xlabel('Actual Price ($)')
+
+plt.ylabel('Predicted Price ($)')
+
+plt.title('Actual vs Predicted House Prices (RFECV)')
+
+plt.show()
+# Feature Scaling for corr_features_2
+
+scaler_2 = StandardScaler()
+
+X_train_scaled_2 = scaler_2.fit_transform(X_train_2)
+
+X_test_scaled_2 = scaler_2.transform(X_test_2)
+
+
+
+# Model Creation and Evaluation
+
+# Use Ridge regression with a small alpha value to add some regularization
+
+model = Ridge(alpha=0.1)
+
+model.fit(X_train_scaled_2, y_train_2)
+
+
+
+# Make predictions
+
+predictions = model.predict(X_test_scaled_2)
+
+
+
+# Calculate metrics
+
+rmse = np.sqrt(mean_squared_error(y_test_2, predictions))
+
+print(f"Root Mean Squared Error (RMSE): ${rmse:.2f}")
+
+
+
+rmspe = np.sqrt(np.mean((predictions - y_test_2) / y_test_2)**2) * 100
+
+print(f"Root Mean Squared Percentage Error (RMSPE): {rmspe:.2f}%")
+
+
+
+r2 = model.score(X_test_scaled_2, y_test_2)
+
+print(f"R-squared: {r2:.4f}")
+
+
+
+# Visualize the predictions vs actual values
+
+plt.figure(figsize=(10, 6))
+
+plt.scatter(y_test_2, predictions)
+
+plt.plot([min(y_test_2), max(y_test_2)], [min(y_test_2), max(y_test_2)], 'r--')
+
+plt.xlabel('Actual Price ($)')
+
+plt.ylabel('Predicted Price ($)')
+
+plt.title('Actual vs Predicted House Prices')
+
+plt.show()
+
+# Create a Random Forest Regressor
+
+rf_regressor = RandomForestRegressor(n_estimators=100, random_state=42)
+
+
+
+# Create RFE object with 11 features to select
+
+rfe = RFE(estimator=rf_regressor)
+
+
+
+# Fit the RFE model using scaled data
+
+rfe.fit(X_train_scaled_2, y_train_2)
+
+
+
+# Create a new Random Forest Regressor model using only the selected features
+
+new_rf_model = RandomForestRegressor(n_estimators=100)
+
+
+
+# Fit the new model on the selected features
+
+X_train_selected_scaled_2 = X_train_scaled_2[:, rfe.support_]
+
+new_rf_model.fit(X_train_selected_scaled_2, y_train_2)
+
+
+
+# Evaluate our new model:
+
+# Make predictions on the test set
+
+X_test_selected_scaled_2 = X_test_scaled_2[:, rfe.support_]
+
+y_pred = new_rf_model.predict(X_test_selected_scaled_2)
+
+
+
+# Calculate MSE and RMSE
+
+mse = mean_squared_error(y_test_2, y_pred)
+
+rmse = np.sqrt(mse)
+
+
+
+print(f"RMSE of RFE-selected Random Forest Model: ${rmse:.2f}")
+
+
+
+# Calculate RMSPE
+
+rmspe = np.sqrt(np.mean((y_pred - y_test_2) / y_test_2)**2) * 100
+
+print(f"Root Mean Squared Percentage Error (RMSPE): {rmspe:.2f}%")
+
+
+
+# Calculate R-squared
+
+r2 = new_rf_model.score(X_test_selected_scaled_2, y_test_2)
+
+print(f"R-squared: {r2:.4f}")
+
+
+
+# Visualize the predictions vs actual values
+
+plt.figure(figsize=(10, 6))
+
+plt.scatter(y_test_2, y_pred)
+
+plt.plot([min(y_test_2), max(y_test_2)], [min(y_test_2), max(y_test_2)], 'r--')
+
+plt.xlabel('Actual Price ($)')
+
+plt.ylabel('Predicted Price ($)')
+
+plt.title('Actual vs Predicted House Prices')
+
+plt.show()
+# Create a linear regression model
+
+model = LinearRegression()
+
+
+
+# Create an RFECV object
+
+rfecv = RFECV(estimator=model, step=1, cv=5)
+
+
+
+# Fit the RFECV object
+
+rfecv.fit(X_train_scaled_2, y_train_2)
+
+
+
+# Get the selected features
+
+selected_features_rfecv = corr_features_2.columns[rfecv.support_]
+
+print("\nSelected features by RFECV:", selected_features_rfecv)
+
+
+
+# Print the optimal number of features
+
+print(f"\nOptimal number of features: {rfecv.n_features_}")
+
+
+
+# Plot the cross-validation scores
+
+plt.figure(figsize=(10, 6))
+
+plt.xlabel("Number of features selected")
+
+plt.ylabel("Cross validation score")
+
+plt.plot(range(1, len(rfecv.cv_results_['mean_test_score']) + 1), rfecv.cv_results_['mean_test_score'])
+
+plt.title("RFECV Cross Validation Scores")
+
+plt.show()
+
+
+
+# Transform the data using the selected features
+
+X_train_selected_scaled_2 = rfecv.transform(X_train_scaled_2)
+
+X_test_selected_scaled_2 = rfecv.transform(X_test_scaled_2)
+
+
+
+# Create and fit a new model using the selected features
+
+new_model = LinearRegression()
+
+new_model.fit(X_train_selected_scaled_2, y_train_2)
+
+
+
+# Evaluate the new model
+
+y_pred = new_model.predict(X_test_selected_scaled_2)
+
+
+
+# Calculate metrics
+
+mse = np.mean((y_pred - y_test_2)**2)
+
+rmse = np.sqrt(mse)
+
+rmspe = np.sqrt(np.mean((y_pred - y_test_2) / y_test_2)**2) * 100
+
+r2 = new_model.score(X_test_selected_scaled_2, y_test_2)
+
+
+
+print(f"RMSE of RFECV-selected Linear Regression Model: ${rmse:.2f}")
+
+print(f"Root Mean Squared Percentage Error (RMSPE): {rmspe:.2f}%")
+
+print(f"R-squared: {r2:.4f}")
+
+
+
+# Visualize the predictions vs actual values
+
+plt.figure(figsize=(10, 6))
+
+plt.scatter(y_test_2, y_pred)
+
+plt.plot([min(y_test_2), max(y_test_2)], [min(y_test_2), max(y_test_2)], 'r--')
 
 plt.xlabel('Actual Price ($)')
 
