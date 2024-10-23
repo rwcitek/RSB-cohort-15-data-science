@@ -61,21 +61,31 @@ for col in categorical_cols:
 ### dropping Lot Frontage with high number of null values
 ### Imputing data for the remainder of columns using looping method
 ### preparing cleaned feature data for feature correlation
-# 5a- Feature Selection / EDA
+# 5aa- Feature Selection / EDA
 ### Initial Correlation Visualization of remaining features
 ### Feature Selection based on correlation
-# 5a1- Data Preparation
+# 5bb- Data Preparation
 ### Splitting Training and Testing sets
 ## Feature Scaling for corr_features
-# 5b-1 Feature Selection / EDA corr_features_2
-# 5b-2 Feature Scaling
-# 5a- Ridge Modelling
-# 5b- RFE Modelling
+# 5b- Feature Selection / EDA corr_features_2
+# 5b- Feature Scaling
+# 5a-1 Ridge Modelling
+## Ridge qq Plotting
+# 5b-1 RFE Modelling
 
-# 5c- RFECV Modelling
+## RFE Q-Q Plotting
+# 5c-1 RFECV Modelling
+## RFECV Q-Q Plotting
+# Lasso Regression Modelling
+## Lasso Q-Q plotting
 # 5a-2 Ridge Modelling
+## Ridge Q-Q Plotting
 # 5b-2 RFE Modelling
+## RFE Q-Q Plotting
 # 5c-2 RFECV Modelling
+## RFECV qq Plotting
+# Lasso Regression Modelling
+## Lasso Q-Q Plotting
 # 6-a Conclusions from initial modelling to incorporation of non-null int64 features
 ### Feature Relevance
 
@@ -267,6 +277,8 @@ from sklearn.linear_model import LinearRegression
 
 from sklearn.linear_model import Ridge
 
+from sklearn.linear_model import LassoCV
+
 
 
 from sklearn.ensemble import RandomForestRegressor
@@ -281,6 +293,8 @@ url = 'https://ddc-datascience.s3.amazonaws.com/Projects/Project.2-Housing/Data/
 
 df = pd.read_csv(url)
 df_1 = pd.DataFrame(df)
+
+df_1
 # Identify the target variable (SalePrice)
 
 target = df_1['SalePrice'].copy()
@@ -378,9 +392,13 @@ df_float_1 = df_float.copy()
 
 
 df_float_1.describe()
+
+
 # Check for missing values
 
 print(df_float_1.isnull().sum())
+
+
 # Remove 'Lot Frontage' column
 
 df_float_1 = df_float_1.drop('Lot Frontage', axis=1)
@@ -525,6 +543,14 @@ non_null_int_features = [col for col in int_features if df[col].isnull().sum() =
 
 
 
+# Remove PID from non_null_int_features if it exists
+
+if 'PID' in non_null_int_features:
+
+    non_null_int_features.remove('PID')
+
+
+
 # Create a new dataframe with selected features and non-null integer features
 
 corr_features_2 = pd.concat([corr_features, df[non_null_int_features]], axis=1)
@@ -649,6 +675,21 @@ plt.title('Actual vs Predicted House Prices')
 
 plt.show()
 
+# Q-Q plot for Ridge model residuals
+
+residuals = y_test - predictions
+
+plt.figure(figsize=(10, 6))
+
+stats.probplot(residuals, dist="norm", plot=plt)
+
+plt.title('Q-Q Plot of Residuals (Ridge Model)')
+
+plt.xlabel('Theoretical Quantiles')
+
+plt.ylabel('Observed Residuals')
+
+plt.show()
 # Create a Random Forest Regressor
 
 rf_regressor = RandomForestRegressor(n_estimators=100, random_state=42)
@@ -735,6 +776,21 @@ plt.title('Actual vs Predicted House Prices')
 
 plt.show()
 
+# Q-Q plot for RFE model residuals
+
+residuals = y_test - y_pred
+
+plt.figure(figsize=(10, 6))
+
+stats.probplot(residuals, dist="norm", plot=plt)
+
+plt.title('Q-Q Plot of Residuals (RFE Model)')
+
+plt.xlabel('Theoretical Quantiles')
+
+plt.ylabel('Observed Residuals')
+
+plt.show()
 # Create a linear regression model
 
 model = LinearRegression()
@@ -840,6 +896,85 @@ plt.ylabel('Predicted Price ($)')
 plt.title('Actual vs Predicted House Prices (RFECV)')
 
 plt.show()
+# Q-Q plot for RFECV model residuals
+
+residuals = y_test - y_pred
+
+plt.figure(figsize=(10, 6))
+
+stats.probplot(residuals, dist="norm", plot=plt)
+
+plt.title('Q-Q Plot of Residuals (RFECV Model)')
+
+plt.xlabel('Theoretical Quantiles')
+
+plt.ylabel('Observed Residuals')
+
+plt.show()
+# Perform Lasso regression
+
+lasso_model = LassoCV(cv=5, random_state=42)
+
+lasso_model.fit(X_train_scaled, y_train)
+
+
+
+# Make predictions
+
+y_pred_lasso = lasso_model.predict(X_test_scaled)
+
+
+
+# Calculate metrics
+
+rmse = np.sqrt(mean_squared_error(y_test, y_pred_lasso))
+
+rmspe = np.sqrt(np.mean((y_pred_lasso - y_test) / y_test)**2) * 100
+
+r2 = lasso_model.score(X_test_scaled, y_test)
+
+
+
+print(f"Lasso Regression Metrics:")
+
+print(f"RMSE: ${rmse:.2f}")
+
+print(f"RMSPE: {rmspe:.2f}%")
+
+print(f"R-squared: {r2:.4f}")
+
+
+
+# Visualize predictions vs actual values
+
+plt.figure(figsize=(10, 6))
+
+plt.scatter(y_test, y_pred_lasso)
+
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], 'r--')
+
+plt.xlabel('Actual Price ($)')
+
+plt.ylabel('Predicted Price ($)')
+
+plt.title('Actual vs Predicted House Prices (Lasso Regression)')
+
+plt.show()
+# Q-Q plot for Lasso model residuals
+
+residuals = y_test - y_pred_lasso
+
+plt.figure(figsize=(10, 6))
+
+stats.probplot(residuals, dist="norm", plot=plt)
+
+plt.title('Q-Q Plot of Residuals (Lasso Regression)')
+
+plt.xlabel('Theoretical Quantiles')
+
+plt.ylabel('Observed Residuals')
+
+plt.show()
 # Feature Scaling for corr_features_2
 
 scaler_2 = StandardScaler()
@@ -902,6 +1037,21 @@ plt.title('Actual vs Predicted House Prices')
 
 plt.show()
 
+# Q-Q plot for Ridge model residuals
+
+residuals = y_test_2 - predictions
+
+plt.figure(figsize=(10, 6))
+
+stats.probplot(residuals, dist="norm", plot=plt)
+
+plt.title('Q-Q Plot of Residuals (Ridge Model)')
+
+plt.xlabel('Theoretical Quantiles')
+
+plt.ylabel('Observed Residuals')
+
+plt.show()
 # Create a Random Forest Regressor
 
 rf_regressor = RandomForestRegressor(n_estimators=100, random_state=42)
@@ -987,6 +1137,21 @@ plt.ylabel('Predicted Price ($)')
 plt.title('Actual vs Predicted House Prices')
 
 plt.show()
+# Q-Q plot for RFE model residuals
+
+residuals = y_test_2 - y_pred
+
+plt.figure(figsize=(10, 6))
+
+stats.probplot(residuals, dist="norm", plot=plt)
+
+plt.title('Q-Q Plot of Residuals (RFE Model)')
+
+plt.xlabel('Theoretical Quantiles')
+
+plt.ylabel('Observed Residuals')
+
+plt.show()
 # Create a linear regression model
 
 model = LinearRegression()
@@ -1051,7 +1216,7 @@ new_model.fit(X_train_selected_scaled_2, y_train_2)
 
 
 
-# Evaluate the new model
+# Evaluate the new model5
 
 y_pred = new_model.predict(X_test_selected_scaled_2)
 
@@ -1090,5 +1255,78 @@ plt.xlabel('Actual Price ($)')
 plt.ylabel('Predicted Price ($)')
 
 plt.title('Actual vs Predicted House Prices (RFECV)')
+
+plt.show()
+qq
+
+plt.title('Q-Q Plot of Residuals (RFECV Model)')
+
+plt.xlabel('Theoretical Quantiles')
+
+plt.ylabel('Observed Residuals')
+
+plt.show()
+# Perform Lasso regression
+
+lasso_model_2 = LassoCV(cv=5, random_state=42)
+
+lasso_model_2.fit(X_train_scaled_2, y_train_2)
+
+
+
+# Make predictions
+
+y_pred_lasso_2 = lasso_model_2.predict(X_test_scaled_2)
+
+
+
+# Calculate metrics
+
+rmse_2 = np.sqrt(mean_squared_error(y_test_2, y_pred_lasso_2))
+
+rmspe_2 = np.sqrt(np.mean((y_pred_lasso_2 - y_test_2) / y_test_2)**2) * 100
+
+r2_2 = lasso_model_2.score(X_test_scaled_2, y_test_2)
+
+
+
+print(f"Lasso Regression Metrics (Second Round):")
+
+print(f"RMSE: ${rmse_2:.2f}")
+
+print(f"RMSPE: {rmspe_2:.2f}%")
+
+print(f"R-squared: {r2_2:.4f}")
+
+
+
+# Visualize predictions vs actual values
+
+plt.figure(figsize=(10, 6))
+
+plt.scatter(y_test_2, y_pred_lasso_2)
+
+plt.plot([min(y_test_2), max(y_test_2)], [min(y_test_2), max(y_test_2)], 'r--')
+
+plt.xlabel('Actual Price ($)')
+
+plt.ylabel('Predicted Price ($)')
+
+plt.title('Actual vs Predicted House Prices (Lasso Regression - Second Round)')
+
+plt.show()
+# Q-Q plot for Lasso model residuals
+
+residuals_2 = y_test_2 - y_pred_lasso_2
+
+plt.figure(figsize=(10, 6))
+
+stats.probplot(residuals_2, dist="norm", plot=plt)
+
+plt.title('Q-Q Plot of Residuals (Lasso Regression - Second Round)')
+
+plt.xlabel('Theoretical Quantiles')
+
+plt.ylabel('Observed Residuals')
 
 plt.show()
