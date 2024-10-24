@@ -1,5 +1,3 @@
-Based on the structure and content of your Jupyter notebook, it appears that your project is well-organized and follows a logical flow through the data science process. Here's a summary of your project's parts, listed by MD cell titles:
-
 Project 2: Housing Price Prediction
 
 Outlines the project goals and requirements
